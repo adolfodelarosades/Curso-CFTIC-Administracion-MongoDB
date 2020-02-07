@@ -27,6 +27,8 @@ Operadores:
      ...
   }
 ```
+* `$unwind` (para arrays)
+
 
   
 * ``
@@ -303,18 +305,48 @@ Cantidad promedio por `item`.
 ```
 
 Crea un array de libros por cada Autor
+
+
 ```sh
+> use shop2
+switched to db shop2
+> show collections
+pedidos
+> db.productos.insert({nombre: "Camiseta Nike", tallas: ["xs", "s", "m", "l", "xl"]})
+WriteResult({ "nInserted" : 1 })
+```
+
+
+
+```sh
+> db.productos.aggregate([
+... {$unwind: "$tallas"}
+... ])
+{ "_id" : ObjectId("5e3d4910d8b0fd4ac47898f5"), "nombre" : "Camiseta Nike", "tallas" : "xs" }
+{ "_id" : ObjectId("5e3d4910d8b0fd4ac47898f5"), "nombre" : "Camiseta Nike", "tallas" : "s" }
+{ "_id" : ObjectId("5e3d4910d8b0fd4ac47898f5"), "nombre" : "Camiseta Nike", "tallas" : "m" }
+{ "_id" : ObjectId("5e3d4910d8b0fd4ac47898f5"), "nombre" : "Camiseta Nike", "tallas" : "l" }
+{ "_id" : ObjectId("5e3d4910d8b0fd4ac47898f5"), "nombre" : "Camiseta Nike", "tallas" : "xl" }
+>    
+```
+De un array crea un documento por cada elemento del array
+
+```sh
+> db.productos.insert({nombre: "Camiseta Puma", tallas: ["m", "l"]})
+WriteResult({ "nInserted" : 1 })
+> db.productos.find({}, {_id: 0})
+{ "nombre" : "Camiseta Nike", "tallas" : [ "xs", "s", "m", "l", "xl" ] }
+{ "nombre" : "Camiseta Puma", "tallas" : [ "m", "l" ] }
+```
+:skull: Pregunta clasica ¿Cuantos documentos regresa si uso el `$unwind`
+
+
+```sh
+> db.productos.aggregate([ {$unwind: "$tallas"}, {$count: "documentos"} ])
+{ "documentos" : 7 }
 
 ```
-```sh
 
-```
-```sh
-
-```
-```sh
-
-```
 ```sh
 
 ```
