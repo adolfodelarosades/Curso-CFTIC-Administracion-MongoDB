@@ -173,6 +173,20 @@ Agrupa por mesAlta, obliga a poner `_id` y los acumula sumandolos en el campo `n
 ¿Cuando pongo o no el signo de $? A mi parecer aquí tiene lógica que lleve el `_id` por que lo convierte a `_id`
 
 ```sh
+> db.clientes.aggregate([ {$project: {mesAlta: {$month: "$alta"}}}, {$group: {_id: "$mesAlta", numeroAltas: {$sum: 1}}} , {$project:{ mes: "$_id", numeroAltas: 1 }} ])
+{ "_id" : 12, "numeroAltas" : 2, "mes" : 12 }
+{ "_id" : 11, "numeroAltas" : 1, "mes" : 11 }
+{ "_id" : 10, "numeroAltas" : 1, "mes" : 10 }
+
+> db.clientes.aggregate([ {$project: {mesAlta: {$month: "$alta"}}}, {$group: {_id: "$mesAlta", numeroAltas: {$sum: 1}}} , {$project:{ mes: "$_id", numeroAltas: 1, _id: 0 }} ])
+{ "numeroAltas" : 2, "mes" : 12 }
+{ "numeroAltas" : 1, "mes" : 11 }
+{ "numeroAltas" : 1, "mes" : 10 }
+
+> db.clientes.aggregate([ {$project: {mesAlta: {$month: "$alta"}}}, {$group: {_id: "$mesAlta", numeroAltas: {$sum: 1}}} , {$project:{ mes: "$_id", numeroAltas: 1, _id: 0 }}, {$sort:{mes: -1}} ])
+{ "numeroAltas" : 2, "mes" : 12 }
+{ "numeroAltas" : 1, "mes" : 11 }
+{ "numeroAltas" : 1, "mes" : 10 }
 ```
 
 ```sh
