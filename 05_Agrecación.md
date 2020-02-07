@@ -2,25 +2,6 @@
 
 :skull: Sólo una pregunta sobre todo el tema.
 
-Operadore:
-
-* `$project` // idem proyección `find()`
-* `sort` // idem método `sort()`
-* `group`
-```
-  $group:{
-     _id: <expression>,
-     <campo1>: {operador: expr},
-     ...
-  }
-```
-   El campo `_id` es obligatorio.
-* ``
-* ``
-* ``
-* ``
-* ``
-
 
 ```sh
 db.<coleccion>.aggregate(
@@ -32,6 +13,30 @@ db.<coleccion>.aggregate(
   { opciones }
 )
 ```
+`{allowDiskUse: true}` Si la etapa de agrupamiento supera el uso de 100MB de memoria RAM
+
+Operadores:
+
+* `$project` // idem proyección `find()`
+* `sort` // idem método `sort()`
+* `group`
+```
+  $group:{
+     _id: <expression>,
+     <campo1>: {operador: expr},
+     ...
+  }
+```
+
+  
+* ``
+* ``
+* ``
+* ``
+* ``
+
+
+
 ```sh
 > use biblioteca
 switched to db biblioteca
@@ -143,6 +148,9 @@ WriteResult({ "nInserted" : 1 })
 
 Le he cambiado el nombre al campo `nombre` por `cliente` y posteriormente ordenamos a `cliente`, y no pintamos el campo `_id`, el orden en la proyección no importa.
 
+
+ El campo `_id` es obligatorio.
+
 **Cada etapa va haciendo referencia a la etapa anterior**
 
 ```sh
@@ -190,9 +198,46 @@ Agrupa por mesAlta, obliga a poner `_id` y los acumula sumandolos en el campo `n
 ```
 
 ```sh
+> use maraton
+switched to db maraton
+> show collections
+foo
+participantes
+> db.participantes.aggregate([
+... {$group: {_id: "$nombre", cantidad: {$sum: 1} }},
+... { $project: {nombre: "$_id", cantidad: 1, _id: 0 } }
+... ])
+{ "cantidad" : 250498, "nombre" : "Carlos" }
+{ "cantidad" : 249888, "nombre" : "Juan" }
+{ "cantidad" : 250110, "nombre" : "María" }
+{ "cantidad" : 249504, "nombre" : "Lucía" }
+>
 ```
 
 ```sh
+> db.participantes.aggregate([ {$group: {_id: "$edad", cantidad: {$sum: 1} }},  { $project: {edad: "$_id", cantidad: 1, _id: 0 } } ])
+{ "cantidad" : 9936, "edad" : 54 }
+{ "cantidad" : 9988, "edad" : 68 }
+{ "cantidad" : 10038, "edad" : 94 }
+{ "cantidad" : 10190, "edad" : 63 }
+{ "cantidad" : 9903, "edad" : 0 }
+{ "cantidad" : 9968, "edad" : 51 }
+{ "cantidad" : 9984, "edad" : 74 }
+{ "cantidad" : 10073, "edad" : 26 }
+{ "cantidad" : 9792, "edad" : 30 }
+{ "cantidad" : 10089, "edad" : 45 }
+{ "cantidad" : 9895, "edad" : 46 }
+{ "cantidad" : 9756, "edad" : 14 }
+{ "cantidad" : 10055, "edad" : 29 }
+{ "cantidad" : 10004, "edad" : 31 }
+{ "cantidad" : 9916, "edad" : 64 }
+{ "cantidad" : 9886, "edad" : 49 }
+{ "cantidad" : 10115, "edad" : 69 }
+{ "cantidad" : 10035, "edad" : 25 }
+{ "cantidad" : 10027, "edad" : 62 }
+{ "cantidad" : 10108, "edad" : 22 }
+Type "it" for more
+>                                           
 ```
 
 ```sh
