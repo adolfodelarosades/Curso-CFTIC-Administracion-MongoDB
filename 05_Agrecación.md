@@ -241,6 +241,18 @@ Type "it" for more
 ```
 
 ```sh
+> use shop2
+switched to db shop2
+> db.pedidos.insert({item: "v101", cantidad:12, precio:20, fecha: ISODate("2020-01-19") })
+WriteResult({ "nInserted" : 1 })
+> db.pedidos.insert({item: "v101", cantidad:6, precio:20, fecha: ISODate("2020-01-11") })
+WriteResult({ "nInserted" : 1 })
+> db.pedidos.insert({item: "v101", cantidad:4, precio:20, fecha: ISODate("2020-01-21") })
+WriteResult({ "nInserted" : 1 })
+> db.pedidos.insert({item: "v102", cantidad:7, precio:10.3, fecha: ISODate("2020-01-21") })
+WriteResult({ "nInserted" : 1 })
+> db.pedidos.insert({item: "v102", cantidad:5, precio:10.9, fecha: ISODate("2020-01-22") })
+WriteResult({ "nInserted" : 1 })
 ```
 
 ```sh
