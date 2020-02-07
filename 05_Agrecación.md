@@ -280,8 +280,29 @@ Por cada día de la semana nos indica las ventas.
 Cantidad promedio por `item`.
 
 ```sh
-
+> db.libros.aggregate([
+... {$group: {_id: "$autor", libros: {$push: "$titulo"} } },
+... {$project: {autor: "$_id", libros: 1, _id:0} },
+... {$sort: {autor: 1}}
+... ])
+{ "libros" : [ "Futuro de la Ingeniería", "Grandes Ingenieros del siglo XX", "Grandes Ingenieros del siglo XX", "El Coronel no tiene quien le escriba", "El Amor en los tiempos del cólera" ], "autor" : null }
+{ "libros" : [ "La Historia Interminable" ], "autor" : "Adolfito" }
+{ "libros" : [ "París era una Fiesta" ], "autor" : "Ernest Hemingway" }
+{ "libros" : [ "Cien Años de Soledad", "El Otoño del Patriarca", "Cien Años de Soledad" ], "autor" : "Gabriel García Márquez" }
+{ "libros" : [ "El Sr. de los Anillos", "El Sr. de los Anillos", "El Sr. de los Anillos", "El Sr. de los Anillos" ], "autor" : "J.R.R. Tolkin" }
+{ "libros" : [ "París siempre será París" ], "autor" : "John Doe" }
+{ "libros" : [ "El Caso Fitgerald" ], "autor" : "John Grisam" }
+{ "libros" : [ "The Firm" ], "autor" : "John Grisham" }
+{ "libros" : [ "Otelo 2" ], "autor" : "Juan" }
+{ "libros" : [ "La Ciudad y los Perros" ], "autor" : "Mario Vargas Llosa" }
+{ "libros" : [ "La Historia Interminable", "La Historia Interminable" ], "autor" : "Michael Ende" }
+{ "libros" : [ "Otelo" ], "autor" : "William Shakespeare" }
+{ "libros" : [ "París, La Guía Completa", "La Era de Oro del Cine Americano", "The Very Best of Beatles", "Agile Consultants", "Consulting for Global Marktes", "París" ], "autor" : "vv.aa." }
+{ "libros" : [ "El Coronel no tiene quién le escriba" ], "autor" : { "nombre" : "Gabriel García Márquez", "pais" : "Colombia" } }
+{ "libros" : [ "El Quijote" ], "autor" : { "nombre" : "Miguel", "apellidos" : "De Cervantes Saavedra", "pais" : "Italia" } }
 ```
+
+Crea un array de libros por cada Autor
 ```sh
 
 ```
