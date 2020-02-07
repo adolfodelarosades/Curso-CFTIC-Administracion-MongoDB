@@ -256,7 +256,23 @@ WriteResult({ "nInserted" : 1 })
 ```
 
 ```sh
+> db.pedidos.aggregate([
+... {$group: {_id: {$dayOfWeek: "$fecha"}, total: {$sum:{$multiply:["$cantidad", "$precio"]}}}},
+... {$sort: {total: -1}}
+... ])
+{ "_id" : 1, "total" : 240 }
+{ "_id" : 3, "total" : 152.10000000000002 }
+{ "_id" : 7, "total" : 120 }
+{ "_id" : 4, "total" : 54.5 }
 ```
 
+Por cada día de la semana nos indica las ventas.
+
 ```sh
+> db.pedidos.aggregate([
+... {$group: {_id: "$item", cantPromedio: {$avg: "$cantidad"}}},
+... {$project: {item: "$_id", cantPromedio:1, _id: 0}}
+... ])
+{ "cantPromedio" : 6, "item" : "v102" }
+{ "cantPromedio" : 7.333333333333333, "item" : "v101" }
 ```
