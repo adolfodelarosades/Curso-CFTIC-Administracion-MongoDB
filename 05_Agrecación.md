@@ -97,6 +97,16 @@ WriteResult({ "nInserted" : 1 })
 
 ```sh
 > db.clientes.aggregate([
+... {$project: {nombre: 1, _id: 0 } }
+... ])
+{ "nombre" : "Pedro" }
+{ "nombre" : "Laura" }
+{ "nombre" : "Carlos" }
+{ "nombre" : "Sara" }
+>      
+
+
+> db.clientes.aggregate([
 ... { $project: { _id:0, cliente: { $toUpper: "$nombre"} } },
 ... { $sort: { cliente: 1 } }
 ... ])
@@ -104,13 +114,51 @@ WriteResult({ "nInserted" : 1 })
 { "cliente" : "LAURA" }
 { "cliente" : "PEDRO" }
 { "cliente" : "SARA" }
->       
+
+> db.clientes.aggregate([
+... {$project: { cliente: {$toUpper: "$nombre"} , _id: 0 } },
+... {$sort: { cliente: 1  } }
+... ])
+{ "cliente" : "CARLOS" }
+{ "cliente" : "LAURA" }
+{ "cliente" : "PEDRO" }
+{ "cliente" : "SARA" }
 ```
 
-Le he cambiado el nombre al campo `nombre` por `cliente` y posteriormente ordenamos a `cliente`.
+Le he cambiado el nombre al campo `nombre` por `cliente` y posteriormente ordenamos a `cliente`, y no pintamos el campo `_id`, el orden en la proyección no importa.
 
 **Cada etapa va haciendo referencia a la etapa anterior**
 
 ```sh
+> db.clientes.aggregate([
+... {$project: {mesAlta: {$month: "$alta" }, cliente: "$nombre", _id: 0}},
+... {$sort: {mesAlta: -1, cliente: 1}}
+... ])
+{ "mesAlta" : 12, "cliente" : "Pedro" }
+{ "mesAlta" : 12, "cliente" : "Sara" }
+{ "mesAlta" : 11, "cliente" : "Laura" }
+{ "mesAlta" : 10, "cliente" : "Carlos" }
+```
 
+Ordena descendentemente por mes y acendentemente por cliente. `$month` como usa la ISO regresa del 1-12 y lo asigna al campo `mesAlta`.
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
 ```
