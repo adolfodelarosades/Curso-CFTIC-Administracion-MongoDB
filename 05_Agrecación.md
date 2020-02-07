@@ -340,7 +340,6 @@ WriteResult({ "nInserted" : 1 })
 ```
 :skull: Pregunta clasica ¿Cuantos documentos regresa si uso el `$unwind`
 
-
 ```sh
 > db.productos.aggregate([ {$unwind: "$tallas"}, {$count: "documentos"} ])
 { "documentos" : 7 }
@@ -348,5 +347,56 @@ WriteResult({ "nInserted" : 1 })
 ```
 
 ```sh
+> db.productos.insert({nombre: "Camiseta Adidas", tallas: null})
+WriteResult({ "nInserted" : 1 })
+> db.productos.insert({nombre: "Camiseta Zara"})
+WriteResult({ "nInserted" : 1 })
 
+> db.productos.aggregate([ {$unwind: "$tallas"} ])
+{ "_id" : ObjectId("5e3d4910d8b0fd4ac47898f5"), "nombre" : "Camiseta Nike", "tallas" : "xs" }
+{ "_id" : ObjectId("5e3d4910d8b0fd4ac47898f5"), "nombre" : "Camiseta Nike", "tallas" : "s" }
+{ "_id" : ObjectId("5e3d4910d8b0fd4ac47898f5"), "nombre" : "Camiseta Nike", "tallas" : "m" }
+{ "_id" : ObjectId("5e3d4910d8b0fd4ac47898f5"), "nombre" : "Camiseta Nike", "tallas" : "l" }
+{ "_id" : ObjectId("5e3d4910d8b0fd4ac47898f5"), "nombre" : "Camiseta Nike", "tallas" : "xl" }
+{ "_id" : ObjectId("5e3d49cad8b0fd4ac47898f6"), "nombre" : "Camiseta Puma", "tallas" : "m" }
+{ "_id" : ObjectId("5e3d49cad8b0fd4ac47898f6"), "nombre" : "Camiseta Puma", "tallas" : "l" }
+
+
+> db.productos.aggregate([ {$unwind: {path: "$tallas", preserveNullAndEmptyArrays: true}} ])
+{ "_id" : ObjectId("5e3d4910d8b0fd4ac47898f5"), "nombre" : "Camiseta Nike", "tallas" : "xs" }
+{ "_id" : ObjectId("5e3d4910d8b0fd4ac47898f5"), "nombre" : "Camiseta Nike", "tallas" : "s" }
+{ "_id" : ObjectId("5e3d4910d8b0fd4ac47898f5"), "nombre" : "Camiseta Nike", "tallas" : "m" }
+{ "_id" : ObjectId("5e3d4910d8b0fd4ac47898f5"), "nombre" : "Camiseta Nike", "tallas" : "l" }
+{ "_id" : ObjectId("5e3d4910d8b0fd4ac47898f5"), "nombre" : "Camiseta Nike", "tallas" : "xl" }
+{ "_id" : ObjectId("5e3d49cad8b0fd4ac47898f6"), "nombre" : "Camiseta Puma", "tallas" : "m" }
+{ "_id" : ObjectId("5e3d49cad8b0fd4ac47898f6"), "nombre" : "Camiseta Puma", "tallas" : "l" }
+{ "_id" : ObjectId("5e3d4b7fd8b0fd4ac47898f8"), "nombre" : "Camiseta Adidas", "tallas" : null }
+{ "_id" : ObjectId("5e3d4ba1d8b0fd4ac47898f9"), "nombre" : "Camiseta Zara" }
+```
+Ya presenta los que tienen array `null` o sin array.
+
+```sh
+> db.clientes.aggregate([ {$unwind: "$actividades"}, {$group: {_id: "$actividades", total: {$sum: 1} }}, {$project: {actividad: "$_id", total: 1, _id:0} }, {$sort: {total: -1}} ])
+{ "total" : 2, "actividad" : "cardio" }
+{ "total" : 2, "actividad" : "step" }
+{ "total" : 2, "actividad" : "aquagym" }
+{ "total" : 2, "actividad" : "tenis" }
+{ "total" : 2, "actividad" : "padel" }
+{ "total" : 1, "actividad" : "pesas" }
+{ "total" : 1, "actividad" : "esgrima" }
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
 ```
