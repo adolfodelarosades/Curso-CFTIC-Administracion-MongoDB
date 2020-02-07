@@ -29,7 +29,7 @@ Operadores:
 ```
 * `$unwind` (para arrays) 
 * `$match`
-* ``
+* `$addFields` Añade campos
 * ``
 * ``
 * ``
@@ -403,13 +403,144 @@ switched to db maraton
 ```
 
 ```sh
+> use shop3
+switched to db shop3
+> db.opiniones.insert({producto: "v101", usuario: "123", opinion:"buen servicio pero producto en mal estado"})
+WriteResult({ "nInserted" : 1 })
+> db.opiniones.insert({producto: "v101", usuario: "1234", opinion:"muy satisfecho con la compra"})
+WriteResult({ "nInserted" : 1 })
+> db.opiniones.insert({producto: "v101", usuario: "129", opinion:"muy mal tuve que devolverlo"})
+WriteResult({ "nInserted" : 1 })
+> db.opiniones.insert({producto: "v101", usuario: "211", opinion:"perfecto en todos los sentidos"})
+WriteResult({ "nInserted" : 1 })
+> db.opiniones.insert({producto: "v101", usuario: "212", opinion:"mal, no volveré a comprar"})
+WriteResult({ "nInserted" : 1 })
+> db.opiniones.insert({producto: "v102", usuario: "129", opinion:"muy mal horrible"})
+WriteResult({ "nInserted" : 1 })
+> db.opiniones.insert({producto: "v102", usuario: "130", opinion:"perfecto"})
+WriteResult({ "nInserted" : 1 })
+
+> db.opiniones.createIndex({opinion: "text"})
+{
+        "createdCollectionAutomatically" : false,
+        "numIndexesBefore" : 1,
+        "numIndexesAfter" : 2,
+        "ok" : 1
+}
+>    
+```
+Creo indice de texto para buscar palabras (malas o buenas)
+```sh
+> db.opiniones.find({}, {_id:0, producto: 1, opinion: 1})
+{ "producto" : "v101", "opinion" : "buen servicio pero producto en mal estado" }
+{ "producto" : "v101", "opinion" : "muy satisfecho con la compra" }
+{ "producto" : "v101", "opinion" : "muy mal tuve que devolverlo" }
+{ "producto" : "v101", "opinion" : "perfecto en todos los sentidos" }
+{ "producto" : "v101", "opinion" : "mal, no volveré a comprar" }
+{ "producto" : "v102", "opinion" : "muy mal horrible" }
+{ "producto" : "v102", "opinion" : "perfecto" }
+
+> db.opiniones.aggregate([ {$match: {$text: {$search: "mal"} } }, {$group: {_id: "$producto", opiNegativas: {$sum: 1} } } ])
+{ "_id" : "v102", "opiNegativas" : 1 }
+{ "_id" : "v101", "opiNegativas" : 3 }
+```
+Tengo tres opiniones con la palabra **mal** en un producto `v101` y una en `v102`.
+
+```sh
+> db.opiniones.aggregate([ {$match: {$text: {$search: "buen perfecto satisfecho"} } }, {$group: {_id: "$producto", opiPositivas: {$sum: 1} } } ])
+{ "_id" : "v102", "opiPositivas" : 1 }
+{ "_id" : "v101", "opiPositivas" : 3 }
 ```
 
 ```sh
+> use maraton2
+switched to db maraton2
+> db.resultados.insert({nombre:"Juan", llegada: new Date("2020-01-30T16:31:40")})
+WriteResult({ "nInserted" : 1 })
+> db.resultados.insert({nombre:"Laura", llegada: new Date("2020-01-30T15:43:20")})
+WriteResult({ "nInserted" : 1 })
+> db.resultados.insert({nombre:"Sara", llegada: new Date("2020-01-30T17:13:22")})
+WriteResult({ "nInserted" : 1 })
 ```
 
-```sh
-```
 
 ```sh
+> db.resultados.aggregate([
+... {$addFields: {tiempo: {$subtract: ["$llegada", new Date("2020-01-30T12:00:00")] } }}
+... ])
+{ "_id" : ObjectId("5e3d58cbd8b0fd4ac4789901"), "nombre" : "Juan", "llegada" : ISODate("2020-01-30T15:31:40Z"), "tiempo" : NumberLong(16300000) }
+{ "_id" : ObjectId("5e3d58e3d8b0fd4ac4789902"), "nombre" : "Laura", "llegada" : ISODate("2020-01-30T14:43:20Z"), "tiempo" : NumberLong(13400000) }
+{ "_id" : ObjectId("5e3d58ffd8b0fd4ac4789903"), "nombre" : "Sara", "llegada" : ISODate("2020-01-30T16:13:22Z"), "tiempo" : NumberLong(18802000) }
+```
+
+Añado una columna `tiempo` que esta dada en milisegundos.
+
+```sh
+db.resultados.aggregate([
+    { $addFields: { tiempo: { $subtract: ["$llegada", new Date("2020-01-30T12:00:00")] } } },
+    { $addFields:{
+        segundos: {
+            $mod: [{$divide: ["$tiempo", 1000]}, 60]
+        }
+      }
+    },
+    { $addFields:{
+        minutos: {
+            $floor: {
+                $mod: [{$divide: ["$tiempo", 1000 * 60]}, 60]
+            }
+        }
+      }
+    },
+    { $addFields:{
+        horas: {
+            $floor: {
+                $mod: [{$divide: ["$tiempo", 1000 * 60 * 60]}, 24]
+            }
+        }
+      }
+    },
+    {$project: {
+        nombre: 1, horas : 1, minutos : 1, segundos : 1, _id: 0
+      }
+    },
+    {$sort: {horas: 1, minutos: 1, segundos: 1} }
+])
+````
+
+```sh
+> db.resultados.aggregate([
+...     { $addFields: { tiempo: { $subtract: ["$llegada", new Date("2020-01-30T12:00:00")] } } },
+...     { $addFields:{
+...         segundos: {
+...             $mod: [{$divide: ["$tiempo", 1000]}, 60]
+...         }
+...       }
+...     },
+...     { $addFields:{
+...         minutos: {
+...             $floor: {
+...                 $mod: [{$divide: ["$tiempo", 1000 * 60]}, 60]
+...             }
+...         }
+...       }
+...     },
+...     { $addFields:{
+...         horas: {
+...             $floor: {
+...                 $mod: [{$divide: ["$tiempo", 1000 * 60 * 60]}, 24]
+...             }
+...         }
+...       }
+...     },
+...     {$project: {
+...         nombre: 1, horas : 1, minutos : 1, segundos : 1, _id: 0
+...       }
+...     },
+...     {$sort: {horas: 1, minutos: 1, segundos: 1} }
+... ])
+{ "nombre" : "Laura", "segundos" : 20, "minutos" : 43, "horas" : 3 }
+{ "nombre" : "Juan", "segundos" : 40, "minutos" : 31, "horas" : 4 }
+{ "nombre" : "Sara", "segundos" : 22, "minutos" : 13, "horas" : 5 }
+>                              
 ```
