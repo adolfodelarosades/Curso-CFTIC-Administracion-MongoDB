@@ -4,7 +4,23 @@
 
 Operadore:
 
-* 
+* `$project` // idem proyección `find()`
+* `sort` // idem método `sort()`
+* `group`
+```
+  $group:{
+     _id: <expression>,
+     <campo1>: {operador: expr},
+     ...
+  }
+```
+   El campo `_id` es obligatorio.
+* ``
+* ``
+* ``
+* ``
+* ``
+
 
 ```sh
 db.<coleccion>.aggregate(
@@ -143,7 +159,18 @@ Le he cambiado el nombre al campo `nombre` por `cliente` y posteriormente ordena
 Ordena descendentemente por mes y acendentemente por cliente. `$month` como usa la ISO regresa del 1-12 y lo asigna al campo `mesAlta`.
 
 ```sh
+> db.clientes.aggregate([
+... {$project: {mesAlta: {$month: "$alta"}}},
+... {$group: {_id: "$mesAlta", numeroAltas: {$sum: 1}}}
+... ])
+{ "_id" : 12, "numeroAltas" : 2 }
+{ "_id" : 11, "numeroAltas" : 1 }
+{ "_id" : 10, "numeroAltas" : 1 }
+> 
 ```
+Agrupa por mesAlta, obliga a poner `_id` y los acumula sumandolos en el campo `numeroAltas`, el `1` del `$sum` indica que sume por el primer campo.
+
+¿Cuando pongo o no el signo de $? A mi parecer aquí tiene lógica que lleve el `_id` por que lo convierte a `_id`
 
 ```sh
 ```
