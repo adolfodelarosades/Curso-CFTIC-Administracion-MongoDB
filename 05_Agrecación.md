@@ -27,11 +27,8 @@ Operadores:
      ...
   }
 ```
-* `$unwind` (para arrays)
-
-
-  
-* ``
+* `$unwind` (para arrays) 
+* `$match`
 * ``
 * ``
 * ``
@@ -385,8 +382,24 @@ Ya presenta los que tienen array `null` o sin array.
 { "total" : 1, "actividad" : "pesas" }
 { "total" : 1, "actividad" : "esgrima" }
 ```
+Agrupa por los elementos de un array y me dice los totales.
 
 ```sh
+> use maraton
+switched to db maraton
+
+> db.participantes.find().count()
+1000000
+
+> db.participantes.aggregate([
+... {$match: {edad: {$gte: 50}, edad: {$lt: 60}}},
+... {$group: {_id: "$nombre", total: {$sum: 1}} },
+... {$sort: {total: -1}}
+... ])
+{ "_id" : "Juan", "total" : 150497 }
+{ "_id" : "Carlos", "total" : 150184 }
+{ "_id" : "María", "total" : 149852 }
+{ "_id" : "Lucía", "total" : 149357 }
 ```
 
 ```sh
