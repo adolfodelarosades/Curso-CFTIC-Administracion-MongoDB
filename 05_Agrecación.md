@@ -13,7 +13,7 @@ db.<coleccion>.aggregate(
   { opciones }
 )
 ```
-`{allowDiskUse: true}` Si la etapa de agrupamiento supera el uso de 100MB de memoria RAM
+`{allowDiskUse: true}` Es una OPCIÓN, Si la etapa de agrupamiento supera el uso de 100MB de memoria RAM
 
 Operadores:
 
@@ -275,4 +275,25 @@ Por cada día de la semana nos indica las ventas.
 ... ])
 { "cantPromedio" : 6, "item" : "v102" }
 { "cantPromedio" : 7.333333333333333, "item" : "v101" }
+```
+
+Cantidad promedio por `item`.
+
+```sh
+
+```
+```sh
+
+```
+```sh
+
+```
+```sh
+
+```
+```sh
+
+```
+```sh
+
 ```
