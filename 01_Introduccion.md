@@ -115,9 +115,9 @@ NO PERMITIDO
 SEGÚN PERMITIDO PERO AMI ME MARCA ESTE ERROR
 ```
 
-### Shell
+### Arrancar Mongo
 
-Para arrancar el shell exitesn varias formas:
+Para arrancar Mongo exitesn varias formas:
 
 * `mongo` es como poner `mongo --host localhost --port 27017`
 * `mongo --host`
@@ -131,8 +131,6 @@ Si el password se omite lo pregunta después.
 
 ### Comandos Básicos.
 
-La consola o shell de Mongo es un interprete JS.
-
 * `cls`: Limpia la pantalla
 * `show dbs`: Muestra las BD existentes.
 * `db`: Indica en que BD estoy trabajando
@@ -143,13 +141,12 @@ La consola o shell de Mongo es un interprete JS.
 
 <img src="/images/c1/1-comandos-basicos.png">
 
-### Crear Colecciones
+**Crear Colecciones**
 
 Existen 2 formas:
 
 * Insertar un registro (Indirecta)
 * Crear una colección (Directa
-
 
 **Crear Colección de Forma Indirecta**
 
