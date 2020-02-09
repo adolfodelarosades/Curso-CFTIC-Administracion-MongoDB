@@ -203,6 +203,101 @@ WriteResult({ "nInserted" : 1 })
 
 En teoría el nombre `3monitores` no sería valido para nombrar una colección, **PERO si la creamos directamente LO PERMITE, si la creamos de manera indirecta NO LO PERMITE**.
 
+**Insertemos un documento más complejo**:
+
+```sh
+> db.clientes.insert(
+... {
+... nombre: "María",
+... apellidos: "Pérez Gómez",
+... edad: 46
+... }
+... )
+WriteResult({ "nInserted" : 1 })
+> 
+```
+
+Observamos que para nombres de los campos no es necesario que vayan entre comillas.
+
+**Mostrar documentos de la colección**
+
+```sh
+> db.clientes.find()
+{ "_id" : ObjectId("5e406738ce31e8b17f0c7e7c"), "nombre" : "Juan" }
+{ "_id" : ObjectId("5e406d3ace31e8b17f0c7e7e"), "nombre" : "María", "apellidos" : "Pérez Gómez", "edad" : 46 }
+
+> db.clientes.find().pretty()
+{ "_id" : ObjectId("5e406738ce31e8b17f0c7e7c"), "nombre" : "Juan" }
+{
+	"_id" : ObjectId("5e406d3ace31e8b17f0c7e7e"),
+	"nombre" : "María",
+	"apellidos" : "Pérez Gómez",
+	"edad" : 46
+}
+```
+
+Para mostrar los documentos de una colección usamos el método `find()` y si lo queremos pintarlo bonito usamos además el método `pretty()`.
+
+**Borrar Colecciones**
+
+Existen dos formas de borrar las colecciones, pero siempre usando el método `drop()`:
+
+```sh
+> show collections
+3monitores
+clientes
+inventario
+
+> db.getCollection("3monitores").drop()
+true
+
+> db.inventario.drop()
+true
+
+> show collections
+clientes
+```
+
+**Borrar la Base de Datos**
+
+Para eliminar la BD se usa el método `dropDatabase()`:
+
+```sh
+> show dbs
+Ejemplo    0.000GB
+admin      0.000GB
+config     0.000GB
+cursenode  0.000GB
+cursonode  0.000GB
+foo        0.000GB
+gimnasio   0.000GB
+local      0.000GB
+udemyDb    0.000GB
+
+> db
+gimnasio
+
+> db.dropDatabase()
+{ "dropped" : "gimnasio", "ok" : 1 }
+
+> db
+gimnasio
+
+> show collections
+
+> show dbs
+Ejemplo    0.000GB
+admin      0.000GB
+config     0.000GB
+cursenode  0.000GB
+cursonode  0.000GB
+foo        0.000GB
+local      0.000GB
+udemyDb    0.000GB
+```
+
+Como vemos con el comando `db.dropDatabase()` eliminamos la BD pero si pulsamos `db` nos indica que seguimos en `gimnasio`, si intentamos mostrar sus colecciones no muestra nada y si listamos las BDs no se muestra `gimnasio`.
+
 
 
 
