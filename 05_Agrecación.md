@@ -26,6 +26,13 @@ Operadores:
      <campo1>: {operador: expr},
      ...
   }
+  
+  $group:{_id: {
+     <campo>: "$campo",
+     <campo>: "$campo",...
+     }, ...}}
+  
+  
 ```
 * `$unwind` (para arrays) :skull:
 * `$match`
@@ -599,15 +606,142 @@ Uso de `$lookup`
 Volca la información en un array con nombre `detalleProducto`
 
 ```sh
+> use maraton
+switched to db maraton
+> db.participantes.aggregate([
+... {$group: {_id: {nombre: "$nombre", edad: "$edad"}, total: {$sum: 1} } }
+... ])
+{ "_id" : { "nombre" : "Lucía", "edad" : 29 }, "total" : 2447 }
+{ "_id" : { "nombre" : "María", "edad" : 95 }, "total" : 2610 }
+{ "_id" : { "nombre" : "Lucía", "edad" : 11 }, "total" : 2455 }
+{ "_id" : { "nombre" : "Juan", "edad" : 26 }, "total" : 2462 }
+{ "_id" : { "nombre" : "Lucía", "edad" : 25 }, "total" : 2507 }
+{ "_id" : { "nombre" : "Lucía", "edad" : 84 }, "total" : 2519 }
+{ "_id" : { "nombre" : "Lucía", "edad" : 57 }, "total" : 2426 }
+{ "_id" : { "nombre" : "Juan", "edad" : 8 }, "total" : 2467 }
+{ "_id" : { "nombre" : "Carlos", "edad" : 16 }, "total" : 2406 }
+{ "_id" : { "nombre" : "Lucía", "edad" : 82 }, "total" : 2521 }
+{ "_id" : { "nombre" : "María", "edad" : 35 }, "total" : 2488 }
+{ "_id" : { "nombre" : "Juan", "edad" : 22 }, "total" : 2634 }
+{ "_id" : { "nombre" : "María", "edad" : 51 }, "total" : 2483 }
+{ "_id" : { "nombre" : "Juan", "edad" : 88 }, "total" : 2548 }
+{ "_id" : { "nombre" : "Juan", "edad" : 96 }, "total" : 2539 }
+{ "_id" : { "nombre" : "María", "edad" : 78 }, "total" : 2543 }
+{ "_id" : { "nombre" : "Lucía", "edad" : 6 }, "total" : 2448 }
+{ "_id" : { "nombre" : "Carlos", "edad" : 44 }, "total" : 2516 }
+{ "_id" : { "nombre" : "Lucía", "edad" : 41 }, "total" : 2477 }
+{ "_id" : { "nombre" : "María", "edad" : 11 }, "total" : 2511 }
+Type "it" for more
+>                                                                    
+```
+
+Agrupa por nombre y edad y nos da su 
+
+
+```sh
+> db.participantes.aggregate([ {$group: {_id: {nombre: "$nombre", edad: "$edad"}, total: {$sum: 1} }}, {$sort: {total: -1}}, {$limit: 3}  ])
+{ "_id" : { "nombre" : "Lucía", "edad" : 78 }, "total" : 2646 }
+{ "_id" : { "nombre" : "Juan", "edad" : 22 }, "total" : 2634 }
+{ "_id" : { "nombre" : "Lucía", "edad" : 91 }, "total" : 2617 }
+```
+
+```sh
+> db.participantes.aggregate([ {$group: { _id: "$edad", registros:{$push: "$$ROOT" } }} ])
+2020-02-10T10:10:20.738+0100 E  QUERY    [js] uncaught exception: Error: command failed: {
+        "ok" : 0,
+        "errmsg" : "Exceeded memory limit for $group, but didn't allow external sort. Pass allowDiskUse:true to opt in.",
+        "code" : 16945,
+        "codeName" : "Location16945"
+} : aggregate failed :
+_getErrorWithCode@src/mongo/shell/utils.js:25:13
+doassert@src/mongo/shell/assert.js:18:14
+_assertCommandWorked@src/mongo/shell/assert.js:583:17
+assert.commandWorked@src/mongo/shell/assert.js:673:16
+DB.prototype._runAggregate@src/mongo/shell/db.js:266:5
+DBCollection.prototype.aggregate@src/mongo/shell/collection.js:1012:12
+@(shell):1:1
+>                                          
+```
+Esto no da error por que tiene limite de 100MB.
+
+```sh
+> db.participantes.aggregate([ {$group: { _id: "$edad", registros:{$push: "$$ROOT" } }} ], {allowDiskUse: true}) 
+```
+
+Con `allowDiskUse: true` ya nos permite usar memoria en disco y puede ejecutar el comando, salen muchos datos hayq que cortarlo. 
+
+En el campo `registro` hace un array con todos los documentos agrupados por edad.
+```
+registro: [
+ {_id, nombre ....}
+ {...}
+ ....
+]
+```
+
+```sh
+> db.games.aggregate([
+... {$group: {_id: "$juego.nombre", registros: {$push: "$$ROOT"} } }
+... ])
+{ "_id" : null, "registros" : [ { "_id" : ObjectId("5e317d9351e2181056d76dde"), "jugador" : "pepe", "juego" : "Tetris", "puntos" : [ 79, 102, 89, 101 ] }, { "_id" : ObjectId("5e317daf51e2181056d76ddf"), "jugador" : "luisa", "juego" : "Tetris", "puntos" : [ 120, 99, 100, 120 ] }, { "_id" : ObjectId("5e317dcb51e2181056d76de0"), "jugador" : "luis", "juego" : "Pacman", "puntos" : [ 120, 99, 100, 120 ] } ] }
+>   
+```
+En este ejemplo si puedo los resultados por ser menos registros. Me crea un array de documentos agrupados por lo que yo le indique y el `$push` mete todo el documento.
+
+
+```sh
+```
+
+
+```sh
+```
+
+
+```sh
+```
+
+
+```sh
+```
+
+
+```sh
+```
+
+
+```sh
+```
+
+
+```sh
+```
+
+
+
+```sh
 ```
 
 ```sh
 ```
+
 ```sh
 ```
+
 ```sh
 ```
+
 ```sh
 ```
+
 ```sh
 ```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
