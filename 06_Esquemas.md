@@ -75,25 +75,49 @@
 
    No tengo dos colecciones (clientes, direcciones) en una sola tengo ambos datos.
    
-   ### MODELO ONE-TO-MANY
+### MODELO ONE-TO-MANY
    
-   [Model One-to-Many Relationships with Embedded Documents¶](https://docs.mongodb.com/manual/tutorial/model-embedded-one-to-many-relationships-between-documents/)
-   Modelo One-to-Few
+[Model One-to-Many Relationships with Embedded Documents¶](https://docs.mongodb.com/manual/tutorial/model-embedded-one-to-many-relationships-between-documents/)
+[Model One-to-Many Relationships with Document References](https://docs.mongodb.com/manual/tutorial/model-referenced-one-to-many-relationships-between-documents/#model-one-to-many-relationships-with-document-references)
    
-   En MongoDB intentemos utilizar el modelo denormalizado o embebido.
+**Modelo One-to-Few**
    
-   * El lado one es el que normalmente recibe más consultas
-   * Los documentos del lado many normalmente no tendrán escrituras frecuentes.
+En MongoDB intentemos utilizar el modelo denormalizado o embebido.
    
-    Colección Productos
-    ```
+* El lado one es el que normalmente recibe más consultas
+* Los documentos del lado many normalmente no tendrán escrituras frecuentes.
+   
+   Colección Productos
+   ```
     {
       _id: "01",
       producto: "Nike TF55",
       marca: "Nike",
-      imagenes:["", ""],
+      imagenes:[
+        {url: "https://...", textoAlt: "Zapatillas ...."}
+        {url: "https://...", textoAlt: "Zapatillas ...."}
+        ...
+      ],
       precio: ...
     }
-    ```
+   ```
    
+   Las imagenes en teoría no cambian mucho, se embeben en el documento principal.
    
+**Modelo One-to-Many**
+
+En general, modelo denormalizado o embebido. Ver circunstancias concretas.
+
+* Cada documento individual no puede superar 16MG,
+
+**Modelo One-to-squillions** (muchísimos "tropecientos")
+
+En general, modelo normalizado o referencia a otra colección.
+
+* El lado many recibira muchas consultas.
+* El lado many podría crecer hasta superar el límite de 16 MG del lado one.
+
+
+
+
+
