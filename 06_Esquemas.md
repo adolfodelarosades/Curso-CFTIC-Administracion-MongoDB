@@ -610,3 +610,224 @@ WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
 
 Como podemos ver nos permite modificar los registros antiguos.
 
+
+Otro ejemplo sería usar ` validationAction: "warn"`
+
+```sh
+db.createCollection(
+    "pacientes", 
+    { validator: {
+          $jsonSchema: {
+              bsonType: "object",
+              required: ["nombre", "apellidos", "fechaNac", "direccion"],
+              properties: {
+                  nombre: {
+                      bsonType: "string",
+                      description: "Debe ser un string y es obligatorio"
+                  },
+                  apellidos: {
+                    bsonType: "string",
+                    description: "Debe ser un string y es obligatorio"
+                  },
+                  fechaNac: {
+                    bsonType: "date",
+                    description: "Debe ser un date y es obligatorio"
+                  },
+                  direccion: {
+                    bsonType: "object",
+                    required: ["calle", "cp","localidad"],
+                    properties: {
+                        calle: {
+                            bsonType: "string",
+                            description: "Debe ser un string y es obligatorio"
+                        },
+                        cp: {
+                            bsonType: "string",
+                            description: "Debe ser un string y es obligatorio"
+                        },
+                        localidad: {
+                            bsonType: "string",
+                            description: "Debe ser un string y es obligatorio"
+                        }
+                    }
+                  }
+                }
+            }
+        }
+    }
+)
+
+//Aplicar validación a colección existente
+db.runCommand({
+    collMod: "medicos", 
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["nombre", "apellidos", "fechaNac", "direccion"],
+            properties: {
+                nombre: {
+                    bsonType: "string",
+                    description: "Debe ser un string y es obligatorio"
+                },
+                apellidos: {
+                bsonType: "string",
+                description: "Debe ser un string y es obligatorio"
+                },
+                fechaNac: {
+                bsonType: "date",
+                description: "Debe ser un date y es obligatorio"
+                },
+                direccion: {
+                bsonType: "object",
+                required: ["calle", "cp","localidad"],
+                properties: {
+                    calle: {
+                        bsonType: "string",
+                        description: "Debe ser un string y es obligatorio"
+                    },
+                    cp: {
+                        bsonType: "string",
+                        description: "Debe ser un string y es obligatorio"
+                    },
+                    localidad: {
+                        bsonType: "string",
+                        description: "Debe ser un string y es obligatorio"
+                    }
+                }
+                }
+            }
+        }
+    } ,
+    validationAction: "warn"
+})
+
+```
+
+
+
+```sh
+> db.runCommand({
+...     collMod: "medicos",
+...     validator: {
+...         $jsonSchema: {
+...             bsonType: "object",
+...             required: ["nombre", "apellidos", "fechaNac", "direccion"],
+...             properties: {
+...                 nombre: {
+...                     bsonType: "string",
+...                     description: "Debe ser un string y es obligatorio"
+...                 },
+...                 apellidos: {
+...                 bsonType: "string",
+...                 description: "Debe ser un string y es obligatorio"
+...                 },
+...                 fechaNac: {
+...                 bsonType: "date",
+...                 description: "Debe ser un date y es obligatorio"
+...                 },
+...                 direccion: {
+...                 bsonType: "object",
+...                 required: ["calle", "cp","localidad"],
+...                 properties: {
+...                     calle: {
+...                         bsonType: "string",
+...                         description: "Debe ser un string y es obligatorio"
+...                     },
+...                     cp: {
+...                         bsonType: "string",
+...                         description: "Debe ser un string y es obligatorio"
+...                     },
+...                     localidad: {
+...                         bsonType: "string",
+...                         description: "Debe ser un string y es obligatorio"
+...                     }
+...                 }
+...                 }
+...             }
+...         }
+...     } ,
+...     validationAction: "warn"
+... })
+{ "ok" : 1 }
+>          
+
+```
+
+Te permite la modificacion la Advertencia la muestra en la consola de Mongod
+
+El comando ` db.getCollectionInfos` Muestra la información de las colecciones entre eso las validaciones que hemos metido:
+
+```sh
+> db.getCollectionInfos({name: "medicos"})
+[
+        {
+                "name" : "medicos",
+                "type" : "collection",
+                "options" : {
+                        "validator" : {
+                                "$jsonSchema" : {
+                                        "bsonType" : "object",
+                                        "required" : [
+                                                "nombre",
+                                                "apellidos",
+                                                "fechaNac",
+                                                "direccion"
+                                        ],
+                                        "properties" : {
+                                                "nombre" : {
+                                                        "bsonType" : "string",
+                                                        "description" : "Debe ser un string y es obligatorio"
+                                                },
+                                                "apellidos" : {
+                                                        "bsonType" : "string",
+                                                        "description" : "Debe ser un string y es obligatorio"
+                                                },
+                                                "fechaNac" : {
+                                                        "bsonType" : "date",
+                                                        "description" : "Debe ser un date y es obligatorio"
+                                                },
+                                                "direccion" : {
+                                                        "bsonType" : "object",
+                                                        "required" : [
+                                                                "calle",
+                                                                "cp",
+                                                                "localidad"
+                                                        ],
+                                                        "properties" : {
+                                                                "calle" : {
+                                                                        "bsonType" : "string",
+                                                                        "description" : "Debe ser un string y es obligatorio"
+                                                                },
+                                                                "cp" : {
+                                                                        "bsonType" : "string",
+                                                                        "description" : "Debe ser un string y es obligatorio"
+                                                                },
+                                                                "localidad" : {
+                                                                        "bsonType" : "string",
+                                                                        "description" : "Debe ser un string y es obligatorio"
+                                                                }
+                                                        }
+                                                }
+                                        }
+                                }
+                        },
+                        "validationLevel" : "moderate",
+                        "validationAction" : "warn"
+                },
+                "info" : {
+                        "readOnly" : false,
+                        "uuid" : UUID("ed6ad035-aaae-4a1a-a272-4ba21187b9bc")
+                },
+                "idIndex" : {
+                        "v" : 2,
+                        "key" : {
+                                "_id" : 1
+                        },
+                        "name" : "_id_",
+                        "ns" : "clinica2.medicos"
+                }
+        }
+]
+>           
+```
+
