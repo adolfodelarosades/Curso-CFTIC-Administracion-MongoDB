@@ -51,7 +51,13 @@ Operadores:
      }
   }
  ```
-
+* `$merge` // Volcar la agregación en una colección (si no existe la crea)
+  ```
+   { $merge: "<coleccion>" | 
+              {db: <base-datos>, coll: <coleccion> }
+   }
+ ```
+  
 ```sh
 > use biblioteca
 switched to db biblioteca
@@ -588,7 +594,7 @@ WriteResult({ "nInserted" : 1 })
 WriteResult({ "nInserted" : 1 })
 ```
 
-Uso de `$lookup`
+**Uso de `$lookup`**
 
 ```sh
 > db.pedidos.aggregate([
@@ -688,12 +694,42 @@ registro: [
 ```
 En este ejemplo si puedo los resultados por ser menos registros. Me crea un array de documentos agrupados por lo que yo le indique y el `$push` mete todo el documento.
 
+**Uso de `$merge`**
 
 ```sh
+> use maraton
+switched to db maraton
+> db.participantes.aggregate([
+... {$match: {edad: {$gte: 50} } },
+... {$group: {_id: "$nombre", total: {$sum: 1} }},
+... {$merge: "nombresSenior" }
+... ])
+> show collections
+foo
+nombresSenior
+participantes
+> db.nombresSenior.find().count()
+4
+> db.nombresSenior.find()
+{ "_id" : "María", "total" : 125180 }
+{ "_id" : "Carlos", "total" : 125385 }
+{ "_id" : "Lucía", "total" : 124955 }
+{ "_id" : "Juan", "total" : 124604 }
 ```
 
+Me crea una nueva colección `nombresSenior`, **Si esa colección ya existiera AÑADE LO QUE SE GENERA** como vemos en el siguiente ejemplo:
 
 ```sh
+> db.foo.find()
+{ "_id" : ObjectId("5e3d203dd8b0fd4ac47898e6"), "nombre" : "Carlos", "apellidos1" : "Gómez" }
+> db.participantes.aggregate([ {$match: {edad: {$gte: 50} } }, {$group: {_id: "$nombre", total: {$sum: 1} }}, {$merge: "foo" } ])
+> db.foo.find()
+{ "_id" : ObjectId("5e3d203dd8b0fd4ac47898e6"), "nombre" : "Carlos", "apellidos1" : "Gómez" }
+{ "_id" : "Carlos", "total" : 125385 }
+{ "_id" : "Lucía", "total" : 124955 }
+{ "_id" : "María", "total" : 125180 }
+{ "_id" : "Juan", "total" : 124604 }
+>                                      
 ```
 
 
