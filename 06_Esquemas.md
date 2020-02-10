@@ -230,6 +230,9 @@ Existen dos formas de validadr
 
 **Esquema JSON** 
 [JSON Schema](https://docs.mongodb.com/manual/core/schema-validation/index.html#json-schema)
+
+[Operador `$jsonSchema`](https://docs.mongodb.com/manual/reference/operator/query/jsonSchema/#op._S_jsonSchema)
+
 ```
 db.createCollection(
   "<nombre-coleccion>",
