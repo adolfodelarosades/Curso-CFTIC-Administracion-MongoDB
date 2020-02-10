@@ -4,7 +4,7 @@
 
 ## 3.1 Operaciones de Inserción
 
-[Create Operations](https://docs.mongodb.com/manual/crud/index.html#create-operations
+[Create Operations](https://docs.mongodb.com/manual/crud/index.html#create-operations)
 
 [Insert Documents](https://docs.mongodb.com/manual/tutorial/insert-documents/)
 
@@ -435,6 +435,7 @@ Como esperabamos nos indica que ha **insertado el documento** `"nInserted" : 1`,
 ## Operaciones de Lectura (Consultas)
 
 [Read Operations](https://docs.mongodb.com/manual/crud/index.html#read-operations)
+
 [Query Documents](https://docs.mongodb.com/manual/tutorial/query-documents/)
 
 ### Método find()
