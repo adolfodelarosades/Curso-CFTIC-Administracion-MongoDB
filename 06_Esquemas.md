@@ -28,29 +28,29 @@
 
 2. Documentos referenciados de otra colección o modelo normalizado
 
-  Colección Productos
-  ```
-  {
-    _id: "01",
-    producto: "Nike TF55",
-    marca: "Nike",
-    distribuidores:["d03", "d06"],
-    precio: ...
-  }
-  ```
+   Colección Productos
+   ```
+   {
+     _id: "01",
+     producto: "Nike TF55",
+     marca: "Nike",
+     distribuidores:["d03", "d06"],
+     precio: ...
+   }
+   ```
   
-  Colección Distribuidores
-  ```
-  {
-  _id: "d03",
-  nombre: "ServiZapas",
-  contacto: ...
-  }
+   Colección Distribuidores
+   ```
+   {
+    _id: "d03",
+    nombre: "ServiZapas",
+    contacto: ...
+   }
   
    {
-  _id: "d06",
-  nombre: "Distr. Pérez",
-  contacto: ...
-  }
-  ```
+    _id: "d06",
+   nombre: "Distr. Pérez",
+   contacto: ...
+   }
+   ```
    
