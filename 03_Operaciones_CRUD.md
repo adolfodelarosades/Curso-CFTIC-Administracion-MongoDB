@@ -29,7 +29,7 @@ db.collection.insert(
 * Crea `_id` si no se especifica para cada documento.
 * Si se especifica `_id` debe ser único.
 
-### Insertar documento individual sin `_id`:
+#### Insertar documento individual sin `_id`:
 
 ```sh
 > use gimnasio
@@ -45,7 +45,7 @@ WriteResult({ "nInserted" : 1 })
 { "_id" : ObjectId("5e419e9490d86b85f5fda8ef"), "nombre" : "Juan", "apellido" : "Pérez" }
 ```
 
-### Insertar documento individual con `_id`:
+#### Insertar documento individual con `_id`:
 
 ```sh
 > db.clientes.insert({ _id: 1, nombre: "María", apellido: "López" })
@@ -64,7 +64,7 @@ WriteResult({
 Como se ve en el ejemplo si intento meter otro documento con el mismo `_id` me indica que no lo puedo hacer.
 
 
-### Insertar un array de documentos:
+#### Insertar un array de documentos:
 
 ```sh
 > db.clientes.insert([
@@ -90,7 +90,7 @@ BulkWriteResult({
 ```
 **Inserta cada uno de los documentos del array**. Si en el array existe un error, insertara los registros hasta antes del error.
 
-### Operación con `ordered` true (Default)
+#### Operación con `ordered` true (Default)
 
 Si `ordered` es `true` que es el valor por default, realiza una inserción ordenada de los documentos en el arrar, y si ocurre un error con uno de los documentos, MongoDB regresará sin procesar los documentos restantes del array.
 
@@ -139,7 +139,7 @@ Nos indica que hay un diplicado en la key `_id: 6`, nos indica que ha insertado 
 > 
 ```
 
-### Operación con `ordered` false
+#### Operación con `ordered` false
 
 Si `ordered` es `false`, realiza una inserción desordenada, y si ocurre un error con uno de los documentos, continúa procesando los documentos restantes en el array.
 
