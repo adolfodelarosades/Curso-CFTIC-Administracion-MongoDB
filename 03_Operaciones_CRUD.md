@@ -8,7 +8,6 @@
 
 ### Método insert()
 
-[Insert](https://docs.mongodb.com/manual/reference/command/insert/index.html)
 [db.collection.insert()](https://docs.mongodb.com/manual/reference/method/db.collection.insert/index.html)
 
 Sintaxis.
@@ -30,7 +29,7 @@ db.collection.insert(
 * Crea `_id` si no se especifica para cada documento.
 * Si se especifica `_id` debe ser único.
 
-### Insertar documento individual sin `_id`:
+### Insertar documento individual sin `_id`:
 
 ```sh
 > use gimnasio
@@ -204,4 +203,95 @@ Aquí encontro un `_id` duplicado el 8 pero continuo la inserción,, en total in
 { "_id" : 8, "nombre" : "Lucia" }
 { "_id" : 9, "nombre" : "Luisa" }
 { "_id" : 10, "nombre" : "Carlos" }
+```
+
+### Método insertOne()
+
+[db.collection.insertOne()](https://docs.mongodb.com/manual/reference/method/db.collection.insertOne/)
+
+Inserta un documento en una coleción.
+
+Sintaxis.
+
+```sh
+db.collection.insertOne(
+  <document>,
+  {
+    writeConcern: <document>
+  }
+)
+```
+
+Insertar un documento con `insertOne()`
+
+```sh
+> db.clientes.insertOne(
+... { _id: 11, nombre: "Javier", createAt: new Date() }
+... )
+{ "acknowledged" : true, "insertedId" : 11 }
+
+> db.clientes.find()
+{ "_id" : ObjectId("5e419e9490d86b85f5fda8ef"), "nombre" : "Juan", "apellido" : "Pérez" }
+{ "_id" : 1, "nombre" : "María", "apellido" : "López" }
+{ "_id" : 2, "nombre" : "Laura", "apellido" : "López" }
+{ "_id" : 3, "nombre" : "Luis", "apellido" : "Pérez" }
+{ "_id" : 4, "nombre" : "Pablo", "apellido" : "Gómez" }
+{ "_id" : 5, "nombre" : "Sara", "apellido" : "García" }
+{ "_id" : 6, "nombre" : "Carlos", "apellido" : "López" }
+{ "_id" : 7, "nombre" : "José" }
+{ "_id" : 8, "nombre" : "Lucia" }
+{ "_id" : 9, "nombre" : "Luisa" }
+{ "_id" : 10, "nombre" : "Carlos" }
+{ "_id" : 11, "nombre" : "Javier", "createAt" : ISODate("2020-02-10T21:29:44.672Z") }
+>
+```
+
+### Método insertMany()
+
+
+[db.collection.insertMany()](https://docs.mongodb.com/manual/reference/method/db.collection.insertMany/)
+
+Inserta multiples documentos en una colección.
+
+Sintaxis.
+
+```sh
+db.collection.insertMany(
+  [ <document 1> , <document 2>, ... ],
+  {
+    writeConcern: <document>,
+    ordered: <boolean>
+  }
+)
+```
+
+Insertar varios documentos con `insertMany()`:
+
+```sh
+> db.clientes.insertMany([
+... { _id: 12, nombre: "Salma"},
+... { _id: 13, nombre: "Angelica"},
+... { _id: 14, nombre: "Veronica"},
+... { _id: 15, nombre: "Rocio"}
+... ])
+{ "acknowledged" : true, "insertedIds" : [ 12, 13, 14, 15 ] }
+
+> db.clientes.find()
+{ "_id" : ObjectId("5e419e9490d86b85f5fda8ef"), "nombre" : "Juan", "apellido" : "Pérez" }
+{ "_id" : 1, "nombre" : "María", "apellido" : "López" }
+{ "_id" : 2, "nombre" : "Laura", "apellido" : "López" }
+{ "_id" : 3, "nombre" : "Luis", "apellido" : "Pérez" }
+{ "_id" : 4, "nombre" : "Pablo", "apellido" : "Gómez" }
+{ "_id" : 5, "nombre" : "Sara", "apellido" : "García" }
+{ "_id" : 6, "nombre" : "Carlos", "apellido" : "López" }
+{ "_id" : 7, "nombre" : "José" }
+{ "_id" : 8, "nombre" : "Lucia" }
+{ "_id" : 9, "nombre" : "Luisa" }
+{ "_id" : 10, "nombre" : "Carlos" }
+{ "_id" : 11, "nombre" : "Javier", "createAt" : ISODate("2020-02-10T21:29:44.672Z") }
+{ "_id" : 12, "nombre" : "Salma" }
+{ "_id" : 13, "nombre" : "Angelica" }
+{ "_id" : 14, "nombre" : "Veronica" }
+{ "_id" : 15, "nombre" : "Rocio" }
+
 ```
