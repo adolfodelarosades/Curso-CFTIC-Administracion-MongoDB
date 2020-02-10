@@ -20,7 +20,7 @@ Operadores:
 * `$project` // idem proyección `find()`
 * `sort` // idem método `sort()`
 * `group`
-```
+```sh
   $group:{
      _id: <expression>,
      <campo1>: {operador: expr},
@@ -30,11 +30,20 @@ Operadores:
 * `$unwind` (para arrays) 
 * `$match`
 * `$addFields` Añade campos
-* ``
-* ``
-* ``
-
-
+* `$kip`
+   {$kip: <entero>}
+* `$limit`
+   {$limit: <entero>}
+* `$lookup` // Soluciona algún tipo de Join
+  ```sh
+   { $lookup: {
+      from: <coleccion>
+      localField: <campo>,
+      foreignField: <campo>,
+      as: <nuevo-campo>
+     }
+  }
+ ```
 
 ```sh
 > use biblioteca
@@ -543,4 +552,26 @@ db.resultados.aggregate([
 { "nombre" : "Juan", "segundos" : 40, "minutos" : 31, "horas" : 4 }
 { "nombre" : "Sara", "segundos" : 22, "minutos" : 13, "horas" : 5 }
 >                              
+```
+
+Uso de `$limit`
+```sh
+> use maraton
+switched to db maraton
+> db.participantes.aggregate([ {$match: { edad: {$gte: 40}, edad: {$lt: 50} } } , {$group: {_id: "$nombre", total: {$sum: 1} } }, {$sort: {total: -1} }, {$limit: 2} ])
+{ "_id" : "Juan", "total" : 125284 }
+{ "_id" : "Carlos", "total" : 125113 }
+>  
+```
+
+
+```sh
+> use shop4
+switched to db shop4
+> db.inventario.insert({ _id: 1, sku: "AA01", descripcion: "Lorem ipsum...", stock: 120 })
+WriteResult({ "nInserted" : 1 })
+> db.inventario.insert({ _id: 2, sku: "BC03", descripcion: "dolor sit...", stock: 90 })
+WriteResult({ "nInserted" : 1 })
+> db.inventario.insert({ _id: 3, sku: "FG03", descripcion: "amet consectetur...", stock: 30 })
+WriteResult({ "nInserted" : 1 })
 ```
