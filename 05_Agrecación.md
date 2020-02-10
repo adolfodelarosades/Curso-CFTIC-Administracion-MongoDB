@@ -1,6 +1,10 @@
 # 05 AGREGACION (06/02/2020)
 
 :skull: Sólo una pregunta sobre todo el tema.
+**Posibles preguntas de agragación en la certificación.**
+* Etapas sencillas `$match`, `$project`, `$sort`...
+* Que nos pidan cuantos docs devuelven un `$unwind`
+* Que nos pregunten acerca de `allowDiscUse: true` (para evitar error si una etapa supera 100MG de set de datos)
 
 
 ```sh
@@ -732,8 +736,16 @@ Me crea una nueva colección `nombresSenior`, **Si esa colección ya existiera A
 >                                      
 ```
 
+Antes existia el operador **`$out`** y este si machacaba la colección por lo que se genere, como podemos ver en el siguiente ejemplo.
+
 
 ```sh
+> db.participantes.aggregate([ {$match: {edad: {$gte: 50} } }, {$group: {_id: "$nombre", total: {$sum: 1} }}, {$out: "foo" } ])
+> db.foo.find()
+{ "_id" : "Carlos", "total" : 125385 }
+{ "_id" : "Lucía", "total" : 124955 }
+{ "_id" : "María", "total" : 125180 }
+{ "_id" : "Juan", "total" : 124604 }
 ```
 
 
