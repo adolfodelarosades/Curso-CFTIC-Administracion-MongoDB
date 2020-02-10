@@ -1,4 +1,4 @@
-# Esquemas o Modelo
+# 6 Esquemas o Modelo
 
 [Data Modeling Introduction](https://docs.mongodb.com/manual/core/data-modeling-introduction/)
 
@@ -87,7 +87,7 @@ En MongoDB intentemos utilizar el modelo denormalizado o embebido.
 * El lado one es el que normalmente recibe más consultas
 * Los documentos del lado many normalmente no tendrán escrituras frecuentes.
    
-   Colección Productos
+   Colección Productos (One)
    ```
     {
       _id: "01",
@@ -102,7 +102,7 @@ En MongoDB intentemos utilizar el modelo denormalizado o embebido.
     }
    ```
    
-   Las imagenes en teoría no cambian mucho, se embeben en el documento principal.
+   Las imagenes(Few) en teoría no cambian mucho, se embeben en el documento principal.
    
 **Modelo One-to-Many**
 
@@ -117,6 +117,105 @@ En general, modelo normalizado o referencia a otra colección.
 * El lado many recibira muchas consultas.
 * El lado many podría crecer hasta superar el límite de 16 MG del lado one.
 
+ Colección Productos (One)
+   ```
+    {
+      _id: "01",
+      producto: "Nike TF55",
+      marca: "Nike",
+      opiniones:["265462", "254567" ],
+      precio: ...
+    }
+   ```
+
+Colección Opiniones (Many)
+
+```
+{
+  _id: "265462",
+  texto: "Buen producto",
+  estrellas: 4,
+  usuario: "..."
+}
+```
+
+**Modelo Many-to-Many**
+
+Con modelo denormalizado o documento embebido
+
+* Mayor número de consultas en el lado del mayor número de registros.
+* Redundancia de datos.
+
+ Colección Productos (One)
+   ```
+    {
+      _id: "01",
+      producto: "Nike TF55",
+      marca: "Nike",
+      tiendas:[
+        {nombre: "Alcorcón Store", direccion: "..."},
+        {nombre: "Las Rozas Store", direccion: "..."},
+        ...
+      ],
+      precio: ...
+    },
+    {
+      _id: "09",
+      producto: "Adidas AR57",
+      marca: "Adidas",
+      tiendas:[
+        {nombre: "Gran Vía Store", direccion: "..."},
+        {nombre: "Las Rosas Store", direccion: "..."},
+        ...
+      ],
+      precio: ...
+    }
+   ```
+
+La redundacia esta en las tiendas sin las inserto aquí y estas cambian puede haber problemas por que se estan poniendo para cada producto.
+
+Con modelo normalizado o referencia a documentos.
+
+* Consultas sobre los dos lados
+* Alta Actulizada 
+
+ Colección Productos (One)
+   ```
+    {
+      _id: "01",
+      producto: "Nike TF55",
+      marca: "Nike",
+      tiendas:["ALC", "LRZ"],
+      precio: ...
+    }
+    
+    {
+      _id: "09",
+      producto: "Adidas AR57",
+      marca: "Adidas",
+      tiendas:["ALC", "LRZ"],
+      precio: ...
+    }
+   ```
+   
+   Colección Tiendas
+   ```sh
+   {
+     _id: "GV",
+     nombre: "Gran Vía Store",
+     dir: ....
+   }
+    {
+     _id: "LRZ",
+     nombre: "Las Rosas Store",
+     dir: ....
+   }
+    {
+     _id: "ALC",
+     nombre: "Alcorcón Store",
+     dir: ....
+   }
+   ```
 
 
 
