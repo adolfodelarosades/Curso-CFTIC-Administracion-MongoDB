@@ -1,6 +1,7 @@
 # 05 AGREGACION (06/02/2020)
 
 :skull: Sólo una pregunta sobre todo el tema.
+
 **Posibles preguntas de agragación en la certificación.**
 * Etapas sencillas `$match`, `$project`, `$sort`...
 * Que nos pidan cuantos docs devuelven un `$unwind`
