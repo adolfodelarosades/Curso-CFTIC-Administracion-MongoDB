@@ -231,7 +231,7 @@ Existen dos formas de validadr
 **Esquema JSON** 
 [JSON Schema](https://docs.mongodb.com/manual/core/schema-validation/index.html#json-schema)
 
-[Operador `$jsonSchema`](https://docs.mongodb.com/manual/reference/operator/query/jsonSchema/#op._S_jsonSchema)
+[Operador `$jsonSchema`](https://docs.mongodb.com/manual/reference/operator/query/jsonSchema/)
 
 ```
 db.createCollection(
@@ -239,8 +239,27 @@ db.createCollection(
   { validator:
     { $jsonSchema: {...} }
   }
-)  
+)
 ```
+`validationLevel`: "strct" (defecto) | "moderate"
+
+* Si la colección ya existe con "strict" obliga a que los documentos de la coleccion cumplan con la validación cuando se actualicen. Con "moderate" los documentos antiguos a la validación pueden mantenerse sin validar cuando se actualicen.
+
+`validationAction`: "error" (defecto) | "warn"
+
+* La opción de "error" impide escrituras que no cumplan la validación y con la opcion "warn" permite la escritura pero emite un mensaje de advertencia.
+
+Implementar un esquema de validación en una colección ya existente:
+
+```
+db.runCommand({
+   collMod: "<coleccion>",
+   validator: {
+      //igual createCollection()
+   }
+})
+```
+
 
 Ejemplo:
 
@@ -367,18 +386,227 @@ WriteResult({
 })
 ```
 
-
+Aplicar una validación a una colección ya eistente (medicos)
 ```sh
+> db.medicos.insert({nombre: "Juan", apellidos: "Fernández"})
+WriteResult({ "nInserted" : 1 })
+> db.medicos.insert({nombre: "Laura", apellidos: "Pérez"})
+WriteResult({ "nInserted" : 1 })
 
 ```
 
 ```sh
+db.runCommand({
+    collMod: "medicos", 
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["nombre", "apellidos", "fechaNac", "direccion"],
+            properties: {
+                nombre: {
+                    bsonType: "string",
+                    description: "Debe ser un string y es obligatorio"
+                },
+                apellidos: {
+                bsonType: "string",
+                description: "Debe ser un string y es obligatorio"
+                },
+                fechaNac: {
+                bsonType: "date",
+                description: "Debe ser un date y es obligatorio"
+                },
+                direccion: {
+                bsonType: "object",
+                required: ["calle", "cp","localidad"],
+                properties: {
+                    calle: {
+                        bsonType: "string",
+                        description: "Debe ser un string y es obligatorio"
+                    },
+                    cp: {
+                        bsonType: "string",
+                        description: "Debe ser un string y es obligatorio"
+                    },
+                    localidad: {
+                        bsonType: "string",
+                        description: "Debe ser un string y es obligatorio"
+                    }
+                }
+                }
+            }
+        }
+    }    
+})
+
 
 ```
 
 ```sh
-
+> db.medicos.find()
+{ "_id" : ObjectId("5e414a3ad793860d1a933102"), "nombre" : "Juan", "apellidos" : "Fernández" }
+{ "_id" : ObjectId("5e414a4dd793860d1a933103"), "nombre" : "Laura", "apellidos" : "Pérez" }
+> db.medicos.insert({nombre: "Pedro"})
+WriteResult({
+        "nInserted" : 0,
+        "writeError" : {
+                "code" : 121,
+                "errmsg" : "Document failed validation"
+        }
+})
+> db.medicos.update({nombre: "Juan"}, {$set: {nombre: "Juan Pedro"}})
+WriteResult({
+        "nMatched" : 0,
+        "nUpserted" : 0,
+        "nModified" : 0,
+        "writeError" : {
+                "code" : 121,
+                "errmsg" : "Document failed validation"
+        }
+})
+>  
 ```
 
 
+Si le añado un nivel de validación `moderate` me permite actualizar los que ya existian
+
+```sh
+db.createCollection(
+    "pacientes", 
+    { validator: {
+          $jsonSchema: {
+              bsonType: "object",
+              required: ["nombre", "apellidos", "fechaNac", "direccion"],
+              properties: {
+                  nombre: {
+                      bsonType: "string",
+                      description: "Debe ser un string y es obligatorio"
+                  },
+                  apellidos: {
+                    bsonType: "string",
+                    description: "Debe ser un string y es obligatorio"
+                  },
+                  fechaNac: {
+                    bsonType: "date",
+                    description: "Debe ser un date y es obligatorio"
+                  },
+                  direccion: {
+                    bsonType: "object",
+                    required: ["calle", "cp","localidad"],
+                    properties: {
+                        calle: {
+                            bsonType: "string",
+                            description: "Debe ser un string y es obligatorio"
+                        },
+                        cp: {
+                            bsonType: "string",
+                            description: "Debe ser un string y es obligatorio"
+                        },
+                        localidad: {
+                            bsonType: "string",
+                            description: "Debe ser un string y es obligatorio"
+                        }
+                    }
+                  }
+                }
+            }
+        }
+    }
+)
+
+//Aplicar validación a colección existente
+db.runCommand({
+    collMod: "medicos", 
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["nombre", "apellidos", "fechaNac", "direccion"],
+            properties: {
+                nombre: {
+                    bsonType: "string",
+                    description: "Debe ser un string y es obligatorio"
+                },
+                apellidos: {
+                bsonType: "string",
+                description: "Debe ser un string y es obligatorio"
+                },
+                fechaNac: {
+                bsonType: "date",
+                description: "Debe ser un date y es obligatorio"
+                },
+                direccion: {
+                bsonType: "object",
+                required: ["calle", "cp","localidad"],
+                properties: {
+                    calle: {
+                        bsonType: "string",
+                        description: "Debe ser un string y es obligatorio"
+                    },
+                    cp: {
+                        bsonType: "string",
+                        description: "Debe ser un string y es obligatorio"
+                    },
+                    localidad: {
+                        bsonType: "string",
+                        description: "Debe ser un string y es obligatorio"
+                    }
+                }
+                }
+            }
+        }
+    } ,
+    validationLevel: "moderate"
+})
+```
+
+```sh
+> db.runCommand({
+...     collMod: "medicos",
+...     validator: {
+...         $jsonSchema: {
+...             bsonType: "object",
+...             required: ["nombre", "apellidos", "fechaNac", "direccion"],
+...             properties: {
+...                 nombre: {
+...                     bsonType: "string",
+...                     description: "Debe ser un string y es obligatorio"
+...                 },
+...                 apellidos: {
+...                 bsonType: "string",
+...                 description: "Debe ser un string y es obligatorio"
+...                 },
+...                 fechaNac: {
+...                 bsonType: "date",
+...                 description: "Debe ser un date y es obligatorio"
+...                 },
+...                 direccion: {
+...                 bsonType: "object",
+...                 required: ["calle", "cp","localidad"],
+...                 properties: {
+...                     calle: {
+...                         bsonType: "string",
+...                         description: "Debe ser un string y es obligatorio"
+...                     },
+...                     cp: {
+...                         bsonType: "string",
+...                         description: "Debe ser un string y es obligatorio"
+...                     },
+...                     localidad: {
+...                         bsonType: "string",
+...                         description: "Debe ser un string y es obligatorio"
+...                     }
+...                 }
+...                 }
+...             }
+...         }
+...     } ,
+...     validationLevel: "moderate"
+... })
+{ "ok" : 1 }
+
+> db.medicos.update({nombre: "Juan"}, {$set: {nombre: "Juan Pedro"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+                                                                  
+```
+
+Como podemos ver nos permite modificar los registros antiguos.
 
