@@ -217,6 +217,119 @@ Con modelo normalizado o referencia a documentos.
    }
    ```
 
+### Validación de Esquemas
+
+[Schema Validation](https://docs.mongodb.com/manual/core/schema-validation/index.html)
+
+Tu valida en aplicación. Llevate la validación a la aplicación no en la BD. Pero por si las dudas se puede hacer desde la propia BD.
+
+Existen dos formas de validadr
+
+* Esquema JSON
+* 
+
+**Esquema JSON** 
+[JSON Schema](https://docs.mongodb.com/manual/core/schema-validation/index.html#json-schema)
+```
+db.createCollection(
+  "<nombre-coleccion>",
+  { validator:
+    { $jsonSchema: {...} }
+  }
+)  
+```
+
+Ejemplo:
+
+```sh
+> use clinica2
+switched to db clinica2
+> show collections
+> db.createCollection(
+...     "pacientes",
+...     { validator: {
+...           $jsonSchema: {
+...               bsonType: "object",
+...               required: ["nombre", "apellidos", "fechaNac", "direccion"],
+...               properties: {
+...                   nombre: {
+...                       bsonType: "string",
+...                       description: "Debe ser un string y es obligatorio"
+...                   },
+...                   apellidos: {
+...                     bsonType: "string",
+...                     description: "Debe ser un string y es obligatorio"
+...                   },
+...                   fechaNac: {
+...                     bsonType: "date",
+...                     description: "Debe ser un date y es obligatorio"
+...                   },
+...                   direccion: {
+...                     bsonType: "object",
+...                     required: ["calle", "cp","localidad"],
+...                     properties: {
+...                         calle: {
+...                             bsonType: "string",
+...                             description: "Debe ser un string y es obligatorio"
+...                         },
+...                         cp: {
+...                             bsonType: "string",
+...                             description: "Debe ser un string y es obligatorio"
+...                         },
+...                         localidad: {
+...                             bsonType: "string",
+...                             description: "Debe ser un string y es obligatorio"
+...                         }
+...                     }
+...                   }
+...                 }
+...             }
+...         }
+...     }
+... )
+{ "ok" : 1 }
+
+> db.pacientes.insert({
+... nombre: "Juan",
+... apellidos: "Pérez López",
+... fechaNac: new Date(1980, 4, 5),
+... direccion: {
+... calle: "Gran Vía, 40",
+... cp: "28001",
+... localidad: "Madrid"
+... }
+... })
+WriteResult({ "nInserted" : 1 })
+```
+
+`description` Mensaje de error que se puede usar desde los driver, la shell no lo muestra
+
+**`Mongoose` tiene su propio esquema y es el que se suele usar no como en el ejemplo**.
+
+Si trato de insertar un documento que no cumpla con tadas las restricciones que establecimos no permitira insertar el documento.
+```sh
+> db.pacientes.insert({ nombre: "Juan", apellidos: "Pérez López", fechaNac: new Date(1980, 4, 5) })
+WriteResult({
+        "nInserted" : 0,
+        "writeError" : {
+                "code" : 121,
+                "errmsg" : "Document failed validation"
+        }
+})
+```
+
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
 
 
 
