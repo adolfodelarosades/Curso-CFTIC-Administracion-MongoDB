@@ -37,7 +37,7 @@ Operadores:
 * `$lookup` // Soluciona algún tipo de Join
   ```sh
    { $lookup: {
-      from: <coleccion>
+      from: <coleccion>, // misma base de datos
       localField: <campo>,
       foreignField: <campo>,
       as: <nuevo-campo>
@@ -574,4 +574,40 @@ WriteResult({ "nInserted" : 1 })
 WriteResult({ "nInserted" : 1 })
 > db.inventario.insert({ _id: 3, sku: "FG03", descripcion: "amet consectetur...", stock: 30 })
 WriteResult({ "nInserted" : 1 })
+
+> db.pedidos.insert({ _id: "p01", codigo: "BC03", cantidad: 10, precio: 40 })
+WriteResult({ "nInserted" : 1 })
+> db.pedidos.insert({ _id: "p02", codigo: "AA01", cantidad: 5, precio: 80 })
+WriteResult({ "nInserted" : 1 })
+```
+
+Uso de `$lookup`
+
+```sh
+> db.pedidos.aggregate([
+... { $lookup: {
+... from: "inventario",
+... localField: "codigo",
+... foreignField: "sku",
+... as: "detalleProducto"
+... }}
+... ])
+{ "_id" : "p01", "codigo" : "BC03", "cantidad" : 10, "precio" : 40, "detalleProducto" : [ { "_id" : 2, "sku" : "BC03", "descripcion" : "dolor sit...", "stock" : 90 } ] }
+{ "_id" : "p02", "codigo" : "AA01", "cantidad" : 5, "precio" : 80, "detalleProducto" : [ { "_id" : 1, "sku" : "AA01", "descripcion" : "Lorem ipsum...", "stock" : 120 } ] }
+```
+
+Volca la información en un array con nombre `detalleProducto`
+
+```sh
+```
+
+```sh
+```
+```sh
+```
+```sh
+```
+```sh
+```
+```sh
 ```
