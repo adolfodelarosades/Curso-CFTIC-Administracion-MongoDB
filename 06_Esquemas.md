@@ -11,6 +11,7 @@
 ### Tipos de relaciones en MongoDB
 
 1. Documento embebido o modelo **denormalizado**
+
    Tipo de relación por defecto de MongoDB y al que se debe recurrir siempre que se pueda.
    
    Colección Productos
