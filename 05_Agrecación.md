@@ -27,7 +27,7 @@ Operadores:
      ...
   }
 ```
-* `$unwind` (para arrays) 
+* `$unwind` (para arrays) :skull:
 * `$match`
 * `$addFields` Añade campos
 * `$kip`
