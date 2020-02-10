@@ -463,24 +463,334 @@ Type "it" for more
 
 Si quiero ver los siguientes 20 presiono `it`.
 
+**Método `findOne()`**
+
+Devuelve el primer documento.
+
 ```sh
+> db.pacientes.findOne()
+{
+	"_id" : ObjectId("5e418e55ce31e8b17f0c7e7f"),
+	"nombre" : "Juan",
+	"apellido1" : "García",
+	"apellido2" : "López"
+}
+> 
+```
+
+Veamos que no es necesario `pretty()` para que lo pinte bonito.
+
+### Comprobación de Tipos
+
+Existen dos formas de comprobar el tipo de un campo, igual que con JS:
+
+* `typeof`: Nos devuelve el tipo de un campo.
+* `instanceof` Compara un campo con un tipo, para ver si es o no de ese tipo.
+
+**JSON no soporta `undefined`.
+
+```sh
+> let documento = db.pacientes.findOne()
+> typeof documento.apellido1
+string
+> documento._id instanceof ObjectId
+true
+> typeof documento._id
+object
+```
+
+### Ayudas
+
+`Ctrl-C`: Cierra el Shell.
+`$ mongo --help` Muestra la ayuda de Mongo.
+
+```sh
+> ^C
+bye
+192:MongoDB adolfodelarosa$ mongo --help
+MongoDB shell version v4.2.2
+usage: mongo [options] [db address] [file names (ending in .js)]
+db address can be:
+  foo                   foo database on local machine
+  192.168.0.5/foo       foo database on 192.168.0.5 machine
+  192.168.0.5:9999/foo  foo database on 192.168.0.5 machine on port 9999
+  mongodb://192.168.0.5:9999/foo  connection string URI can also be used
+Options:
+  --ipv6                               enable IPv6 support (disabled by 
+                                       default)
+  --host arg                           server to connect to
+  --port arg                           port to connect to
+  -h [ --help ]                        show this usage information
+  --version                            show version information
+  --verbose                            increase verbosity
+  --shell                              run the shell after executing files
+  --nodb                               don't connect to mongod on startup - no 
+                                       'db address' arg expected
+  --norc                               will not run the ".mongorc.js" file on 
+                                       start up
+  --quiet                              be less chatty
+  --eval arg                           evaluate javascript
+  --disableJavaScriptJIT               disable the Javascript Just In Time 
+                                       compiler
+  --enableJavaScriptJIT                enable the Javascript Just In Time 
+                                       compiler
+  --disableJavaScriptProtection        allow automatic JavaScript function 
+                                       marshalling
+  --retryWrites                        automatically retry write operations 
+                                       upon transient network errors
+  --disableImplicitSessions            do not automatically create and use 
+                                       implicit sessions
+  --jsHeapLimitMB arg                  set the js scope's heap size limit
+
+TLS Options:
+  --tls                                use TLS for all connections
+  --tlsCertificateKeyFile arg          PEM certificate/key file for TLS
+  --tlsCertificateKeyFilePassword arg  Password for key in PEM file for TLS
+  --tlsCAFile arg                      Certificate Authority file for TLS
+  --tlsCRLFile arg                     Certificate Revocation List file for TLS
+  --tlsAllowInvalidHostnames           Allow connections to servers with 
+                                       non-matching hostnames
+  --tlsAllowInvalidCertificates        Allow connections to servers with 
+                                       invalid certificates
+  --tlsFIPSMode                        Activate FIPS 140-2 mode at startup
+  --tlsCertificateSelector arg         TLS Certificate in system store
+  --tlsDisabledProtocols arg           Comma separated list of TLS protocols to
+                                       disable [TLS1_0,TLS1_1,TLS1_2]
+
+Authentication Options:
+  -u [ --username ] arg                username for authentication
+  -p [ --password ] arg                password for authentication
+  --authenticationDatabase arg         user source (defaults to dbname)
+  --authenticationMechanism arg        authentication mechanism
+  --gssapiServiceName arg (=mongodb)   Service name to use when authenticating 
+                                       using GSSAPI/Kerberos
+  --gssapiHostName arg                 Remote host name to use for purpose of 
+                                       GSSAPI/Kerberos authentication
+
+FLE AWS Options:
+  --awsAccessKeyId arg                 AWS Access Key for FLE Amazon KMS
+  --awsSecretAccessKey arg             AWS Secret Key for FLE Amazon KMS
+  --awsSessionToken arg                Optional AWS Session Token ID
+  --keyVaultNamespace arg              database.collection to store encrypted 
+                                       FLE parameters
+  --kmsURL arg                         Test parameter to override the URL for 
+                                       KMS
+
+file names: a list of files to run. files have to end in .js and will exit after unless --shell is specified
+192:MongoDB adolfodelarosa$ 
+```
+
+**Ayuda del Shell**
+
+`> help`
+
+
+```sh
+> help
+	db.help()                    help on db methods
+	db.mycoll.help()             help on collection methods
+	sh.help()                    sharding helpers
+	rs.help()                    replica set helpers
+	help admin                   administrative help
+	help connect                 connecting to a db help
+	help keys                    key shortcuts
+	help misc                    misc things to know
+	help mr                      mapreduce
+
+	show dbs                     show database names
+	show collections             show collections in current database
+	show users                   show users in current database
+	show profile                 show most recent system.profile entries with time >= 1ms
+	show logs                    show the accessible logger names
+	show log [name]              prints out the last segment of log in memory, 'global' is default
+	use <db_name>                set current database
+	db.foo.find()                list objects in collection foo
+	db.foo.find( { a : 1 } )     list objects in foo where a == 1
+	it                           result of the last line evaluated; use to further iterate
+	DBQuery.shellBatchSize = x   set default number of items to display on shell
+	exit                         quit the mongo shell
+> 
 
 ```
 
+**Ayuda de métodos de la BD**
+
+`> db.help()`
+
 ```sh
+> db.help()
+DB methods:
+	db.adminCommand(nameOrDocument) - switches to 'admin' db, and runs command [just calls db.runCommand(...)]
+	db.aggregate([pipeline], {options}) - performs a collectionless aggregation on this database; returns a cursor
+	db.auth(username, password)
+	db.cloneDatabase(fromhost) - will only function with MongoDB 4.0 and below
+	db.commandHelp(name) returns the help for the command
+	db.copyDatabase(fromdb, todb, fromhost) - will only function with MongoDB 4.0 and below
+	db.createCollection(name, {size: ..., capped: ..., max: ...})
+	db.createUser(userDocument)
+	db.createView(name, viewOn, [{$operator: {...}}, ...], {viewOptions})
+	db.currentOp() displays currently executing operations in the db
+	db.dropDatabase(writeConcern)
+	db.dropUser(username)
+	db.eval() - deprecated
+	db.fsyncLock() flush data to disk and lock server for backups
+	db.fsyncUnlock() unlocks server following a db.fsyncLock()
+	db.getCollection(cname) same as db['cname'] or db.cname
+	db.getCollectionInfos([filter]) - returns a list that contains the names and options of the db's collections
+	db.getCollectionNames()
+	db.getLastError() - just returns the err msg string
+	db.getLastErrorObj() - return full status object
+	db.getLogComponents()
+	db.getMongo() get the server connection object
+	db.getMongo().setSlaveOk() allow queries on a replication slave server
+	db.getName()
+	db.getProfilingLevel() - deprecated
+	db.getProfilingStatus() - returns if profiling is on and slow threshold
+	db.getReplicationInfo()
+	db.getSiblingDB(name) get the db at the same server as this one
+	db.getWriteConcern() - returns the write concern used for any operations on this db, inherited from server object if set
+	db.hostInfo() get details about the server's host
+	db.isMaster() check replica primary status
+	db.killOp(opid) kills the current operation in the db
+	db.listCommands() lists all the db commands
+	db.loadServerScripts() loads all the scripts in db.system.js
+	db.logout()
+	db.printCollectionStats()
+	db.printReplicationInfo()
+	db.printShardingStatus()
+	db.printSlaveReplicationInfo()
+	db.resetError()
+	db.runCommand(cmdObj) run a database command.  if cmdObj is a string, turns it into {cmdObj: 1}
+	db.serverStatus()
+	db.setLogLevel(level,<component>)
+	db.setProfilingLevel(level,slowms) 0=off 1=slow 2=all
+	db.setVerboseShell(flag) display extra information in shell output
+	db.setWriteConcern(<write concern doc>) - sets the write concern for writes to the db
+	db.shutdownServer()
+	db.stats()
+	db.unsetWriteConcern(<write concern doc>) - unsets the write concern for writes to the db
+	db.version() current version of the server
+	db.watch() - opens a change stream cursor for a database to report on all  changes to its non-system collections.
+> 
+```
+
+**Ayuda de Colecciones**
+
+`db.<colección>.help()`
+
+```sh
+> db.pacientes.help()
+DBCollection help
+	db.pacientes.find().help() - show DBCursor help
+	db.pacientes.bulkWrite( operations, <optional params> ) - bulk execute write operations, optional parameters are: w, wtimeout, j
+	db.pacientes.count( query = {}, <optional params> ) - count the number of documents that matches the query, optional parameters are: limit, skip, hint, maxTimeMS
+	db.pacientes.countDocuments( query = {}, <optional params> ) - count the number of documents that matches the query, optional parameters are: limit, skip, hint, maxTimeMS
+	db.pacientes.estimatedDocumentCount( <optional params> ) - estimate the document count using collection metadata, optional parameters are: maxTimeMS
+	db.pacientes.convertToCapped(maxBytes) - calls {convertToCapped:'pacientes', size:maxBytes}} command
+	db.pacientes.createIndex(keypattern[,options])
+	db.pacientes.createIndexes([keypatterns], <options>)
+	db.pacientes.dataSize()
+	db.pacientes.deleteOne( filter, <optional params> ) - delete first matching document, optional parameters are: w, wtimeout, j
+	db.pacientes.deleteMany( filter, <optional params> ) - delete all matching documents, optional parameters are: w, wtimeout, j
+	db.pacientes.distinct( key, query, <optional params> ) - e.g. db.pacientes.distinct( 'x' ), optional parameters are: maxTimeMS
+	db.pacientes.drop() drop the collection
+	db.pacientes.dropIndex(index) - e.g. db.pacientes.dropIndex( "indexName" ) or db.pacientes.dropIndex( { "indexKey" : 1 } )
+	db.pacientes.dropIndexes()
+	db.pacientes.ensureIndex(keypattern[,options]) - DEPRECATED, use createIndex() instead
+	db.pacientes.explain().help() - show explain help
+	db.pacientes.reIndex()
+	db.pacientes.find([query],[fields]) - query is an optional query filter. fields is optional set of fields to return.
+	                                              e.g. db.pacientes.find( {x:77} , {name:1, x:1} )
+	db.pacientes.find(...).count()
+	db.pacientes.find(...).limit(n)
+	db.pacientes.find(...).skip(n)
+	db.pacientes.find(...).sort(...)
+	db.pacientes.findOne([query], [fields], [options], [readConcern])
+	db.pacientes.findOneAndDelete( filter, <optional params> ) - delete first matching document, optional parameters are: projection, sort, maxTimeMS
+	db.pacientes.findOneAndReplace( filter, replacement, <optional params> ) - replace first matching document, optional parameters are: projection, sort, maxTimeMS, upsert, returnNewDocument
+	db.pacientes.findOneAndUpdate( filter, <update object or pipeline>, <optional params> ) - update first matching document, optional parameters are: projection, sort, maxTimeMS, upsert, returnNewDocument
+	db.pacientes.getDB() get DB object associated with collection
+	db.pacientes.getPlanCache() get query plan cache associated with collection
+	db.pacientes.getIndexes()
+	db.pacientes.insert(obj)
+	db.pacientes.insertOne( obj, <optional params> ) - insert a document, optional parameters are: w, wtimeout, j
+	db.pacientes.insertMany( [objects], <optional params> ) - insert multiple documents, optional parameters are: w, wtimeout, j
+	db.pacientes.mapReduce( mapFunction , reduceFunction , <optional params> )
+	db.pacientes.aggregate( [pipeline], <optional params> ) - performs an aggregation on a collection; returns a cursor
+	db.pacientes.remove(query)
+	db.pacientes.replaceOne( filter, replacement, <optional params> ) - replace the first matching document, optional parameters are: upsert, w, wtimeout, j
+	db.pacientes.renameCollection( newName , <dropTarget> ) renames the collection.
+	db.pacientes.runCommand( name , <options> ) runs a db command with the given name where the first param is the collection name
+	db.pacientes.save(obj)
+	db.pacientes.stats({scale: N, indexDetails: true/false, indexDetailsKey: <index key>, indexDetailsName: <index name>})
+	db.pacientes.storageSize() - includes free space allocated to this collection
+	db.pacientes.totalIndexSize() - size in bytes of all the indexes
+	db.pacientes.totalSize() - storage allocated for all data and indexes
+	db.pacientes.update( query, <update object or pipeline>[, upsert_bool, multi_bool] ) - instead of two flags, you can pass an object with fields: upsert, multi, hint
+	db.pacientes.updateOne( filter, <update object or pipeline>, <optional params> ) - update the first matching document, optional parameters are: upsert, w, wtimeout, j, hint
+	db.pacientes.updateMany( filter, <update object or pipeline>, <optional params> ) - update all matching documents, optional parameters are: upsert, w, wtimeout, j, hint
+	db.pacientes.validate( <full> ) - SLOW
+	db.pacientes.getShardVersion() - only for use with sharding
+	db.pacientes.getShardDistribution() - prints statistics about data distribution in the cluster
+	db.pacientes.getSplitKeysForChunks( <maxChunkSize> ) - calculates split points over all chunks and returns splitter function
+	db.pacientes.getWriteConcern() - returns the write concern used for any operations on this collection, inherited from server/db if set
+	db.pacientes.setWriteConcern( <write concern doc> ) - sets the write concern for writes to the collection
+	db.pacientes.unsetWriteConcern( <write concern doc> ) - unsets the write concern for writes to the collection
+	db.pacientes.latencyStats() - display operation latency histograms for this collection
+> 
 
 ```
 
-```sh
+**Código de Métodos**
 
+Si quiero ver el código de un método, lo pongo sin parentesis.
+
+`db.<coleccion>.<metodo>`
+
+```sh
+> db.pacientes.find
+function(query, fields, limit, skip, batchSize, options) {
+    var cursor = new DBQuery(this._mongo,
+                             this._db,
+                             this,
+                             this._fullName,
+                             this._massageObject(query),
+                             fields,
+                             limit,
+                             skip,
+                             batchSize,
+                             options || this.getQueryOptions());
+
+    {
+        const session = this.getDB().getSession();
+
+        const readPreference = session._getSessionAwareClient().getReadPreference(session);
+        if (readPreference !== null) {
+            cursor.readPref(readPreference.mode, readPreference.tags);
+        }
+
+        const readConcern = session._getSessionAwareClient().getReadConcern(session);
+        if (readConcern !== null) {
+            cursor.readConcern(readConcern.level);
+        }
+    }
+
+    return cursor;
+}
 ```
 
+### Cierre del Shell
 
+Puedo cerrar el shell con:
 
+* `Ctrl + c`
+* Método `quit()`
 
+### Documentación Oficial de MongoDB
 
+[MongoDB Docs](https://docs.mongodb.com/)
 
+[The mongo Shell](https://docs.mongodb.com/manual/mongo/index.html)
 
-
-
+[mongo Shell Methods](https://docs.mongodb.com/manual/reference/method/index.html)
 
