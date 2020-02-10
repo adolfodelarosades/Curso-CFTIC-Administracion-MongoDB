@@ -295,10 +295,185 @@ udemyDb    0.000GB
 
 Como vemos con el comando `db.dropDatabase()` eliminamos la BD pero si pulsamos `db` nos indica que seguimos en `gimnasio`, si intentamos mostrar sus colecciones no muestra nada y si listamos las BDs no se muestra `gimnasio`.
 
+### Shell como Interprete JS
+
+El shell se puede usar cono interprete de JS.
+
+```sh
+> let pacientes = [];
+> let nombres = ["María", "Juan", "Fernando", "Lucia"];
+> let apellidos = ["Gómez", "Pérez", "García", "López"];
+> for(i=0; i < 100000; i++) {
+... pacientes.push({
+... nombre: nombres[Math.floor(Math.random()*nombres.length)],
+... apellido1: apellidos[Math.floor(Math.random()*apellidos.length)],
+... apellido2: apellidos[Math.floor(Math.random()*apellidos.length)] 
+... })
+... }
+100000
+```
+Esto nos inserta 100 pacientes en el array `pacientes`. Vamos a insertarlos en la BD `clinica` en una colección `pacientes`:
+
+```sh
+> use clinica
+switched to db clinica
+> db.pacientes.insert(pacientes)
+BulkWriteResult({
+	"writeErrors" : [ ],
+	"writeConcernErrors" : [ ],
+	"nInserted" : 100000,
+	"nUpserted" : 0,
+	"nMatched" : 0,
+	"nModified" : 0,
+	"nRemoved" : 0,
+	"upserted" : [ ]
+})
+> db.pacientes.find().count()
+100000
+```
+
+### Formato Salida de Pantalla
+
+* Por defecto a un cursor de 20 documentos iterable con `it`
+
+```sh
+> db.pacientes.find()
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e7f"), "nombre" : "Juan", "apellido1" : "García", "apellido2" : "López" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e80"), "nombre" : "María", "apellido1" : "Gómez", "apellido2" : "Pérez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e81"), "nombre" : "Lucia", "apellido1" : "Pérez", "apellido2" : "García" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e82"), "nombre" : "Juan", "apellido1" : "Gómez", "apellido2" : "Pérez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e83"), "nombre" : "María", "apellido1" : "Gómez", "apellido2" : "Gómez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e84"), "nombre" : "Lucia", "apellido1" : "Pérez", "apellido2" : "López" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e85"), "nombre" : "Lucia", "apellido1" : "Pérez", "apellido2" : "García" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e86"), "nombre" : "Lucia", "apellido1" : "Gómez", "apellido2" : "Pérez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e87"), "nombre" : "Juan", "apellido1" : "Gómez", "apellido2" : "García" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e88"), "nombre" : "Fernando", "apellido1" : "Pérez", "apellido2" : "Gómez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e89"), "nombre" : "Juan", "apellido1" : "López", "apellido2" : "Gómez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e8a"), "nombre" : "Lucia", "apellido1" : "García", "apellido2" : "Gómez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e8b"), "nombre" : "Lucia", "apellido1" : "Pérez", "apellido2" : "Pérez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e8c"), "nombre" : "Lucia", "apellido1" : "Pérez", "apellido2" : "López" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e8d"), "nombre" : "Lucia", "apellido1" : "López", "apellido2" : "Pérez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e8e"), "nombre" : "Lucia", "apellido1" : "López", "apellido2" : "García" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e8f"), "nombre" : "María", "apellido1" : "López", "apellido2" : "García" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e90"), "nombre" : "María", "apellido1" : "García", "apellido2" : "López" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e91"), "nombre" : "Fernando", "apellido1" : "Pérez", "apellido2" : "López" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e92"), "nombre" : "María", "apellido1" : "Pérez", "apellido2" : "Gómez" }
+Type "it" for more
+> 
+```
+
+Presenta los primeros 20 documentos, si quiero ver los siguientes 20 presiono `it`:
+
+```sh
+> it
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e93"), "nombre" : "María", "apellido1" : "Gómez", "apellido2" : "Pérez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e94"), "nombre" : "Fernando", "apellido1" : "López", "apellido2" : "López" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e95"), "nombre" : "Fernando", "apellido1" : "Gómez", "apellido2" : "López" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e96"), "nombre" : "Juan", "apellido1" : "Gómez", "apellido2" : "López" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e97"), "nombre" : "Fernando", "apellido1" : "López", "apellido2" : "García" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e98"), "nombre" : "María", "apellido1" : "Gómez", "apellido2" : "Gómez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e99"), "nombre" : "María", "apellido1" : "Gómez", "apellido2" : "Pérez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e9a"), "nombre" : "María", "apellido1" : "Pérez", "apellido2" : "Gómez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e9b"), "nombre" : "Lucia", "apellido1" : "Gómez", "apellido2" : "Pérez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e9c"), "nombre" : "Fernando", "apellido1" : "Gómez", "apellido2" : "López" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e9d"), "nombre" : "María", "apellido1" : "López", "apellido2" : "Pérez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e9e"), "nombre" : "María", "apellido1" : "Pérez", "apellido2" : "García" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7e9f"), "nombre" : "Fernando", "apellido1" : "García", "apellido2" : "Pérez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7ea0"), "nombre" : "María", "apellido1" : "Pérez", "apellido2" : "Gómez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7ea1"), "nombre" : "Lucia", "apellido1" : "Pérez", "apellido2" : "Gómez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7ea2"), "nombre" : "Lucia", "apellido1" : "García", "apellido2" : "Pérez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7ea3"), "nombre" : "Fernando", "apellido1" : "López", "apellido2" : "Pérez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7ea4"), "nombre" : "María", "apellido1" : "García", "apellido2" : "García" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7ea5"), "nombre" : "Juan", "apellido1" : "García", "apellido2" : "Gómez" }
+{ "_id" : ObjectId("5e418e55ce31e8b17f0c7ea6"), "nombre" : "Lucia", "apellido1" : "Gómez", "apellido2" : "García" }
+Type "it" for more
+> 
+```
+Puedo meter los resultados de una colección en una variable JS:
+
+```sh
+> let coleccionPacientes = db.pacientes.find()
+> coleccionPacientes.length()
+100000
+> 
+```
+Usamos el método `length()` para conocer su tamaño en JS es una propiedad `length`.
+
+Podemos usar el método `printjson` para imprimir su contenido en formato JSON.
+
+```sh
+> printjson(coleccionPacientes)
+{
+	"_id" : ObjectId("5e418e56ce31e8b17f0c9298"),
+	"nombre" : "Fernando",
+	"apellido1" : "López",
+	"apellido2" : "Gómez"
+},
+{
+	"_id" : ObjectId("5e418e56ce31e8b17f0c9299"),
+	"nombre" : "Juan",
+	"apellido1" : "Gómez",
+	"apellido2" : "García"
+},
+{
+	"_id" : ObjectId("5e418e56ce31e8b17f0c929a"),
+	"nombre" : "María",
+	"apellido1" : "Pérez",
+	"apellido2" : "Pérez"
+},
+{
+	"_id" : ObjectId("5e418e56ce31e8b17f0c929b"),
+	"nombre" : "Juan",
+	"apellido1" : "Gómez",
+	"apellido2" : "Pérez"
+},
+....
+
+```
+
+Así hasta imprimir los 100000.
 
 
+Puedo usar el método `pretty()` para mostrar la colección en formato JSON formateado de 20 en 20.
 
+```sh
+> db.pacientes.find().pretty()
+{
+	"_id" : ObjectId("5e418e55ce31e8b17f0c7e7f"),
+	"nombre" : "Juan",
+	"apellido1" : "García",
+	"apellido2" : "López"
+}
+{
+	"_id" : ObjectId("5e418e55ce31e8b17f0c7e80"),
+	"nombre" : "María",
+	"apellido1" : "Gómez",
+	"apellido2" : "Pérez"
+}
+....
+{
+	"_id" : ObjectId("5e418e55ce31e8b17f0c7e92"),
+	"nombre" : "María",
+	"apellido1" : "Pérez",
+	"apellido2" : "Gómez"
+}
+Type "it" for more
+> 
+```
 
+Si quiero ver los siguientes 20 presiono `it`.
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
 
 
 
