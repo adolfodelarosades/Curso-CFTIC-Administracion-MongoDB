@@ -599,6 +599,36 @@ WriteResult({ "nInserted" : 1 })
 >
 ```
 
+Los documentos de la colección son:
+
+```sh
+> db.clientes.find({ })
+{ "_id" : ObjectId("5e419e9490d86b85f5fda8ef"), "nombre" : "Juan", "apellido" : "Pérez" }
+{ "_id" : 1, "nombre" : "María", "apellido" : "López" }
+{ "_id" : 2, "nombre" : "Laura", "apellido" : "López" }
+{ "_id" : 3, "nombre" : "Luis", "apellido" : "Pérez" }
+{ "_id" : 4, "nombre" : "Pablo", "apellido" : "Gómez" }
+{ "_id" : 5, "nombre" : "Sara", "apellido" : "García" }
+{ "_id" : 6, "nombre" : "Carlos", "apellido" : "López" }
+{ "_id" : 7, "nombre" : "José" }
+{ "_id" : 8, "nombre" : "Lucia" }
+{ "_id" : 9, "nombre" : "Luisa" }
+{ "_id" : 10, "nombre" : "Carlos" }
+{ "_id" : 11, "nombre" : "Javier", "createAt" : ISODate("2020-02-10T21:29:44.672Z") }
+{ "_id" : 12, "nombre" : "Salma" }
+{ "_id" : 13, "nombre" : "Angelica" }
+{ "_id" : 14, "nombre" : "Veronica" }
+{ "_id" : 15, "nombre" : "José", "apellido" : "López" }
+{ "_id" : 16, "nombre" : "Pedro", "apellido" : "Paramo" }
+{ "_id" : ObjectId("5e41d25290d86b85f5fda8f0"), "nombre" : "Julio", "apellido" : "Cortez" }
+{ "_id" : ObjectId("5e42d23890d86b85f5fda8f1"), "nombre" : "Luis", "apellido" : "González", "direccion" : { "calle" : "Alcalá, 90", "localidad" : "Madrid" } }
+{ "_id" : ObjectId("5e42d29a90d86b85f5fda8f2"), "nombre" : "Mariano", "apellido" : "Mejía", "direccion" : { "calle" : "Gran vía, 100", "localidad" : "Madrid" } }
+Type "it" for more
+> it
+{ "_id" : ObjectId("5e42d2c890d86b85f5fda8f3"), "nombre" : "Enrique", "apellido" : "Flores", "direccion" : { "calle" : "Plaza España, 50", "localidad" : "Sevilla" } }
+>
+```
+
 Para hacer la consulta del documento embebido:
 
 ```sh
@@ -650,3 +680,16 @@ Aquí vamos a buscar en un campo que pertenece a un documento embebido y un camp
 { "_id" : ObjectId("5e42d23890d86b85f5fda8f1"), "nombre" : "Luis", "apellido" : "González", "direccion" : { "calle" : "Alcalá, 90", "localidad" : "Madrid" } }
 ```
 
+#### Consulta de Igualdad en Arrays
+
+Sintaxis.
+
+```sh
+db.<coleccion>.find({ <campo>: [elementos] })
+```
+
+* Exige igualdad exacta en el array incluyendo el orden de los elementos.
+
+```sh
+
+```
