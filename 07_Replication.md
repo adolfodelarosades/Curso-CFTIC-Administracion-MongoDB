@@ -176,6 +176,8 @@ Esto arranca la shell de este puerto, lo podemos ver en el título de la ventana
 
 <img src="/images/consola.png">
 
+Si ejecutamos el comando `show dbs` nos marca un error, es por que no esta configurado aún.
+
 Con JS establecemos los parametros de conexión, más sencillos que podemos tener:
 
 ```sh
@@ -387,6 +389,63 @@ Me indica el estado de los otros servidores indicando que son secundarios ` "sta
 
 El objeto `rs` es un objeto que representa el `replicatSet`.
 
+[Replication Reference](https://docs.mongodb.com/manual/reference/replication/)
+
+
+**Si la cago en algún paso borro el contenido de las carpetas `server1, server2 server3` y comienzo de nuevo**
+
+Otra manera de lanzar información es con el comando `rs.isMaster()`:
+
+```sh
+clusterGetafe:PRIMARY> rs.isMaster()
+{
+        "hosts" : [
+                "localhost:27017",
+                "localhost:27018",
+                "localhost:27019"
+        ],
+        "setName" : "clusterGetafe",
+        "setVersion" : 1,
+        "ismaster" : true,
+        "secondary" : false,
+        "primary" : "localhost:27017",
+        "me" : "localhost:27017",
+        "electionId" : ObjectId("7fffffff0000000000000001"),
+        "lastWrite" : {
+                "opTime" : {
+                        "ts" : Timestamp(1581423306, 1),
+                        "t" : NumberLong(1)
+                },
+                "lastWriteDate" : ISODate("2020-02-11T12:15:06Z"),
+                "majorityOpTime" : {
+                        "ts" : Timestamp(1581423306, 1),
+                        "t" : NumberLong(1)
+                },
+                "majorityWriteDate" : ISODate("2020-02-11T12:15:06Z")
+        },
+        "maxBsonObjectSize" : 16777216,
+        "maxMessageSizeBytes" : 48000000,
+        "maxWriteBatchSize" : 100000,
+        "localTime" : ISODate("2020-02-11T12:15:16.474Z"),
+        "logicalSessionTimeoutMinutes" : 30,
+        "connectionId" : 2,
+        "minWireVersion" : 0,
+        "maxWireVersion" : 8,
+        "readOnly" : false,
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581423306, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581423306, 1)
+}
+clusterGetafe:PRIMARY> 
+
+```
+En el fondo te da la misma información presentada de forma diferente.
 
 
 
