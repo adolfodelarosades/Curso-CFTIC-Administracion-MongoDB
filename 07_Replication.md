@@ -24,11 +24,22 @@
 * solamente uno será el primario.
 * Algunos de los miembros pueden ser "árbitros".
 
-<img src="/images/replica-set-primary-with-two-secondaries.bakedsvg.svg">
+<img src="/images/replicaset.svg">
 (Apuntes)
 
 
 El primary replica todo en los secundarios, cada que escribo en el primario escribe en los secundarios con una conexión Asíncrona, para que en caso que el primario se caiga por cualquier razon, automaticamente uno de los dos secundarios se levanta como primario con algun criterio establecido tarda de 10 - 90 seg. Si se levanta el primario caido vuelve a ser el primario.
+
+Planteamientos:
+
+* Algunos implementan el primario y secundario en el mismo lugar fisico así la asíncronia mínima y el otro secundario lo hago en otra ubicación fisica o en la nube.
+
+* Todo a la nube, azure, amazon. Puedo desplegar maquinas con Mongo con Comunity o Enterprise(Soporte, Ops Manager)
+
+* Atlas. Todo automatizado. Con soporte especifico. No tienen sus granjas propias.(Herramienta Clust Manager)
+
+
+
 
 
 
