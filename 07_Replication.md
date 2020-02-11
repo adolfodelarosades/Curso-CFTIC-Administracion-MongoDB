@@ -172,7 +172,7 @@ Hacer la conección a alguno de ellos:
 mongo --port 27017
 ```
 
-Esto arranca la shell de este puerto:
+Esto arranca la shell de este puerto, lo podemos ver en el título de la ventana de la shell `mongo --port 27017`:
 
 <img src="/images/consola.png">
 
@@ -207,7 +207,8 @@ Con JS establecemos los parametros de conexión, más sencillos que podemos tene
 >                                                                                     
 ```
 
-Pasar este objeto a `rs.initiate()`:
+
+Pasar este objeto al método `rs.initiate()`:
 
 ```sh
 > rs.initiate(rsconfig)
@@ -224,10 +225,170 @@ Pasar este objeto a `rs.initiate()`:
 }
 clusterGetafe:SECONDARY>      
 ```
-
 Observemos como el prompt a cambiado a `clusterGetafe:SECONDARY>`.
-
 El algoritmo elige cual de ellos sera el Primario.
+Esto se conecta con los otros dos servidores y le pasa la información de configuración y se conectan entre ellos.
+Una vez conectados en función del algoritmo elige el Primario, debemos comprobar cual es el primario. 
+
+Con el comando `rs.status()` vemos información de los miembros:
+
+```sh
+clusterGetafe:SECONDARY> rs.status()
+{
+        "set" : "clusterGetafe",
+        "date" : ISODate("2020-02-11T11:51:18.067Z"),
+        "myState" : 1,
+        "term" : NumberLong(1),
+        "syncingTo" : "",
+        "syncSourceHost" : "",
+        "syncSourceId" : -1,
+        "heartbeatIntervalMillis" : NumberLong(2000),
+        "majorityVoteCount" : 2,
+        "writeMajorityCount" : 2,
+        "optimes" : {
+                "lastCommittedOpTime" : {
+                        "ts" : Timestamp(1581421876, 1),
+                        "t" : NumberLong(1)
+                },
+                "lastCommittedWallTime" : ISODate("2020-02-11T11:51:16.784Z"),
+                "readConcernMajorityOpTime" : {
+                        "ts" : Timestamp(1581421876, 1),
+                        "t" : NumberLong(1)
+                },
+                "readConcernMajorityWallTime" : ISODate("2020-02-11T11:51:16.784Z"),
+                "appliedOpTime" : {
+                        "ts" : Timestamp(1581421876, 1),
+                        "t" : NumberLong(1)
+                },
+                "durableOpTime" : {
+                        "ts" : Timestamp(1581421876, 1),
+                        "t" : NumberLong(1)
+                },
+                "lastAppliedWallTime" : ISODate("2020-02-11T11:51:16.784Z"),
+                "lastDurableWallTime" : ISODate("2020-02-11T11:51:16.784Z")
+        },
+        "lastStableRecoveryTimestamp" : Timestamp(1581421856, 1),
+        "lastStableCheckpointTimestamp" : Timestamp(1581421856, 1),
+        "electionCandidateMetrics" : {
+                "lastElectionReason" : "electionTimeout",
+                "lastElectionDate" : ISODate("2020-02-11T11:41:55.748Z"),
+                "electionTerm" : NumberLong(1),
+                "lastCommittedOpTimeAtElection" : {
+                        "ts" : Timestamp(0, 0),
+                        "t" : NumberLong(-1)
+                },
+                "lastSeenOpTimeAtElection" : {
+                        "ts" : Timestamp(1581421304, 1),
+                        "t" : NumberLong(-1)
+                },
+                "numVotesNeeded" : 2,
+                "priorityAtElection" : 1,
+                "electionTimeoutMillis" : NumberLong(10000),
+                "numCatchUpOps" : NumberLong(0),
+                "newTermStartDate" : ISODate("2020-02-11T11:41:56.735Z"),
+                "wMajorityWriteAvailabilityDate" : ISODate("2020-02-11T11:41:57.618Z")
+        },
+        "members" : [
+                {
+                        "_id" : 0,
+                        "name" : "localhost:27017",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 1,
+                        "stateStr" : "PRIMARY",
+                        "uptime" : 2020,
+                        "optime" : {
+                                "ts" : Timestamp(1581421876, 1),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDate" : ISODate("2020-02-11T11:51:16Z"),
+                        "syncingTo" : "",
+                        "syncSourceHost" : "",
+                        "syncSourceId" : -1,
+                        "infoMessage" : "",
+                        "electionTime" : Timestamp(1581421315, 1),
+                        "electionDate" : ISODate("2020-02-11T11:41:55Z"),
+                        "configVersion" : 1,
+                        "self" : true,
+                        "lastHeartbeatMessage" : ""
+                },
+                {
+                        "_id" : 1,
+                        "name" : "localhost:27018",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 573,
+                        "optime" : {
+                                "ts" : Timestamp(1581421876, 1),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581421876, 1),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDate" : ISODate("2020-02-11T11:51:16Z"),
+                        "optimeDurableDate" : ISODate("2020-02-11T11:51:16Z"),
+                        "lastHeartbeat" : ISODate("2020-02-11T11:51:17.951Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-11T11:51:17.588Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27017",
+                        "syncSourceHost" : "localhost:27017",
+                        "syncSourceId" : 0,
+                        "infoMessage" : "",
+                        "configVersion" : 1
+                },
+                {
+                        "_id" : 2,
+                        "name" : "localhost:27019",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 573,
+                        "optime" : {
+                                "ts" : Timestamp(1581421876, 1),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581421876, 1),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDate" : ISODate("2020-02-11T11:51:16Z"),
+                        "optimeDurableDate" : ISODate("2020-02-11T11:51:16Z"),
+                        "lastHeartbeat" : ISODate("2020-02-11T11:51:17.951Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-11T11:51:17.587Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27017",
+                        "syncSourceHost" : "localhost:27017",
+                        "syncSourceId" : 0,
+                        "infoMessage" : "",
+                        "configVersion" : 1
+                }
+        ],
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581421876, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581421876, 1)
+}
+clusterGetafe:PRIMARY>                                                                                                
+```
+El prompt a cambiado a `clusterGetafe:PRIMARY>`.
+
+Me indica el estado de los otros servidores indicando que son secundarios ` "stateStr" : "SECONDARY",`.
+
+El objeto `rs` es un objeto que representa el `replicatSet`.
+
+
+
 
 
 
