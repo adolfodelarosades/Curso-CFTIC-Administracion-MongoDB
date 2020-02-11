@@ -66,14 +66,88 @@ Notas:
 * Si incorporamos un server vacio prmero le hago la copia del backup y luego lo incorporo.
 * Se pueden llegar a perder datos cuando hay una caida del primario aun que sea de milisegundos si hay un alto nivel de escritura. (Existe un Rollback para hacerlo manualmente), hay que implementar reconocimiento de escritura (la escritura no es valida hasta estar escrito o replicado en los secundarios, el problema es que la operacion de escritura es más larga, por eso suele haber el primario y secundario en el mismo centro de datos)
 * Vale más la percistencia del dato que la velocidad de su manejo.
+* El cluster permite tener hasta 50 servidores, pero cuando solo hay 3 sus caracteristicas deberían ser las mismas.
+
+### Despliegue de Replica Set
+
+En local solo tenemos 1 instancia, lo simularemos con puertos.
+
+1. Crear 3 directorios de datos para cada servidor del cluster
+
+2. Levantar servidores miembros de un replicate set.
+
+   ```
+   mongod --replSet <nombre-cluster> --dbpath <ruta-directorio>
+          --bind_ip <ip-o-dominio>
+          --port <numero-puerto>
+   ```
+   
+   AWS
+   ip 142.23.7.12  => mejor Dominio
+   port 27027
+   
 
 
 
+Archivo de configuración de MongoDB `mongod.conf`.
+
+```
+# mongod.conf
+
+# for documentation of all options, see:
+#   http://docs.mongodb.org/manual/reference/configuration-options/
+
+# Where and how to store data.
+storage:
+  dbPath: %MONGO_DATA_PATH%
+  journal:
+    enabled: true
+#  engine:
+#  mmapv1:
+#  wiredTiger:
+
+# where to write logging data.
+systemLog:
+  destination: file
+  logAppend: true
+  path:  %MONGO_LOG_PATH%\mongod.log
+
+# network interfaces
+net:
+  port: 27017
+  bindIp: 127.0.0.1
 
 
+#processManagement:
 
+#security:
 
+#operationProfiling:
 
+#replication:
 
+#sharding:
+
+## Enterprise-Only Options:
+
+#auditLog:
+
+#snmp:
+
+```
+
+Vamos a crear 3 subdirectorios para levantarlos en otros puertos diferentes al de default.
+
+Desde el prompt creamos los siguientes directorios:
+
+```sh
+C:\Users\manana> md data\server1
+C:\Users\manana> md data\server2
+C:\Users\manana> md data\server3
+```
+
+Notas:
+
+* Si fueran 3 maquinas diferentes en las 3 tendría que instalar Mongo.
 
 
