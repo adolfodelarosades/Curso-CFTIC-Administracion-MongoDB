@@ -34,7 +34,7 @@ Planteamientos:
 
 * Algunos implementan el primario y secundario en el mismo lugar fisico así la asíncronia mínima y el otro secundario lo hago en otra ubicación fisica o en la nube.
 
-* Todo a la nube, azure, amazon. Puedo desplegar maquinas con Mongo con Comunity o Enterprise(Soporte, Ops Manager)
+* Todo a la nube, Azure, Amazon. Puedo desplegar maquinas con Mongo con Comunity o Enterprise(Soporte, Ops Manager). No hay un despliegue 
 
 * Atlas. Todo automatizado. Con soporte especifico. No tienen sus granjas propias.(Herramienta Clust Manager)
 
