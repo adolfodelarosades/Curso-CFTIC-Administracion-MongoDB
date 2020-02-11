@@ -440,3 +440,19 @@ Como esperabamos nos indica que ha **insertado el documento** `"nInserted" : 1`,
 
 ### Método find()
 
+[db.collection.find()](https://docs.mongodb.com/manual/reference/method/db.collection.find/index.html)
+
+Sintaxis.
+
+```sh
+db.collection.find(
+  <documento-consulta>,
+  <documento-projection>
+)
+```
+Ambos documentos son opcionales.
+
+Parametro | Type | Descripción
+----------|------|------------
+query |	document | Opcional. Especifica el filtro de selección utilizando operadores de consulta. Para devolver todos los documentos de una colección, omita este parámetro o pase un documento vacío ({}).
+projection | document |	Opcional. Especifica los campos para devolver en los documentos que coinciden con el filtro de consulta. Para devolver todos los campos en los documentos coincidentes, omita este parámetro. 
