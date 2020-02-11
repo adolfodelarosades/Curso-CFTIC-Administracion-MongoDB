@@ -86,7 +86,15 @@ En local solo tenemos 1 instancia, lo simularemos con puertos.
    ip 142.23.7.12  => mejor Dominio
    port 27027
    
+3. Conectar la shell a cualquiera de los servidores levantados:
 
+   * Crear un objeto de configuración.
+   * Pasar ese objeto con el método `rs.initiate(<objeto-config>)`
+
+
+Notas:
+
+* Si fueran 3 maquinas diferentes en las 3 tendría que instalar Mongo.
 
 
 Archivo de configuración de MongoDB `mongod.conf`.
@@ -146,8 +154,81 @@ C:\Users\manana> md data\server2
 C:\Users\manana> md data\server3
 ```
 
-Notas:
+Levantar los servidores en 3 consolas diferentes:
 
-* Si fueran 3 maquinas diferentes en las 3 tendría que instalar Mongo.
+```sh
+C:\Users\manana>mongod --replSet clusterGetafe --dbpath data\server1 --port 27017
+
+C:\Users\manana>mongod --replSet clusterGetafe --dbpath data\server2 --port 27018
+
+C:\Users\manana>mongod --replSet clusterGetafe --dbpath data\server3 --port 27019
+```
+
+Al arrancar los servidores las carpetas se llenan `C:\Users\manana\data` para cada servidor `server1`, `server2` y `server3`.
+
+Hacer la conección a alguno de ellos:
+
+```sh
+mongo --port 27017
+```
+
+Esto arranca la shell de este puerto:
+
+<img 
+
+
+Con JS establecemos los parametros de conexión, más sencillos que podemos tener:
+
+```sh
+> rsconfig = {
+... _id: "clusterGetafe",
+... members: [
+... {_id: 0, host: "localhost:27017"},
+... {_id: 1, host: "localhost:27018"},
+... {_id: 2, host: "localhost:27019"}
+... ]
+... }
+{
+        "_id" : "clusterGetafe",
+        "members" : [
+                {
+                        "_id" : 0,
+                        "host" : "localhost:27017"
+                },
+                {
+                        "_id" : 1,
+                        "host" : "localhost:27018"
+                },
+                {
+                        "_id" : 2,
+                        "host" : "localhost:27019"
+                }
+        ]
+}
+>                                                                                     
+```
+
+Pasar este objeto a `rs.initiate()`:
+
+```sh
+> rs.initiate(rsconfig)
+{
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581421304, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581421304, 1)
+}
+clusterGetafe:SECONDARY>      
+```
+
+Observemos como el prompt a cambiado a `clusterGetafe:SECONDARY>`.
+
+El algoritmo elige cual de ellos sera el Primario.
+
 
 
