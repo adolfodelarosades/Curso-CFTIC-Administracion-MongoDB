@@ -688,7 +688,181 @@ Sintaxis.
 db.<coleccion>.find({ <campo>: [elementos] })
 ```
 
-* Exige igualdad exacta en el array incluyendo el orden de los elementos.
+**Exige igualdad exacta en el array incluyendo el orden de los elementos.**
+
+Vamos a insertar algunos documentos que contenga en sus campos un array:
+
+```sh
+> db.clientes.insert({
+... nombre: "Pedro",
+... apellido: "López",
+... actividades: ["yoga", "zumba"]
+... })
+WriteResult({ "nInserted" : 1 })
+> 
+> db.clientes.insert({ nombre: "Paula", apellido: "García", actividades: ["esgrima", "zumba", "padel"] })
+WriteResult({ "nInserted" : 1 })
+> db.clientes.insert({ nombre: "Susana", apellido: "González", actividades: ["esgrima", "natación", "step"] })
+WriteResult({ "nInserted" : 1 })
+> 
+```
+
+Si los consultamos:
+
+```sh
+> db.clientes.find()
+....
+> it
+{ "_id" : ObjectId("5e42d2c890d86b85f5fda8f3"), "nombre" : "Enrique", "apellido" : "Flores", "direccion" : { "calle" : "Plaza España, 50", "localidad" : "Sevilla" } }
+{ "_id" : ObjectId("5e42ed4390d86b85f5fda8f4"), "nombre" : "Pedro", "apellido" : "López", "actividades" : [ "yoga", "zumba" ] }
+{ "_id" : ObjectId("5e42ef1590d86b85f5fda8f6"), "nombre" : "Paula", "apellido" : "García", "actividades" : [ "esgrima", "zumba", "padel" ] }
+{ "_id" : ObjectId("5e42ef3b90d86b85f5fda8f7"), "nombre" : "Susana", "apellido" : "González", "actividades" : [ "esgrima", "natación", "step" ] }
+```
+
+Para localizar este documento en la colección es **importante el orden de los elementos del array**, si lo cambio no lo encuentra, **IGUALDAD EXACTA** vamos a comprobarlo:
+
+```sh
+> db.clientes.find({ actividades: ["yoga", "zumba"] })
+{ "_id" : ObjectId("5e42ed4390d86b85f5fda8f4"), "nombre" : "Pedro", "apellido" : "López", "actividades" : [ "yoga", "zumba" ] }
+> db.clientes.find({ actividades: ["zumba", "yoga"] })
+> db.clientes.find({ actividades: ["yoga"] })
+> 
+```
+
+Vemos que solo encuentra el documento cuando ponemos el array exactamente igual que cuando lo insertamos en cuanto a orden y número de elementos, sino es así no encontrara el documento.
+
+### Consulta de un Elemento en el Array
+
+Sintaxis.
+
+```sh
+db.<coleccion>.find({ <campo>: <elemento> })
+```
+
+* Devuelve los documentos que en el array contenga al menos un valor como el especificado.
+
+```sh
+{ "_id" : ObjectId("5e42ef1590d86b85f5fda8f6"), "nombre" : "Paula", "apellido" : "García", "actividades" : [ "esgrima", "zumba", "padel" ] }
+{ "_id" : ObjectId("5e42ef3b90d86b85f5fda8f7"), "nombre" : "Susana", "apellido" : "González", "actividades" : [ "esgrima", "natación", "step" ] }
+> 
+```
+
+Recuepera dos registros que en el array `actividades` tienen el elemento buscado, `esgrima`.
+
+```sh
+> db.clientes.find({ $or: [ {actividades: "step"}, {actividades: "yoga"} ] })
+{ "_id" : ObjectId("5e42ed4390d86b85f5fda8f4"), "nombre" : "Pedro", "apellido" : "López", "actividades" : [ "yoga", "zumba" ] }
+{ "_id" : ObjectId("5e42ef3b90d86b85f5fda8f7"), "nombre" : "Susana", "apellido" : "González", "actividades" : [ "esgrima", "natación", "step" ] }
+> 
+```
+
+Usando el operador `$or` recuperamos los documentos que tengan en sus actividades `yoga` o `step`:
+
+```sh
+> db.clientes.find({ $or: [ {actividades: "step"}, {actividades: "yoga"} ] })
+{ "_id" : ObjectId("5e42ed4390d86b85f5fda8f4"), "nombre" : "Pedro", "apellido" : "López", "actividades" : [ "yoga", "zumba" ] }
+{ "_id" : ObjectId("5e42ef3b90d86b85f5fda8f7"), "nombre" : "Susana", "apellido" : "González", "actividades" : [ "esgrima", "natación", "step" ] }
+>
+```
+
+### Consulta de Múltiples Condiciones en Array.
+
+Sintaxis.
+
+```sh
+db.<coleccion>.find({ <campo>: { condiciones } })
+```
+
+* Devuelve los documentos que en el array tengan elementos que cumplan las condiciones.
+
+Vamos a insertar documentos con campos tipo arrays que contengan números:
+
+```sh
+> db.clientes.insert({
+... nombre: "Rebeca",
+... puntuaciones: [100, 34, 67]
+... })
+WriteResult({ "nInserted" : 1 })
+> db.clientes.insert({ nombre: "Rocio", puntuaciones: [95, 88, 21] })
+WriteResult({ "nInserted" : 1 })
+> db.clientes.insert({ nombre: "Rosa", puntuaciones: [15, 49, 44] })
+WriteResult({ "nInserted" : 1 })
+> db.clientes.insert({ nombre: "Rita", puntuaciones: [78, 92, 52] })
+WriteResult({ "nInserted" : 1 })
+>
+```
+
+Si los consultamos: 
+
+
+```sh
+> db.clientes.find()
+....
+> it
+{ "_id" : ObjectId("5e42d2c890d86b85f5fda8f3"), "nombre" : "Enrique", "apellido" : "Flores", "direccion" : { "calle" : "Plaza España, 50", "localidad" : "Sevilla" } }
+{ "_id" : ObjectId("5e42ed4390d86b85f5fda8f4"), "nombre" : "Pedro", "apellido" : "López", "actividades" : [ "yoga", "zumba" ] }
+{ "_id" : ObjectId("5e42ef1590d86b85f5fda8f6"), "nombre" : "Paula", "apellido" : "García", "actividades" : [ "esgrima", "zumba", "padel" ] }
+{ "_id" : ObjectId("5e42ef3b90d86b85f5fda8f7"), "nombre" : "Susana", "apellido" : "González", "actividades" : [ "esgrima", "natación", "step" ] }
+{ "_id" : ObjectId("5e42f25490d86b85f5fda8f8"), "nombre" : "Rebeca", "puntuaciones" : [ 100, 34, 67 ] }
+{ "_id" : ObjectId("5e42f26d90d86b85f5fda8f9"), "nombre" : "Rocio", "puntuaciones" : [ 95, 88, 21 ] }
+{ "_id" : ObjectId("5e42f28b90d86b85f5fda8fa"), "nombre" : "Rosa", "puntuaciones" : [ 15, 49, 44 ] }
+{ "_id" : ObjectId("5e42f2a290d86b85f5fda8fb"), "nombre" : "Rita", "puntuaciones" : [ 78, 92, 52 ] }
+> 
+```
+
+Vamos a recuperar documentos que cumplan la codición `puntuacion >= 50 AND puntuacion < 95`:
+
+```sh
+> db.clientes.find({ puntuaciones: { $gte: 50, $lt: 95 } })
+{ "_id" : ObjectId("5e42f25490d86b85f5fda8f8"), "nombre" : "Rebeca", "puntuaciones" : [ 100, 34, 67 ] }
+{ "_id" : ObjectId("5e42f26d90d86b85f5fda8f9"), "nombre" : "Rocio", "puntuaciones" : [ 95, 88, 21 ] }
+{ "_id" : ObjectId("5e42f2a290d86b85f5fda8fb"), "nombre" : "Rita", "puntuaciones" : [ 78, 92, 52 ] }
+> 
+```
+Observemos muy bien los resultados, **requesa aquellos documentos que en el array `puntuaciones` ALGUNO O VARIOS DE SUS ELEMENTOS cumpla con la condición que le indicamos**.
+
+En el caso del segundo documento el que tiene `"puntuaciones" : [ 95, 88, 21 ]` lo regresa por el `88` ya que nie l `95` y `22` cumplen la condición pero el `88` si la cumple.
+
+```sh
+
+```
+
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
 
 ```sh
 
