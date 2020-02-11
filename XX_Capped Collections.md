@@ -62,3 +62,46 @@ Como lo hemos limitado a un máximo de 5 documentos. Al listar la colección sol
 >       
 ```
 
+Para ver si es una colección capada:
+```sh
+> db.foo.isCapped()
+true
+
+Si tenemos una coleccion y luego le aplicamos la caoacion al max no le hace caso falta ver si por tamaño si.
+```sh
+> db.foo2.insert({ _id:1, a: 1})
+WriteResult({ "nInserted" : 1 })
+> db.foo2.insert({ _id:2, a: 1})
+WriteResult({ "nInserted" : 1 })
+> db.foo2.insert({ _id:3, a: 1})
+WriteResult({ "nInserted" : 1 })
+> db.foo2.insert({ _id:4, a: 1})
+WriteResult({ "nInserted" : 1 })
+> db.foo2.insert({ _id:5, a: 1})
+WriteResult({ "nInserted" : 1 })
+> db.foo2.isCapped()
+false
+
+> db.runCommand({convertToCapped: "foo2", size: 10000, max: 3})
+{ "ok" : 1 }
+> db.foo2.find()
+{ "_id" : 1, "a" : 1 }
+{ "_id" : 2, "a" : 1 }
+{ "_id" : 3, "a" : 1 }
+{ "_id" : 4, "a" : 1 }
+{ "_id" : 5, "a" : 1 }
+> db.foo2.insert({ _id:6, a: 1})
+WriteResult({ "nInserted" : 1 })
+> db.foo2.insert({ _id:7, a: 1})
+WriteResult({ "nInserted" : 1 })
+> db.foo2.find()
+{ "_id" : 1, "a" : 1 }
+{ "_id" : 2, "a" : 1 }
+{ "_id" : 3, "a" : 1 }
+{ "_id" : 4, "a" : 1 }
+{ "_id" : 5, "a" : 1 }
+{ "_id" : 6, "a" : 1 }
+{ "_id" : 7, "a" : 1 }
+>                                                                                                                                       ```                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+```
