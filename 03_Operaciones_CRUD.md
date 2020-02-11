@@ -579,18 +579,50 @@ Esta consulta nos recupera los documentos que tienen `apellido = "López" AND ( 
 Sintaxis.
 
 ```sh
-{ <campo>: <subdocumento>}
+{ <campo>: <subdocumento> }
 ```
 
-```sh
-```
+Vamos a insertar algunos documentos con documento embebido:
 
 ```sh
+> db.clientes.insert({
+... nombre: "Luis",
+... apellido: "González",
+... direccion:
+... { calle: "Alcalá, 90", localidad: "Madrid" }
+... })
+WriteResult({ "nInserted" : 1 })
+> db.clientes.insert({ nombre: "Mariano", apellido: "Mejía", direccion: { calle: "Gran vía, 100", localidad: "Madrid" } })
+WriteResult({ "nInserted" : 1 })
+> db.clientes.insert({ nombre: "Enrique", apellido: "Flores", direccion: { calle: "Plaza España, 50", localidad: "Sevilla" } })
+WriteResult({ "nInserted" : 1 })
+>
 ```
 
-```sh
-```
+Para hacer la consulta del documento embebido:
 
 ```sh
+> db.clientes.find( { direccion: { calle: "Gran vía, 100", localidad: "Madrid" } } )
+{ "_id" : ObjectId("5e42d29a90d86b85f5fda8f2"), "nombre" : "Mariano", "apellido" : "Mejía", "direccion" : { "calle" : "Gran vía, 100", "localidad" : "Madrid" } }
+> 
+```
+
+Vemos como recuperamos el documento buscando en su documento embebido.
+
+**El orden en que se mete el documento es importante, si se invierten los campos no encuentra nada**
+(se se usa la notación de punto no importa)
+
+```sh
+> db.clientes.find(
+...  { direccion: { localidad: "Madrid", calle: "Gran vía, 100" } }
+... )
+>
+```
+
+Tampoco encuentra nada si solo ponemos parte del documento embebido **debemos ponerlo completo**
+
+```sh
+> db.clientes.find( { direccion: { calle: "Gran vía, 100" } } )
+> 
 ```
 
