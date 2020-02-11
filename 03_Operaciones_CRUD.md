@@ -579,7 +579,7 @@ Esta consulta nos recupera los documentos que tienen `apellido = "López" AND ( 
 Sintaxis.
 
 ```sh
-{ <campo>: <subdocumento> }
+db.<coleccion>.find({ <campo>: <subdocumento> })
 ```
 
 Vamos a insertar algunos documentos con documento embebido:
@@ -624,5 +624,29 @@ Tampoco encuentra nada si solo ponemos parte del documento embebido **debemos po
 ```sh
 > db.clientes.find( { direccion: { calle: "Gran vía, 100" } } )
 > 
+```
+
+#### Consulta en Campos de Documentos Embebidos
+
+Sintaxis.
+
+```sh
+db.<coleccion>.find({ "<campo>.<subdocumento>": <valor> })
+```
+
+**Las comillas son muy importantes.**
+
+Aquí vamos a buscar en un campo que pertenece a un documento embebido.
+
+```sh
+> db.clientes.find({ "direccion.localidad": "Sevilla" })
+{ "_id" : ObjectId("5e42d2c890d86b85f5fda8f3"), "nombre" : "Enrique", "apellido" : "Flores", "direccion" : { "calle" : "Plaza España, 50", "localidad" : "Sevilla" } }
+```
+
+Aquí vamos a buscar en un campo que pertenece a un documento embebido y un campo del documento principal.
+
+```sh
+> db.clientes.find({ "direccion.localidad": "Madrid", nombre: "Luis" })
+{ "_id" : ObjectId("5e42d23890d86b85f5fda8f1"), "nombre" : "Luis", "apellido" : "González", "direccion" : { "calle" : "Alcalá, 90", "localidad" : "Madrid" } }
 ```
 
