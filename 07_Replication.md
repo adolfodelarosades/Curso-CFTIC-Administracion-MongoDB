@@ -449,5 +449,56 @@ En el fondo te da la misma información presentada de forma diferente.
 
 
 
+Si me conecto al puerto 27019 e intento insertar algo me marca error:
+
+```sh
+clusterGetafe:SECONDARY> use getafeTest
+switched to db getafeTest
+clusterGetafe:SECONDARY> db.foo.insert({ a: 1})
+WriteCommandError({
+        "operationTime" : Timestamp(1581423616, 1),
+        "ok" : 0,
+        "errmsg" : "not master",
+        "code" : 10107,
+        "codeName" : "NotMaster",
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581423616, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        }
+})
+clusterGetafe:SECONDARY>
+```
+
+En el primario, creamos una BD y una colección con 1000 registros:
+
+```sh
+clusterGetafe:PRIMARY> use getafeTest
+switched to db getafeTest
+
+clusterGetafe:PRIMARY> for(i=0; i < 1000; i++){
+... db.foo.insert({a: i})
+... }
+WriteResult({ "nInserted" : 1 })
+
+clusterGetafe:PRIMARY> db.foo.find().count()
+1000
+clusterGetafe:PRIMARY>  
+```
+
+Las operaciones de escritura se escriben en forma de idenpotencia en los otros `oplog` de los otros servidores y las ejecuta. Esto lo hace así por si algún servidor no esta activo y posteriormente entra, lo ejecuta de forma Idempotente, esto es para que solo las ejecute igual. Esto garantiza que todos los servidores aun que sea con retraso.
+
+`oplog` Log de operaciones almacena las instrucciones de forma idempotente y luego el servidor Secundario las toma de aquí y las ejecuta. Cada servidor tiene su `oplog`.
+
+IDEMPOTENTE lo ejecuta la primera vez y después ya no hace nada.
+
+
+
+
+
+
+
 
 
