@@ -494,11 +494,31 @@ Las operaciones de escritura se escriben en forma de idenpotencia en los otros `
 
 IDEMPOTENTE lo ejecuta la primera vez y después ya no hace nada.
 
+Si me voy a mi secundario no puedo leerlo si quiero ejecutar ``show dbs` para ver si efectivamente se ha replicado.
+
+La forma que tengo es exportar los datos.
 
 
+Abrimos una consola nueva tengo `mongoexport`.
+
+```
+C:\Users\manana>mongoexport --port 27019 --collection=foo --db=getafeTest
+....
+{"_id":{"$oid":"5e429ce101c51fddb7887272"},"a":998.0}
+{"_id":{"$oid":"5e429ce101c51fddb7887273"},"a":999.0}
+2020-02-11T13:39:42.550+0100    exported 1000 records
+
+C:\Users\manana>mongoexport --port 27019 --collection=foo --db=getafeTest --out=foo.json
+2020-02-11T13:41:48.801+0100    connected to: mongodb://localhost:27019/
+2020-02-11T13:41:48.895+0100    exported 1000 records
+```
+En el primer comando lo muestra en la pantalla. Me exporta los 1000 registros en un archivo foo.json en la ruta donde se ejecuto el comando `C:\Users\manana`.
 
 
+El secundario no es para leer es para replicar.
+El primario es el unico que puede recibir las peticiones de lectura y escritura.
 
+**El sarding permite crecer horizontalmente, por que ahora solo podemos hacer un escalado vertical.** :skull:
 
 
 
