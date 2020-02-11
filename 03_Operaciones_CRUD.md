@@ -794,7 +794,6 @@ WriteResult({ "nInserted" : 1 })
 
 Si los consultamos: 
 
-
 ```sh
 > db.clientes.find()
 ....
@@ -813,15 +812,46 @@ Si los consultamos:
 Vamos a recuperar documentos que cumplan la codición `puntuacion >= 50 AND puntuacion < 95`:
 
 ```sh
-> db.clientes.find({ puntuaciones: { $gte: 50, $lt: 95 } })
+> db.clientes.find({ puntuaciones: { $gte: 90, $lt: 100 } })
 { "_id" : ObjectId("5e42f25490d86b85f5fda8f8"), "nombre" : "Rebeca", "puntuaciones" : [ 100, 34, 67 ] }
 { "_id" : ObjectId("5e42f26d90d86b85f5fda8f9"), "nombre" : "Rocio", "puntuaciones" : [ 95, 88, 21 ] }
 { "_id" : ObjectId("5e42f2a290d86b85f5fda8fb"), "nombre" : "Rita", "puntuaciones" : [ 78, 92, 52 ] }
 > 
 ```
-Observemos muy bien los resultados, **requesa aquellos documentos que en el array `puntuaciones` ALGUNO O VARIOS DE SUS ELEMENTOS cumpla con la condición que le indicamos**.
+:-1: Observemos muy bien los resultados, **devuelve aquellos documentos que en el array `puntuaciones` tengan un elemento que cumpla todas las condiciones o varios elementos cuya combinación cumplan todas las condiciones**.
 
-En el caso del segundo documento el que tiene `"puntuaciones" : [ 95, 88, 21 ]` lo regresa por el `88` ya que nie l `95` y `22` cumplen la condición pero el `88` si la cumple.
+**No es que cumpla ambas condiciones**, al menos un elemento sea `>= 90`.
+
+Otro ejemplo:
+
+```sh
+> db.clientes.find({ puntuaciones: { $gte: 10, $lt: 50 } })
+{ "_id" : ObjectId("5e42f25490d86b85f5fda8f8"), "nombre" : "Rebeca", "puntuaciones" : [ 100, 34, 67 ] }
+{ "_id" : ObjectId("5e42f26d90d86b85f5fda8f9"), "nombre" : "Rocio", "puntuaciones" : [ 95, 88, 21 ] }
+{ "_id" : ObjectId("5e42f28b90d86b85f5fda8fa"), "nombre" : "Rosa", "puntuaciones" : [ 15, 49, 44 ] }
+> 
+> db.clientes.find({ puntuaciones: { $gte: 10, $lt: 30 } })
+{ "_id" : ObjectId("5e42f26d90d86b85f5fda8f9"), "nombre" : "Rocio", "puntuaciones" : [ 95, 88, 21 ] }
+{ "_id" : ObjectId("5e42f28b90d86b85f5fda8fa"), "nombre" : "Rosa", "puntuaciones" : [ 15, 49, 44 ] }
+>
+> db.clientes.find({ puntuaciones: { $gte: 90, $lt: 94 } })
+{ "_id" : ObjectId("5e42f25490d86b85f5fda8f8"), "nombre" : "Rebeca", "puntuaciones" : [ 100, 34, 67 ] }
+{ "_id" : ObjectId("5e42f26d90d86b85f5fda8f9"), "nombre" : "Rocio", "puntuaciones" : [ 95, 88, 21 ] }
+{ "_id" : ObjectId("5e42f2a290d86b85f5fda8fb"), "nombre" : "Rita", "puntuaciones" : [ 78, 92, 52 ] }
+>
+````
+
+**NO ENTIENDO EL COMPORTAMIENTO**
+
+#### Consulta de un Elemento que Cumpla Multiples Condiciones.
+
+Sintaxis.
+
+```sh
+db.<coleccion>.find({ <campo>: {$elemMatch: { condiciones } } })
+```
+
+* Devuelve los documentos que tengan al menos un elemento que cumpla todas las condiciones.
 
 ```sh
 
