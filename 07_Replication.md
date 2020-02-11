@@ -207,7 +207,6 @@ Con JS establecemos los parametros de conexión, más sencillos que podemos tene
 >                                                                                     
 ```
 
-
 Pasar este objeto al método `rs.initiate()`:
 
 ```sh
@@ -225,12 +224,13 @@ Pasar este objeto al método `rs.initiate()`:
 }
 clusterGetafe:SECONDARY>      
 ```
+
 Observemos como el prompt a cambiado a `clusterGetafe:SECONDARY>`.
 El algoritmo elige cual de ellos sera el Primario.
 Esto se conecta con los otros dos servidores y le pasa la información de configuración y se conectan entre ellos.
 Una vez conectados en función del algoritmo elige el Primario, debemos comprobar cual es el primario. 
 
-Con el comando `rs.status()` vemos información de los miembros:
+Con el comando `rs.status()` vemos información de los miembros, entre ella el  `"stateStr"` que indica si es Primario o Secundario: 
 
 ```sh
 clusterGetafe:SECONDARY> rs.status()
