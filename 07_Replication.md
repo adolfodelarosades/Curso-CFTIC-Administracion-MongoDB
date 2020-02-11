@@ -24,3 +24,11 @@
 * solamente uno será el primario.
 * Algunos de los miembros pueden ser "árbitros".
 
+<img src="/images/replica-set-primary-with-two-secondaries.bakedsvg.svg">
+(Apuntes)
+
+
+El primary replica todo en los secundarios, cada que escribo en el primario escribe en los secundarios con una conexión Asíncrona, para que en caso que el primario se caiga por cualquier razon, automaticamente uno de los dos secundarios se levanta como primario con algun criterio establecido tarda de 10 - 90 seg. Si se levanta el primario caido vuelve a ser el primario.
+
+
+
