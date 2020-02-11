@@ -174,8 +174,7 @@ mongo --port 27017
 
 Esto arranca la shell de este puerto:
 
-<img 
-
+<img src="/images/consola.png">
 
 Con JS establecemos los parametros de conexión, más sencillos que podemos tener:
 
