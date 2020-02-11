@@ -446,7 +446,7 @@ Sintaxis.
 
 ```sh
 db.collection.find(
-  <documento-consulta>,
+  <documento-query>,
   <documento-projection>
 )
 ```
@@ -455,4 +455,142 @@ Ambos documentos son opcionales.
 Parametro | Type | Descripción
 ----------|------|------------
 query |	document | Opcional. Especifica el filtro de selección utilizando operadores de consulta. Para devolver todos los documentos de una colección, omita este parámetro o pase un documento vacío ({}).
-projection | document |	Opcional. Especifica los campos para devolver en los documentos que coinciden con el filtro de consulta. Para devolver todos los campos en los documentos coincidentes, omita este parámetro. 
+projection | document |	Opcional. Especifica los campos para devolver en los documentos que coinciden con el filtro de consulta. Para devolver todos los campos en los documentos coincidentes, omita este parámetro.
+
+#### Consulta de todos los documentos de la colección.
+
+Tenemos tres formas de ejecutar el método `find()` para recuperar todos los documentos:
+
+```sh
+> db.<coleccion>.find()
+
+> db.<coleccion>.find({})
+
+> db.<coleccion>.find({}).pretty()
+```
+
+#### Especificar una condición de igualdad
+
+Sintaxis.
+
+```sh
+> db.<coleccion>.find({ <campo>: <valor>, <campo>: <valor>, ... })
+```
+
+Veamos un ejemplo:
+
+```sh
+> use gimnasio
+switched to db gimnasio
+
+> db.clientes.find({ nombre: "José" })
+{ "_id" : 7, "nombre" : "José" }
+{ "_id" : 15, "nombre" : "José", "apellido" : "López" }
+> 
+```
+Devuelve todos los documentos que tienen de nombre `José`.
+
+* Cuando haya más de un par de campos, la coma que los separa implica un AND implicito.
+
+```sh
+> db.clientes.find({ nombre: "José", apellido: "López" })
+{ "_id" : 15, "nombre" : "José", "apellido" : "López" }
+```
+
+* En el caso de `_id` el valor debe ser `ObjectId` cuando no se metio ese campo, si se metio se recupera normal.
+
+```sh
+> db.clientes.find({ _id: ObjectId("5e41d25290d86b85f5fda8f0") })
+{ "_id" : ObjectId("5e41d25290d86b85f5fda8f0"), "nombre" : "Julio", "apellido" : "Cortez" }
+
+> db.clientes.find({ _id: 10 })
+{ "_id" : 10, "nombre" : "Carlos" }
+```
+
+**Debate** 
+
+¿Cómo se debe guardar la información?
+* En mayúsculas
+* En minúsculas
+* Como se inserte
+
+#### Especificar condiciones con los Operadores de Consulta.
+
+Sintaxis.
+
+```sh
+> db.<coleccion>.find({ <campo>: { $<operador>: <valor> } }, ... })
+```
+
+#### Especificar condiciones OR,  Operador $or
+
+El operador `$or` realiza una operación lógica OR en un array de *dos o más* **<expresiones>** y selecciona los documentos que satisfacen al *menos* una de las <expresiones>. `$or` tiene la siguiente sintaxis:
+
+```sh
+> db.<coleccion>.find({ $or: [ { <expression1> }, { <expression2> }, ... , { <expressionN> } ] })
+
+<expression1> = <campo1> : <valor>
+```
+
+Veamos un ejemplo:
+
+```sh
+> db.clientes.find({ $or: [
+... { nombre: "José" },
+... { nombre: "Carlos" },
+... { apellido: "Pérez" }
+... ] })
+{ "_id" : ObjectId("5e419e9490d86b85f5fda8ef"), "nombre" : "Juan", "apellido" : "Pérez" }
+{ "_id" : 3, "nombre" : "Luis", "apellido" : "Pérez" }
+{ "_id" : 6, "nombre" : "Carlos", "apellido" : "López" }
+{ "_id" : 7, "nombre" : "José" }
+{ "_id" : 10, "nombre" : "Carlos" }
+{ "_id" : 15, "nombre" : "José", "apellido" : "López" }
+> 
+```
+En esta consulta recuperamos los documentos que tengan `nombre = José` o `nombre = Carlos` o `apellido = Pérez`.
+
+#### Especificar tanto condiciones AND como OR
+
+```sh
+> db.<coleccion>.find({
+    <campo>: <valor>,
+    $or: [ { <expression1> }, { <expression2> }, ... , { <expressionN> } ] 
+    })
+```
+
+```sh
+> db.clientes.find({
+... apellido: "López",
+... $or : [
+... { nombre: "María" },
+... { nombre: "Laura" }
+... ]
+... })
+{ "_id" : 1, "nombre" : "María", "apellido" : "López" }
+{ "_id" : 2, "nombre" : "Laura", "apellido" : "López" }
+> 
+```
+
+Esta consulta nos recupera los documentos que tienen `apellido = "López" AND ( nombre = "María" OR nombre = "Laura")`.
+
+#### Consultas en Documentos Embebidos
+
+Sintaxis.
+
+```sh
+{ <campo>: <subdocumento>}
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
