@@ -1,4 +1,4 @@
-# 7 Replication
+# 7 Replication :skull: :skull: :skull: :skull: :skull: :skull: :skull:
 
 [Replication](https://docs.mongodb.com/manual/replication/index.html)
 
@@ -1151,7 +1151,7 @@ NO ME LO HIZO
 * Si necesitamos que siempre uno sea el Primario por ser mejor maquina (27017) hay que configurarlo.
 * En teoria en todos los servidores deben tener la misma capacidad.
 
-### Tolerancia a Fallos
+### Tolerancia a Fallos :skull:
 
 * Concepto de mayoría (del cluster).
 * La mayoría se define por más de la mitad de los miembros del cluster, esten vivos o no.
@@ -1174,9 +1174,11 @@ Tolerancia a fallos | No. Miembros | Mayoría
 --------------------|--------------|--------
 1 | 3 | 2
 1 | 4 | 3
-
+2 | 5 | 3
+2 | 6 | 4
+3 | 7 | 4
 **Sino hay mayoría funcionando se queda fuera de servio el Cluster**
-
+Tolerancia a fallos indica cuantos servidores como máximo se pueden caer si es más el cluster deja de funcionar.
 Conviene tener impares para poder tener un arbitro.
 
 
