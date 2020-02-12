@@ -1158,6 +1158,12 @@ La mayoría se define por más de la mitad de los miembros del cluster, esten vi
 
 Para que se produzcan elecciones es necesario que exista mayoria. Esto es debido a que si hubiera una partición de red, la mayoría necesaria para que haya elecciones impedirá que se generen dos primarios al mismo tiempo.
 
+Si tenemos 5 servidores.
+
+3 Madrid
+2 Lisboa
+Si no se consideraria la mayoria y no hay comunicacion entre Madrid y Lisboa sino se tuviera esta restricción se tendrían 2 primarios.
+Por eso esta la restricción de la mayoría para que solo en ese lado haya un Primario.
 
 
 
