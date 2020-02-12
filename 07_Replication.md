@@ -1207,6 +1207,8 @@ Puede ser una arquitectura MÁS costosa por que el 5 servidor implica gastos de 
 
 #### Configuración de los Miembros
 
+[Member Configuration Tutorials](https://docs.mongodb.com/manual/administration/replica-set-member-configuration/)
+
 **Prioridad** (Para llegar a ser primario, siempre un servidor sea primario) 
 
 * Podemos conseguir la configuración actual del cluster con el método `rs.config()`.
@@ -2449,6 +2451,91 @@ clusterGetafe:PRIMARY>
 ```
 
 Veo en la configuración que `27021` tiene prioridad `"priority" : 0` por que nunca puede llegar a ser Primario.
+
+
+####Comando `db.isMaster()`
+
+```sh
+clusterGetafe:PRIMARY> db.isMaster()
+{
+        "hosts" : [
+                "localhost:27017",
+                "localhost:27018",
+                "localhost:27019",
+                "localhost:27020"
+        ],
+        "arbiters" : [
+                "localhost:27021"
+        ],
+        "setName" : "clusterGetafe",
+        "setVersion" : 5,
+        "ismaster" : true,
+        "secondary" : false,
+        "primary" : "localhost:27019",
+        "me" : "localhost:27019",
+        "electionId" : ObjectId("7fffffff000000000000000b"),
+        "lastWrite" : {
+                "opTime" : {
+                        "ts" : Timestamp(1581510571, 1),
+                        "t" : NumberLong(11)
+                },
+                "lastWriteDate" : ISODate("2020-02-12T12:29:31Z"),
+                "majorityOpTime" : {
+                        "ts" : Timestamp(1581510571, 1),
+                        "t" : NumberLong(11)
+                },
+                "majorityWriteDate" : ISODate("2020-02-12T12:29:31Z")
+        },
+        "maxBsonObjectSize" : 16777216,
+        "maxMessageSizeBytes" : 48000000,
+        "maxWriteBatchSize" : 100000,
+        "localTime" : ISODate("2020-02-12T12:29:34.354Z"),
+        "logicalSessionTimeoutMinutes" : 30,
+        "connectionId" : 22,
+        "minWireVersion" : 0,
+        "maxWireVersion" : 8,
+        "readOnly" : false,
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581510571, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581510571, 1)
+}
+clusterGetafe:PRIMARY>
+
+```
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+```sh
+
+```
 
 
 
