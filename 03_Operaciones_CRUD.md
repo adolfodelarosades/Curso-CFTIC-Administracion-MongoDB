@@ -656,7 +656,7 @@ Tampoco encuentra nada si solo ponemos parte del documento embebido **debemos po
 > 
 ```
 
-#### Consulta en Campos de Documentos Embebidos
+#### Consulta en Campos de Documentos Embebidos
 
 Sintaxis.
 
@@ -1045,7 +1045,7 @@ Listemos los monitores:
 > 
 ```
 
-Listemos los documentos de la clase aerobics por las mañanas.
+Listemos los monitores que impartan a clase aerobics por las mañanas.
 
 ```sh
 > db.monitores.find({ actividades: { $elemMatch: { clase: "aerobics", turno: "mañana"} } })
@@ -1053,6 +1053,106 @@ Listemos los documentos de la clase aerobics por las mañanas.
 { "_id" : ObjectId("5e443498f6a56e42b753ca3f"), "nombre" : "Alexa", "actividades" : [ { "clase" : "aerobics", "turno" : "mañana", "homologado" : false }, { "clase" : "pesas", "turno" : "mañana", "homologado" : true }, { "clase" : "zumba", "turno" : "mañana", "homologado" : true } ] }
 > 
 ```
+Ambos documentos cumplen ambas condiciones.
 
+#### Multiples Condiciones en Array de Documentos con uno o Varios Documentos.
+
+Sintaxis.
+
+```sh
+db.<coleccion>.find({ "<campo><campoSubDocumento>": <valor>, "<campo><campoSubDocumento>": <valor>, ...   })
+```
+Buscamos documentos con clase aerobics y turno mañana (Como el ejemplo anterior)
+
+```sh
+> db.monitores.find({
+... "actividades.clase": "aerobics",
+... "actividades.turno": "mañana"
+... })
+{ "_id" : ObjectId("5e4433b8f6a56e42b753ca3d"), "nombre" : "Pedro", "actividades" : [ { "clase" : "aerobics", "turno" : "mañana", "homologado" : false }, { "clase" : "pesas", "turno" : "tarde", "homologado" : false }, { "clase" : "zumba", "turno" : "mañana", "homologado" : true } ] }
+{ "_id" : ObjectId("5e443498f6a56e42b753ca3f"), "nombre" : "Alexa", "actividades" : [ { "clase" : "aerobics", "turno" : "mañana", "homologado" : false }, { "clase" : "pesas", "turno" : "mañana", "homologado" : true }, { "clase" : "zumba", "turno" : "mañana", "homologado" : true } ] }
+> 
+```
+
+### Proyecciones
+
+#### Proyección de Todos los Campos de los Documentos Seleccionados.
+
+Sintaxis.
+
+```sh
+db.<coleccion>.find({}, { campo1: 1, campo2: 1, ...} })
+```
+
+Valor | Descripción
+------|------------
+1 | Se visualiza el campo
+-1 | Se oculta el campo
+
+
+* No se pasan documentos de proyección 
+
+Devuelve los campos especificados y el campo `_id`
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
 
 
