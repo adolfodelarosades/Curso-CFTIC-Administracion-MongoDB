@@ -1480,6 +1480,9 @@ clusterGetafe:PRIMARY> rs.status()
 clusterGetafe:PRIMARY>                                                                                          
 ```
 
+
+
+
 ```sh
 ```
 
