@@ -520,5 +520,37 @@ El primario es el unico que puede recibir las peticiones de lectura y escritura.
 
 **El sarding permite crecer horizontalmente, por que ahora solo podemos hacer un escalado vertical.** :skull:
 
+* **Resumen**
+   * Cluster
+      * Un solo primario (recibe escrituras y lecturas)
+      * Secundario donde se replican los datos a través de la colección `oplog`
+      
+  ```sh
+  mongod --dbpath <ruta>
+         --port <puerto>
+         --replSet <nombre-cluster> //Esto indica que esta en un cluster (replicaset) sino lo pongo el servidor es independiente
+  ```
+  
+  ```sh
+  mongod --dbpath data\serve3 --port 27019
+  ```
+  
+  Levanto mis servidores:
+  
+  ```sh
+C:\Users\manana>mongod --replSet clusterGetafe --dbpath data\server1 --port 27017
 
+C:\Users\manana>mongod --replSet clusterGetafe --dbpath data\server2 --port 27018
+
+C:\Users\manana>mongod --replSet clusterGetafe --dbpath data\server3 --port 27019
+```
+
+Hacer la conección a alguno de ellos:
+
+```sh
+mongo --port 27017
+```
+
+
+   
 
