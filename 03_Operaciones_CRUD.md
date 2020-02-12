@@ -949,18 +949,110 @@ Recuperemos aquellos documentos que en su segunda dirección tengan la localidad
 > 
 ```
 
+#### Multiples Condiciones en Array de Documentos
 
+Sintaxis.
 
 ```sh
+db.<coleccion>.find({ <campo>: { $elemMatch: {condiciones} } })
+```
 
+Insertemos algunos registros:
+
+```sh
+> db.monitores.insert({
+... nombre: "Pedro",
+... actividades: [
+... { clase: "aerobics", turno: "mañana", homologado: false },
+... { clase: "pesas", turno: "tarde", homologado: false },
+... { clase: "zumba", turno: "mañana", homologado: true }
+... ]
+... })
+WriteResult({ "nInserted" : 1 })
+> db.monitores.insert({ nombre: "Susana", actividades: [ { clase: "aerobics", turno: "tarde", homologado: true }, { clase: "step", turno: "tarde", homologado: false }, { clase: "ciclismo", turno: "tarde", homologado: true } ] })
+WriteResult({ "nInserted" : 1 })
+> db.monitores.insert({ nombre: "Alexa", actividades: [ { clase: "aerobics", turno: "mañana", homologado: false }, { clase: "pesas", turno: "mañana", homologado: true }, { clase: "zumba", turno: "mañana", homologado: true } ] })
+WriteResult({ "nInserted" : 1 })
+> 
+```
+Listemos los monitores:
+
+```sh
+> db.monitores.find().pretty()
+{
+	"_id" : ObjectId("5e4433b8f6a56e42b753ca3d"),
+	"nombre" : "Pedro",
+	"actividades" : [
+		{
+			"clase" : "aerobics",
+			"turno" : "mañana",
+			"homologado" : false
+		},
+		{
+			"clase" : "pesas",
+			"turno" : "tarde",
+			"homologado" : false
+		},
+		{
+			"clase" : "zumba",
+			"turno" : "mañana",
+			"homologado" : true
+		}
+	]
+}
+{
+	"_id" : ObjectId("5e44343ef6a56e42b753ca3e"),
+	"nombre" : "Susana",
+	"actividades" : [
+		{
+			"clase" : "aerobics",
+			"turno" : "tarde",
+			"homologado" : true
+		},
+		{
+			"clase" : "step",
+			"turno" : "tarde",
+			"homologado" : false
+		},
+		{
+			"clase" : "ciclismo",
+			"turno" : "tarde",
+			"homologado" : true
+		}
+	]
+}
+{
+	"_id" : ObjectId("5e443498f6a56e42b753ca3f"),
+	"nombre" : "Alexa",
+	"actividades" : [
+		{
+			"clase" : "aerobics",
+			"turno" : "mañana",
+			"homologado" : false
+		},
+		{
+			"clase" : "pesas",
+			"turno" : "mañana",
+			"homologado" : true
+		},
+		{
+			"clase" : "zumba",
+			"turno" : "mañana",
+			"homologado" : true
+		}
+	]
+}
+> 
+```
+
+Listemos los documentos de la clase aerobics por las mañanas.
+
+```sh
+> db.monitores.find({ actividades: { $elemMatch: { clase: "aerobics", turno: "mañana"} } })
+{ "_id" : ObjectId("5e4433b8f6a56e42b753ca3d"), "nombre" : "Pedro", "actividades" : [ { "clase" : "aerobics", "turno" : "mañana", "homologado" : false }, { "clase" : "pesas", "turno" : "tarde", "homologado" : false }, { "clase" : "zumba", "turno" : "mañana", "homologado" : true } ] }
+{ "_id" : ObjectId("5e443498f6a56e42b753ca3f"), "nombre" : "Alexa", "actividades" : [ { "clase" : "aerobics", "turno" : "mañana", "homologado" : false }, { "clase" : "pesas", "turno" : "mañana", "homologado" : true }, { "clase" : "zumba", "turno" : "mañana", "homologado" : true } ] }
+> 
 ```
 
 
-```sh
 
-```
-
-
-```sh
-
-```
