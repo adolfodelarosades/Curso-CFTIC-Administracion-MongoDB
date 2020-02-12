@@ -953,11 +953,215 @@ Type "it" for more
 clusterGetafe:SECONDARY>      
 ```
 
+Por que quisiera leer de un secundario.
+
+* Situación geografica
+* Trafico de Big Data
+* Lecturas Quioscos Burguer King
+
+Para quitarlo `db.setSlaveOk(false)`
 ```sh
+clusterGetafe:SECONDARY> db.setSlaveOk
+function(value) {
+    if (value == undefined)
+        value = true;
+    this._slaveOk = value;
+}
+clusterGetafe:SECONDARY>  
 ```
 
+Levanto nuevamente el `27017`
+
 ```sh
+clusterGetafe:PRIMARY> rs.status()
+{
+        "set" : "clusterGetafe",
+        "date" : ISODate("2020-02-12T09:05:02.481Z"),
+        "myState" : 1,
+        "term" : NumberLong(4),
+        "syncingTo" : "",
+        "syncSourceHost" : "",
+        "syncSourceId" : -1,
+        "heartbeatIntervalMillis" : NumberLong(2000),
+        "majorityVoteCount" : 2,
+        "writeMajorityCount" : 2,
+        "optimes" : {
+                "lastCommittedOpTime" : {
+                        "ts" : Timestamp(1581498294, 1),
+                        "t" : NumberLong(4)
+                },
+                "lastCommittedWallTime" : ISODate("2020-02-12T09:04:54.819Z"),
+                "readConcernMajorityOpTime" : {
+                        "ts" : Timestamp(1581498294, 1),
+                        "t" : NumberLong(4)
+                },
+                "readConcernMajorityWallTime" : ISODate("2020-02-12T09:04:54.819Z"),
+                "appliedOpTime" : {
+                        "ts" : Timestamp(1581498294, 1),
+                        "t" : NumberLong(4)
+                },
+                "durableOpTime" : {
+                        "ts" : Timestamp(1581498294, 1),
+                        "t" : NumberLong(4)
+                },
+                "lastAppliedWallTime" : ISODate("2020-02-12T09:04:54.819Z"),
+                "lastDurableWallTime" : ISODate("2020-02-12T09:04:54.819Z")
+        },
+        "lastStableRecoveryTimestamp" : Timestamp(1581498274, 1),
+        "lastStableCheckpointTimestamp" : Timestamp(1581498274, 1),
+        "electionCandidateMetrics" : {
+                "lastElectionReason" : "stepUpRequestSkipDryRun",
+                "lastElectionDate" : ISODate("2020-02-12T08:42:54.288Z"),
+                "electionTerm" : NumberLong(4),
+                "lastCommittedOpTimeAtElection" : {
+                        "ts" : Timestamp(1581496964, 1),
+                        "t" : NumberLong(3)
+                },
+                "lastSeenOpTimeAtElection" : {
+                        "ts" : Timestamp(1581496964, 1),
+                        "t" : NumberLong(3)
+                },
+                "numVotesNeeded" : 2,
+                "priorityAtElection" : 1,
+                "electionTimeoutMillis" : NumberLong(10000),
+                "priorPrimaryMemberId" : 0,
+                "numCatchUpOps" : NumberLong(0),
+                "newTermStartDate" : ISODate("2020-02-12T08:42:54.725Z"),
+                "wMajorityWriteAvailabilityDate" : ISODate("2020-02-12T08:42:54.781Z")
+        },
+        "electionParticipantMetrics" : {
+                "votedForCandidate" : true,
+                "electionTerm" : NumberLong(3),
+                "lastVoteDate" : ISODate("2020-02-12T08:32:42.232Z"),
+                "electionCandidateMemberId" : 0,
+                "voteReason" : "",
+                "lastAppliedOpTimeAtElection" : {
+                        "ts" : Timestamp(1581425591, 1),
+                        "t" : NumberLong(2)
+                },
+                "maxAppliedOpTimeInSet" : {
+                        "ts" : Timestamp(1581425591, 1),
+                        "t" : NumberLong(2)
+                },
+                "priorityAtElection" : 1
+        },
+        "members" : [
+                {
+                        "_id" : 0,
+                        "name" : "localhost:27017",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 62,
+                        "optime" : {
+                                "ts" : Timestamp(1581498294, 1),
+                                "t" : NumberLong(4)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581498294, 1),
+                                "t" : NumberLong(4)
+                        },
+                        "optimeDate" : ISODate("2020-02-12T09:04:54Z"),
+                        "optimeDurableDate" : ISODate("2020-02-12T09:04:54Z"),
+                        "lastHeartbeat" : ISODate("2020-02-12T09:05:02.299Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-12T09:05:01.665Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27019",
+                        "syncSourceHost" : "localhost:27019",
+                        "syncSourceId" : 2,
+                        "infoMessage" : "",
+                        "configVersion" : 1
+                },
+                {
+                        "_id" : 1,
+                        "name" : "localhost:27018",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 1,
+                        "stateStr" : "PRIMARY",
+                        "uptime" : 1955,
+                        "optime" : {
+                                "ts" : Timestamp(1581498294, 1),
+                                "t" : NumberLong(4)
+                        },
+                        "optimeDate" : ISODate("2020-02-12T09:04:54Z"),
+                        "syncingTo" : "",
+                        "syncSourceHost" : "",
+                        "syncSourceId" : -1,
+                        "infoMessage" : "",
+                        "electionTime" : Timestamp(1581496974, 1),
+                        "electionDate" : ISODate("2020-02-12T08:42:54Z"),
+                        "configVersion" : 1,
+                        "self" : true,
+                        "lastHeartbeatMessage" : ""
+                },
+                {
+                        "_id" : 2,
+                        "name" : "localhost:27019",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 1850,
+                        "optime" : {
+                                "ts" : Timestamp(1581498294, 1),
+                                "t" : NumberLong(4)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581498294, 1),
+                                "t" : NumberLong(4)
+                        },
+                        "optimeDate" : ISODate("2020-02-12T09:04:54Z"),
+                        "optimeDurableDate" : ISODate("2020-02-12T09:04:54Z"),
+                        "lastHeartbeat" : ISODate("2020-02-12T09:05:00.697Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-12T09:05:02.148Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27018",
+                        "syncSourceHost" : "localhost:27018",
+                        "syncSourceId" : 1,
+                        "infoMessage" : "",
+                        "configVersion" : 1
+                }
+        ],
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581498294, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581498294, 1)
+}
+clusterGetafe:PRIMARY>
 ```
+
+El `27017` queda ya como secundario, vamos a levantar una consola para ver si replico biblioteca en el `27017`.
+
+```sh
+NO ME LO HIZO
+```
+
+¿Como determina Mongo cual es el Primario.?
+
+* Si no hace falta cambiarlo lo deja como esta, hay una perdida de tiempo en hacer el cambio
+* Si necesitamos que siempre uno sea el Primario por ser mejor maquina (27017) hay que configurarlo.
+* En teoria en todos los servidores deben tener la misma capacidad.
+
+### Tolerancia a Fallos
+
+Concepto de mayoría (del cluster).
+La mayoría se define por más de la mitad de los miembros del cluster, esten vivos o no.
+
+Para que se produzcan elecciones es necesario que exista mayoria. Esto es debido a que si hubiera una partición de red, la mayoría necesaria para que haya elecciones impedirá que se generen dos primarios al mismo tiempo.
+
+
+
+
+
 
 ```sh
 ```
