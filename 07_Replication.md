@@ -2152,9 +2152,303 @@ clusterGetafe:PRIMARY> rs.addArb("localhost:27021")
 }
 clusterGetafe:PRIMARY>      
 ```
+Veo el Status
+```sh
+clusterGetafe:PRIMARY> rs.status()
+{
+        "set" : "clusterGetafe",
+        "date" : ISODate("2020-02-12T12:17:20.802Z"),
+        "myState" : 1,
+        "term" : NumberLong(11),
+        "syncingTo" : "",
+        "syncSourceHost" : "",
+        "syncSourceId" : -1,
+        "heartbeatIntervalMillis" : NumberLong(2000),
+        "majorityVoteCount" : 3,
+        "writeMajorityCount" : 3,
+        "optimes" : {
+                "lastCommittedOpTime" : {
+                        "ts" : Timestamp(1581509831, 1),
+                        "t" : NumberLong(11)
+                },
+                "lastCommittedWallTime" : ISODate("2020-02-12T12:17:11.427Z"),
+                "readConcernMajorityOpTime" : {
+                        "ts" : Timestamp(1581509831, 1),
+                        "t" : NumberLong(11)
+                },
+                "readConcernMajorityWallTime" : ISODate("2020-02-12T12:17:11.427Z"),
+                "appliedOpTime" : {
+                        "ts" : Timestamp(1581509831, 1),
+                        "t" : NumberLong(11)
+                },
+                "durableOpTime" : {
+                        "ts" : Timestamp(1581509831, 1),
+                        "t" : NumberLong(11)
+                },
+                "lastAppliedWallTime" : ISODate("2020-02-12T12:17:11.427Z"),
+                "lastDurableWallTime" : ISODate("2020-02-12T12:17:11.427Z")
+        },
+        "lastStableRecoveryTimestamp" : Timestamp(1581509821, 1),
+        "lastStableCheckpointTimestamp" : Timestamp(1581509821, 1),
+        "electionCandidateMetrics" : {
+                "lastElectionReason" : "priorityTakeover",
+                "lastElectionDate" : ISODate("2020-02-12T11:51:11.013Z"),
+                "electionTerm" : NumberLong(11),
+                "lastCommittedOpTimeAtElection" : {
+                        "ts" : Timestamp(1581508254, 2),
+                        "t" : NumberLong(10)
+                },
+                "lastSeenOpTimeAtElection" : {
+                        "ts" : Timestamp(1581508254, 2),
+                        "t" : NumberLong(10)
+                },
+                "numVotesNeeded" : 3,
+                "priorityAtElection" : 2,
+                "electionTimeoutMillis" : NumberLong(10000),
+                "priorPrimaryMemberId" : 3,
+                "numCatchUpOps" : NumberLong(0),
+                "newTermStartDate" : ISODate("2020-02-12T11:51:11.303Z"),
+                "wMajorityWriteAvailabilityDate" : ISODate("2020-02-12T11:51:13.499Z")
+        },
+        "members" : [
+                {
+                        "_id" : 0,
+                        "name" : "localhost:27017",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 1580,
+                        "optime" : {
+                                "ts" : Timestamp(1581509831, 1),
+                                "t" : NumberLong(11)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581509831, 1),
+                                "t" : NumberLong(11)
+                        },
+                        "optimeDate" : ISODate("2020-02-12T12:17:11Z"),
+                        "optimeDurableDate" : ISODate("2020-02-12T12:17:11Z"),
+                        "lastHeartbeat" : ISODate("2020-02-12T12:17:20.111Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-12T12:17:20.255Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27019",
+                        "syncSourceHost" : "localhost:27019",
+                        "syncSourceId" : 2,
+                        "infoMessage" : "",
+                        "configVersion" : 5
+                },
+                {
+                        "_id" : 1,
+                        "name" : "localhost:27018",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 1580,
+                        "optime" : {
+                                "ts" : Timestamp(1581509831, 1),
+                                "t" : NumberLong(11)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581509831, 1),
+                                "t" : NumberLong(11)
+                        },
+                        "optimeDate" : ISODate("2020-02-12T12:17:11Z"),
+                        "optimeDurableDate" : ISODate("2020-02-12T12:17:11Z"),
+                        "lastHeartbeat" : ISODate("2020-02-12T12:17:20.116Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-12T12:17:20.256Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27019",
+                        "syncSourceHost" : "localhost:27019",
+                        "syncSourceId" : 2,
+                        "infoMessage" : "",
+                        "configVersion" : 5
+                },
+                {
+                        "_id" : 2,
+                        "name" : "localhost:27019",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 1,
+                        "stateStr" : "PRIMARY",
+                        "uptime" : 1582,
+                        "optime" : {
+                                "ts" : Timestamp(1581509831, 1),
+                                "t" : NumberLong(11)
+                        },
+                        "optimeDate" : ISODate("2020-02-12T12:17:11Z"),
+                        "syncingTo" : "",
+                        "syncSourceHost" : "",
+                        "syncSourceId" : -1,
+                        "infoMessage" : "",
+                        "electionTime" : Timestamp(1581508271, 1),
+                        "electionDate" : ISODate("2020-02-12T11:51:11Z"),
+                        "configVersion" : 5,
+                        "self" : true,
+                        "lastHeartbeatMessage" : ""
+                },
+                {
+                        "_id" : 3,
+                        "name" : "localhost:27020",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 1580,
+                        "optime" : {
+                                "ts" : Timestamp(1581509831, 1),
+                                "t" : NumberLong(11)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581509831, 1),
+                                "t" : NumberLong(11)
+                        },
+                        "optimeDate" : ISODate("2020-02-12T12:17:11Z"),
+                        "optimeDurableDate" : ISODate("2020-02-12T12:17:11Z"),
+                        "lastHeartbeat" : ISODate("2020-02-12T12:17:20.116Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-12T12:17:20.238Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27019",
+                        "syncSourceHost" : "localhost:27019",
+                        "syncSourceId" : 2,
+                        "infoMessage" : "",
+                        "configVersion" : 5
+                },
+                {
+                        "_id" : 4,
+                        "name" : "localhost:27021",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 7,
+                        "stateStr" : "ARBITER",
+                        "uptime" : 304,
+                        "lastHeartbeat" : ISODate("2020-02-12T12:17:20.112Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-12T12:17:20.355Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "",
+                        "syncSourceHost" : "",
+                        "syncSourceId" : -1,
+                        "infoMessage" : "",
+                        "configVersion" : 5
+                }
+        ],
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581509831, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581509831, 1)
+}
+clusterGetafe:PRIMARY>                                                                                                                 
+```
+Veo que el `27021` es un `"ARBITER"`.
+
+Le doy la configuración
 
 ```sh
+clusterGetafe:PRIMARY> rs.config()
+{
+        "_id" : "clusterGetafe",
+        "version" : 5,
+        "protocolVersion" : NumberLong(1),
+        "writeConcernMajorityJournalDefault" : true,
+        "members" : [
+                {
+                        "_id" : 0,
+                        "host" : "localhost:27017",
+                        "arbiterOnly" : false,
+                        "buildIndexes" : true,
+                        "hidden" : false,
+                        "priority" : 1,
+                        "tags" : {
+
+                        },
+                        "slaveDelay" : NumberLong(0),
+                        "votes" : 1
+                },
+                {
+                        "_id" : 1,
+                        "host" : "localhost:27018",
+                        "arbiterOnly" : false,
+                        "buildIndexes" : true,
+                        "hidden" : false,
+                        "priority" : 1,
+                        "tags" : {
+
+                        },
+                        "slaveDelay" : NumberLong(0),
+                        "votes" : 1
+                },
+                {
+                        "_id" : 2,
+                        "host" : "localhost:27019",
+                        "arbiterOnly" : false,
+                        "buildIndexes" : true,
+                        "hidden" : false,
+                        "priority" : 2,
+                        "tags" : {
+
+                        },
+                        "slaveDelay" : NumberLong(0),
+                        "votes" : 1
+                },
+                {
+                        "_id" : 3,
+                        "host" : "localhost:27020",
+                        "arbiterOnly" : false,
+                        "buildIndexes" : true,
+                        "hidden" : false,
+                        "priority" : 1,
+                        "tags" : {
+
+                        },
+                        "slaveDelay" : NumberLong(0),
+                        "votes" : 1
+                },
+                {
+                        "_id" : 4,
+                        "host" : "localhost:27021",
+                        "arbiterOnly" : true,
+                        "buildIndexes" : true,
+                        "hidden" : false,
+                        "priority" : 0,
+                        "tags" : {
+
+                        },
+                        "slaveDelay" : NumberLong(0),
+                        "votes" : 1
+                }
+        ],
+        "settings" : {
+                "chainingAllowed" : true,
+                "heartbeatIntervalMillis" : 2000,
+                "heartbeatTimeoutSecs" : 10,
+                "electionTimeoutMillis" : 10000,
+                "catchUpTimeoutMillis" : -1,
+                "catchUpTakeoverDelayMillis" : 30000,
+                "getLastErrorModes" : {
+
+                },
+                "getLastErrorDefaults" : {
+                        "w" : 1,
+                        "wtimeout" : 0
+                },
+                "replicaSetId" : ObjectId("5e4292f8cca7dd3e0ef26c77")
+        }
+}
+clusterGetafe:PRIMARY>                                                                                          
+
 ```
 
-```sh
-```
+Veo en la configuración que `27021` tiene prioridad `"priority" : 0` por que nunca puede llegar a ser Primario.
+
+
+
