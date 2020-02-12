@@ -535,9 +535,9 @@ El primario es el unico que puede recibir las peticiones de lectura y escritura.
   mongod --dbpath data\serve3 --port 27019
   ```
   
-  Levanto mis servidores:
+Levanto mis servidores:
   
-  ```sh
+```sh
 C:\Users\manana>mongod --replSet clusterGetafe --dbpath data\server1 --port 27017
 
 C:\Users\manana>mongod --replSet clusterGetafe --dbpath data\server2 --port 27018
@@ -551,6 +551,449 @@ Hacer la conección a alguno de ellos:
 mongo --port 27017
 ```
 
+```sh
+clusterGetafe:PRIMARY> rs.status()
+{
+        "set" : "clusterGetafe",
+        "date" : ISODate("2020-02-12T08:41:21.706Z"),
+        "myState" : 1,
+        "term" : NumberLong(3),
+        "syncingTo" : "",
+        "syncSourceHost" : "",
+        "syncSourceId" : -1,
+        "heartbeatIntervalMillis" : NumberLong(2000),
+        "majorityVoteCount" : 2,
+        "writeMajorityCount" : 2,
+        "optimes" : {
+                "lastCommittedOpTime" : {
+                        "ts" : Timestamp(1581496874, 1),
+                        "t" : NumberLong(3)
+                },
+                "lastCommittedWallTime" : ISODate("2020-02-12T08:41:14.670Z"),
+                "readConcernMajorityOpTime" : {
+                        "ts" : Timestamp(1581496874, 1),
+                        "t" : NumberLong(3)
+                },
+                "readConcernMajorityWallTime" : ISODate("2020-02-12T08:41:14.670Z"),
+                "appliedOpTime" : {
+                        "ts" : Timestamp(1581496874, 1),
+                        "t" : NumberLong(3)
+                },
+                "durableOpTime" : {
+                        "ts" : Timestamp(1581496874, 1),
+                        "t" : NumberLong(3)
+                },
+                "lastAppliedWallTime" : ISODate("2020-02-12T08:41:14.670Z"),
+                "lastDurableWallTime" : ISODate("2020-02-12T08:41:14.670Z")
+        },
+        "lastStableRecoveryTimestamp" : Timestamp(1581496834, 1),
+        "lastStableCheckpointTimestamp" : Timestamp(1581496834, 1),
+        "electionCandidateMetrics" : {
+                "lastElectionReason" : "electionTimeout",
+                "lastElectionDate" : ISODate("2020-02-12T08:32:42.190Z"),
+                "electionTerm" : NumberLong(3),
+                "lastCommittedOpTimeAtElection" : {
+                        "ts" : Timestamp(0, 0),
+                        "t" : NumberLong(-1)
+                },
+                "lastSeenOpTimeAtElection" : {
+                        "ts" : Timestamp(1581425591, 1),
+                        "t" : NumberLong(2)
+                },
+                "numVotesNeeded" : 2,
+                "priorityAtElection" : 1,
+                "electionTimeoutMillis" : NumberLong(10000),
+                "numCatchUpOps" : NumberLong(0),
+                "newTermStartDate" : ISODate("2020-02-12T08:32:44.629Z"),
+                "wMajorityWriteAvailabilityDate" : ISODate("2020-02-12T08:32:44.742Z")
+        },
+        "members" : [
+                {
+                        "_id" : 0,
+                        "name" : "localhost:27017",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 1,
+                        "stateStr" : "PRIMARY",
+                        "uptime" : 583,
+                        "optime" : {
+                                "ts" : Timestamp(1581496874, 1),
+                                "t" : NumberLong(3)
+                        },
+                        "optimeDate" : ISODate("2020-02-12T08:41:14Z"),
+                        "syncingTo" : "",
+                        "syncSourceHost" : "",
+                        "syncSourceId" : -1,
+                        "infoMessage" : "",
+                        "electionTime" : Timestamp(1581496362, 1),
+                        "electionDate" : ISODate("2020-02-12T08:32:42Z"),
+                        "configVersion" : 1,
+                        "self" : true,
+                        "lastHeartbeatMessage" : ""
+                },
+                {
+                        "_id" : 1,
+                        "name" : "localhost:27018",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 529,
+                        "optime" : {
+                                "ts" : Timestamp(1581496874, 1),
+                                "t" : NumberLong(3)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581496874, 1),
+                                "t" : NumberLong(3)
+                        },
+                        "optimeDate" : ISODate("2020-02-12T08:41:14Z"),
+                        "optimeDurableDate" : ISODate("2020-02-12T08:41:14Z"),
+                        "lastHeartbeat" : ISODate("2020-02-12T08:41:20.351Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-12T08:41:21.334Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27017",
+                        "syncSourceHost" : "localhost:27017",
+                        "syncSourceId" : 0,
+                        "infoMessage" : "",
+                        "configVersion" : 1
+                },
+                {
+                        "_id" : 2,
+                        "name" : "localhost:27019",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 430,
+                        "optime" : {
+                                "ts" : Timestamp(1581496874, 1),
+                                "t" : NumberLong(3)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581496874, 1),
+                                "t" : NumberLong(3)
+                        },
+                        "optimeDate" : ISODate("2020-02-12T08:41:14Z"),
+                        "optimeDurableDate" : ISODate("2020-02-12T08:41:14Z"),
+                        "lastHeartbeat" : ISODate("2020-02-12T08:41:21.631Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-12T08:41:21.087Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27018",
+                        "syncSourceHost" : "localhost:27018",
+                        "syncSourceId" : 1,
+                        "infoMessage" : "",
+                        "configVersion" : 1
+                }
+        ],
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581496874, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581496874, 1)
+}
+clusterGetafe:PRIMARY>
+```
 
-   
+Si me deja de funcionar el servidor primario (Lo cierro), ya no me deja hacer nada.
 
+Enmtro al `mongo --27018` y este pasa a ser mi primario.
+
+```sh
+clusterGetafe:PRIMARY> rs.status()
+{
+        "set" : "clusterGetafe",
+        "date" : ISODate("2020-02-12T08:43:46.217Z"),
+        "myState" : 1,
+        "term" : NumberLong(4),
+        "syncingTo" : "",
+        "syncSourceHost" : "",
+        "syncSourceId" : -1,
+        "heartbeatIntervalMillis" : NumberLong(2000),
+        "majorityVoteCount" : 2,
+        "writeMajorityCount" : 2,
+        "optimes" : {
+                "lastCommittedOpTime" : {
+                        "ts" : Timestamp(1581497024, 1),
+                        "t" : NumberLong(4)
+                },
+                "lastCommittedWallTime" : ISODate("2020-02-12T08:43:44.730Z"),
+                "readConcernMajorityOpTime" : {
+                        "ts" : Timestamp(1581497024, 1),
+                        "t" : NumberLong(4)
+                },
+                "readConcernMajorityWallTime" : ISODate("2020-02-12T08:43:44.730Z"),
+                "appliedOpTime" : {
+                        "ts" : Timestamp(1581497024, 1),
+                        "t" : NumberLong(4)
+                },
+                "durableOpTime" : {
+                        "ts" : Timestamp(1581497024, 1),
+                        "t" : NumberLong(4)
+                },
+                "lastAppliedWallTime" : ISODate("2020-02-12T08:43:44.730Z"),
+                "lastDurableWallTime" : ISODate("2020-02-12T08:43:44.730Z")
+        },
+        "lastStableRecoveryTimestamp" : Timestamp(1581497004, 1),
+        "lastStableCheckpointTimestamp" : Timestamp(1581497004, 1),
+        "electionCandidateMetrics" : {
+                "lastElectionReason" : "stepUpRequestSkipDryRun",
+                "lastElectionDate" : ISODate("2020-02-12T08:42:54.288Z"),
+                "electionTerm" : NumberLong(4),
+                "lastCommittedOpTimeAtElection" : {
+                        "ts" : Timestamp(1581496964, 1),
+                        "t" : NumberLong(3)
+                },
+                "lastSeenOpTimeAtElection" : {
+                        "ts" : Timestamp(1581496964, 1),
+                        "t" : NumberLong(3)
+                },
+                "numVotesNeeded" : 2,
+                "priorityAtElection" : 1,
+                "electionTimeoutMillis" : NumberLong(10000),
+                "priorPrimaryMemberId" : 0,
+                "numCatchUpOps" : NumberLong(0),
+                "newTermStartDate" : ISODate("2020-02-12T08:42:54.725Z"),
+                "wMajorityWriteAvailabilityDate" : ISODate("2020-02-12T08:42:54.781Z")
+        },
+        "electionParticipantMetrics" : {
+                "votedForCandidate" : true,
+                "electionTerm" : NumberLong(3),
+                "lastVoteDate" : ISODate("2020-02-12T08:32:42.232Z"),
+                "electionCandidateMemberId" : 0,
+                "voteReason" : "",
+                "lastAppliedOpTimeAtElection" : {
+                        "ts" : Timestamp(1581425591, 1),
+                        "t" : NumberLong(2)
+                },
+                "maxAppliedOpTimeInSet" : {
+                        "ts" : Timestamp(1581425591, 1),
+                        "t" : NumberLong(2)
+                },
+                "priorityAtElection" : 1
+        },
+        "members" : [
+                {
+                        "_id" : 0,
+                        "name" : "localhost:27017",
+                        "ip" : "127.0.0.1",
+                        "health" : 0,
+                        "state" : 8,
+                        "stateStr" : "(not reachable/healthy)",
+                        "uptime" : 0,
+                        "optime" : {
+                                "ts" : Timestamp(0, 0),
+                                "t" : NumberLong(-1)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(0, 0),
+                                "t" : NumberLong(-1)
+                        },
+                        "optimeDate" : ISODate("1970-01-01T00:00:00Z"),
+                        "optimeDurableDate" : ISODate("1970-01-01T00:00:00Z"),
+                        "lastHeartbeat" : ISODate("2020-02-12T08:43:43.727Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-12T08:42:54.874Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "Error connecting to localhost:27017 (127.0.0.1:27017) :: caused by :: No se puede establecer una conexi�n ya que el equipo de destino deneg� expresamente dicha conexi�n.",
+                        "syncingTo" : "",
+                        "syncSourceHost" : "",
+                        "syncSourceId" : -1,
+                        "infoMessage" : "",
+                        "configVersion" : -1
+                },
+                {
+                        "_id" : 1,
+                        "name" : "localhost:27018",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 1,
+                        "stateStr" : "PRIMARY",
+                        "uptime" : 679,
+                        "optime" : {
+                                "ts" : Timestamp(1581497024, 1),
+                                "t" : NumberLong(4)
+                        },
+                        "optimeDate" : ISODate("2020-02-12T08:43:44Z"),
+                        "syncingTo" : "",
+                        "syncSourceHost" : "",
+                        "syncSourceId" : -1,
+                        "infoMessage" : "",
+                        "electionTime" : Timestamp(1581496974, 1),
+                        "electionDate" : ISODate("2020-02-12T08:42:54Z"),
+                        "configVersion" : 1,
+                        "self" : true,
+                        "lastHeartbeatMessage" : ""
+                },
+                {
+                        "_id" : 2,
+                        "name" : "localhost:27019",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 574,
+                        "optime" : {
+                                "ts" : Timestamp(1581497014, 1),
+                                "t" : NumberLong(4)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581497014, 1),
+                                "t" : NumberLong(4)
+                        },
+                        "optimeDate" : ISODate("2020-02-12T08:43:34Z"),
+                        "optimeDurableDate" : ISODate("2020-02-12T08:43:34Z"),
+                        "lastHeartbeat" : ISODate("2020-02-12T08:43:44.384Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-12T08:43:45.832Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27018",
+                        "syncSourceHost" : "localhost:27018",
+                        "syncSourceId" : 1,
+                        "infoMessage" : "",
+                        "configVersion" : 1
+                }
+        ],
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581497024, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581497024, 1)
+}
+clusterGetafe:PRIMARY>
+```
+Como vemos el `27017` no goza de buena salud `"health" : 0,`.
+
+Las peticiones escritura y lectura se haran sobre el `27018`.
+
+Si inserto algo aquí:
+
+```sh
+clusterGetafe:PRIMARY> use getafeTest
+switched to db getafeTest
+
+clusterGetafe:PRIMARY> db.biblioteca.insert(
+... {titulo: "El Quijote", autor: "Miguel de Cervantes" }
+... )
+WriteResult({ "nInserted" : 1 })
+clusterGetafe:PRIMARY>
+>
+```
+
+Si levanto el `27019` por defecto no dejan hacer operaciones de lectura, pero hay un comando
+
+
+```sh
+clusterGetafe:SECONDARY> use getafeTest
+switched to db getafeTest
+clusterGetafe:SECONDARY> show dbs
+2020-02-12T09:50:53.803+0100 E  QUERY    [js] uncaught exception: Error: listDatabases failed:{
+        "operationTime" : Timestamp(1581497444, 1),
+        "ok" : 0,
+        "errmsg" : "not master and slaveOk=false",
+        "code" : 13435,
+        "codeName" : "NotMasterNoSlaveOk",
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581497444, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        }
+} :
+_getErrorWithCode@src/mongo/shell/utils.js:25:13
+Mongo.prototype.getDBs/<@src/mongo/shell/mongo.js:135:19
+Mongo.prototype.getDBs@src/mongo/shell/mongo.js:87:12
+shellHelper.show@src/mongo/shell/utils.js:906:13
+shellHelper@src/mongo/shell/utils.js:790:15
+@(shellhelp2):1:1
+
+
+clusterGetafe:SECONDARY> db.setSlaveOk()
+```
+
+Con este comando ya puedo hacer operaciones de lectura como vemos:
+
+
+```sh
+clusterGetafe:SECONDARY> show collections
+biblioteca
+foo
+clusterGetafe:SECONDARY> db.foo.find()
+{ "_id" : ObjectId("5e429ce001c51fddb7886e8e"), "a" : 2 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886e8f"), "a" : 3 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886e97"), "a" : 11 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886ea3"), "a" : 23 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886ea2"), "a" : 22 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886ea8"), "a" : 28 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886e90"), "a" : 4 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886ea6"), "a" : 26 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886e95"), "a" : 9 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886e94"), "a" : 8 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886e8d"), "a" : 1 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886e98"), "a" : 12 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886ea9"), "a" : 29 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886ea0"), "a" : 20 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886e9b"), "a" : 15 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886ea1"), "a" : 21 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886eab"), "a" : 31 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886e9a"), "a" : 14 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886ea5"), "a" : 25 }
+{ "_id" : ObjectId("5e429ce001c51fddb7886eaa"), "a" : 30 }
+Type "it" for more
+clusterGetafe:SECONDARY>      
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
