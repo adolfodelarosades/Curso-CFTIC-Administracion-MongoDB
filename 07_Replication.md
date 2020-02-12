@@ -2135,7 +2135,22 @@ Creamos carpeta `arbitro` y lo levantamos en `27021`
 C:\Users\manana>mongod --dbpath data\arbitro --port 27021 --replSet clusterGetafe
 ```
 
+Lo levanto como arbitro, no tendra permisos de lectura, ni prioridad ni nada solo es para las elecciones. Se instalara en un servidor muy básico (Black Berry :) ).
+
 ```sh
+clusterGetafe:PRIMARY> rs.addArb("localhost:27021")
+{
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581509536, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581509536, 1)
+}
+clusterGetafe:PRIMARY>      
 ```
 
 ```sh
