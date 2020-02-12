@@ -1177,27 +1177,307 @@ Tolerancia a fallos | No. Miembros | Mayoría
 2 | 5 | 3
 2 | 6 | 4
 3 | 7 | 4
-**Sino hay mayoría funcionando se queda fuera de servio el Cluster**
+
+**Sino hay mayoría funcionando se queda fuera de servio el Cluster**.
+
 Tolerancia a fallos indica cuantos servidores como máximo se pueden caer si es más el cluster deja de funcionar.
+
 Conviene tener impares para poder tener un arbitro.
 
+#### Mayoría en la distribución de servidores en Data Centers :skull:
+
+* Evitar que un Data Center tenga la mayoría de miembros.
+
+Cluster único.
+Un solo primario.
+
+Madrid 3 Lisboa 2
+
+Un DataCenter cae. (No es particion de Red) se cae un centro de datos Madrid, fuera de servicio por que no hay mayoria.
+
+Trata que uno de los datacenters no tenga mayoria
+
+En este caso si Madrid se cae
+Madrid 2 Lisboa 2 Otro 1 (Nube)
+
+Me quedan 3 servidores hay mayoría y sigue pudiendo haber un primario.
+
+Puede ser una arquitectura MÁS costosa por que el 5 servidor implica gastos de nuevas instalaciones.
 
 
-         
+#### Configuración de los Miembros
 
+**Prioridad** (Para llegar a ser primario, siempre un servidor sea primario) 
 
+* Podemos conseguir la configuración actual del cluster con el método `rs.config()`.
 
 
 ```sh
+clusterGetafe:PRIMARY> var configuracion = rs.config()
+clusterGetafe:PRIMARY> configuracion
+{
+        "_id" : "clusterGetafe",
+        "version" : 1,
+        "protocolVersion" : NumberLong(1),
+        "writeConcernMajorityJournalDefault" : true,
+        "members" : [
+                {
+                        "_id" : 0,
+                        "host" : "localhost:27017",
+                        "arbiterOnly" : false,
+                        "buildIndexes" : true,
+                        "hidden" : false,
+                        "priority" : 1,
+                        "tags" : {
+
+                        },
+                        "slaveDelay" : NumberLong(0),
+                        "votes" : 1
+                },
+                {
+                        "_id" : 1,
+                        "host" : "localhost:27018",
+                        "arbiterOnly" : false,
+                        "buildIndexes" : true,
+                        "hidden" : false,
+                        "priority" : 1,
+                        "tags" : {
+
+                        },
+                        "slaveDelay" : NumberLong(0),
+                        "votes" : 1
+                },
+                {
+                        "_id" : 2,
+                        "host" : "localhost:27019",
+                        "arbiterOnly" : false,
+                        "buildIndexes" : true,
+                        "hidden" : false,
+                        "priority" : 1,
+                        "tags" : {
+
+                        },
+                        "slaveDelay" : NumberLong(0),
+                        "votes" : 1
+                }
+        ],
+        "settings" : {
+                "chainingAllowed" : true,
+                "heartbeatIntervalMillis" : 2000,
+                "heartbeatTimeoutSecs" : 10,
+                "electionTimeoutMillis" : 10000,
+                "catchUpTimeoutMillis" : -1,
+                "catchUpTakeoverDelayMillis" : 30000,
+                "getLastErrorModes" : {
+
+                },
+                "getLastErrorDefaults" : {
+                        "w" : 1,
+                        "wtimeout" : 0
+                },
+                "replicaSetId" : ObjectId("5e4292f8cca7dd3e0ef26c77")
+        }
+}
+clusterGetafe:PRIMARY>                                                    
+```
+
+Mongo hasta ahora coge como el primario sin esfuerzo.
+
+Para cambiarlo y poner siempre uno como primario cambiamos la prioridad.
+
+
+```sh
+clusterGetafe:PRIMARY> configuracion.members[2].priority = 2  
 ```
 
 ```sh
+clusterGetafe:PRIMARY> rs.reconfig(configucion)  
 ```
 
 ```sh
+clusterGetafe:PRIMARY> rs.reconfig(configuracion)
+{
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581502878, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581502878, 1)
+}
+clusterGetafe:PRIMARY>    
+usterGetafe:SECONDARY> 
 ```
+Esto me cambia el servidor a que el `27019` sea ahora el primario, el prompt cambia cuando lanza algo.
 
+Con ` rs.status()` en el `27019` ya me sale como el primario.
 ```sh
+clusterGetafe:PRIMARY> rs.status()
+{
+        "set" : "clusterGetafe",
+        "date" : ISODate("2020-02-12T10:22:09.855Z"),
+        "myState" : 1,
+        "term" : NumberLong(5),
+        "syncingTo" : "",
+        "syncSourceHost" : "",
+        "syncSourceId" : -1,
+        "heartbeatIntervalMillis" : NumberLong(2000),
+        "majorityVoteCount" : 2,
+        "writeMajorityCount" : 2,
+        "optimes" : {
+                "lastCommittedOpTime" : {
+                        "ts" : Timestamp(1581502929, 1),
+                        "t" : NumberLong(5)
+                },
+                "lastCommittedWallTime" : ISODate("2020-02-12T10:22:09.133Z"),
+                "readConcernMajorityOpTime" : {
+                        "ts" : Timestamp(1581502929, 1),
+                        "t" : NumberLong(5)
+                },
+                "readConcernMajorityWallTime" : ISODate("2020-02-12T10:22:09.133Z"),
+                "appliedOpTime" : {
+                        "ts" : Timestamp(1581502929, 1),
+                        "t" : NumberLong(5)
+                },
+                "durableOpTime" : {
+                        "ts" : Timestamp(1581502929, 1),
+                        "t" : NumberLong(5)
+                },
+                "lastAppliedWallTime" : ISODate("2020-02-12T10:22:09.133Z"),
+                "lastDurableWallTime" : ISODate("2020-02-12T10:22:09.133Z")
+        },
+        "lastStableRecoveryTimestamp" : Timestamp(1581502899, 1),
+        "lastStableCheckpointTimestamp" : Timestamp(1581502899, 1),
+        "electionCandidateMetrics" : {
+                "lastElectionReason" : "priorityTakeover",
+                "lastElectionDate" : ISODate("2020-02-12T10:21:28.195Z"),
+                "electionTerm" : NumberLong(5),
+                "lastCommittedOpTimeAtElection" : {
+                        "ts" : Timestamp(1581502878, 1),
+                        "t" : NumberLong(4)
+                },
+                "lastSeenOpTimeAtElection" : {
+                        "ts" : Timestamp(1581502878, 1),
+                        "t" : NumberLong(4)
+                },
+                "numVotesNeeded" : 2,
+                "priorityAtElection" : 2,
+                "electionTimeoutMillis" : NumberLong(10000),
+                "priorPrimaryMemberId" : 1,
+                "numCatchUpOps" : NumberLong(0),
+                "newTermStartDate" : ISODate("2020-02-12T10:21:29.130Z"),
+                "wMajorityWriteAvailabilityDate" : ISODate("2020-02-12T10:21:30.189Z")
+        },
+        "electionParticipantMetrics" : {
+                "votedForCandidate" : true,
+                "electionTerm" : NumberLong(4),
+                "lastVoteDate" : ISODate("2020-02-12T08:42:54.356Z"),
+                "electionCandidateMemberId" : 1,
+                "voteReason" : "",
+                "lastAppliedOpTimeAtElection" : {
+                        "ts" : Timestamp(1581496964, 1),
+                        "t" : NumberLong(3)
+                },
+                "maxAppliedOpTimeInSet" : {
+                        "ts" : Timestamp(1581496964, 1),
+                        "t" : NumberLong(3)
+                },
+                "priorityAtElection" : 1
+        },
+        "members" : [
+                {
+                        "_id" : 0,
+                        "name" : "localhost:27017",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 4689,
+                        "optime" : {
+                                "ts" : Timestamp(1581502919, 1),
+                                "t" : NumberLong(5)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581502919, 1),
+                                "t" : NumberLong(5)
+                        },
+                        "optimeDate" : ISODate("2020-02-12T10:21:59Z"),
+                        "optimeDurableDate" : ISODate("2020-02-12T10:21:59Z"),
+                        "lastHeartbeat" : ISODate("2020-02-12T10:22:08.258Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-12T10:22:08.171Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27019",
+                        "syncSourceHost" : "localhost:27019",
+                        "syncSourceId" : 2,
+                        "infoMessage" : "",
+                        "configVersion" : 2
+                },
+                {
+                        "_id" : 1,
+                        "name" : "localhost:27018",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 6478,
+                        "optime" : {
+                                "ts" : Timestamp(1581502919, 1),
+                                "t" : NumberLong(5)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581502919, 1),
+                                "t" : NumberLong(5)
+                        },
+                        "optimeDate" : ISODate("2020-02-12T10:21:59Z"),
+                        "optimeDurableDate" : ISODate("2020-02-12T10:21:59Z"),
+                        "lastHeartbeat" : ISODate("2020-02-12T10:22:08.259Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-12T10:22:09.117Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27019",
+                        "syncSourceHost" : "localhost:27019",
+                        "syncSourceId" : 2,
+                        "infoMessage" : "",
+                        "configVersion" : 2
+                },
+                {
+                        "_id" : 2,
+                        "name" : "localhost:27019",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 1,
+                        "stateStr" : "PRIMARY",
+                        "uptime" : 6481,
+                        "optime" : {
+                                "ts" : Timestamp(1581502929, 1),
+                                "t" : NumberLong(5)
+                        },
+                        "optimeDate" : ISODate("2020-02-12T10:22:09Z"),
+                        "syncingTo" : "",
+                        "syncSourceHost" : "",
+                        "syncSourceId" : -1,
+                        "infoMessage" : "",
+                        "electionTime" : Timestamp(1581502888, 1),
+                        "electionDate" : ISODate("2020-02-12T10:21:28Z"),
+                        "configVersion" : 2,
+                        "self" : true,
+                        "lastHeartbeatMessage" : ""
+                }
+        ],
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581502929, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581502929, 1)
+}
+clusterGetafe:PRIMARY>                                                                                          
 ```
 
 ```sh
