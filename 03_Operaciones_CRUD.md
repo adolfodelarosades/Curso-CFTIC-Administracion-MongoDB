@@ -854,34 +854,101 @@ db.<coleccion>.find({ <campo>: {$elemMatch: { condiciones } } })
 * Devuelve los documentos que tengan al menos un elemento que cumpla todas las condiciones.
 
 ```sh
+> db.clientes.find({ puntuaciones: { $gte: 94, $lt: 99 } })
+{ "_id" : ObjectId("5e42f25490d86b85f5fda8f8"), "nombre" : "Rebeca", "puntuaciones" : [ 100, 34, 67 ] }
+{ "_id" : ObjectId("5e42f26d90d86b85f5fda8f9"), "nombre" : "Rocio", "puntuaciones" : [ 95, 88, 21 ] }
 
+> db.clientes.find({ puntuaciones: { $elemMatch: { $gte: 94, $lt: 99 } } })
+{ "_id" : ObjectId("5e42f26d90d86b85f5fda8f9"), "nombre" : "Rocio", "puntuaciones" : [ 95, 88, 21 ] }
+> 
 ```
+Vemos que en el segundo ejemplo que al menos un elemento que cumpla a la vez las dos condiciones, solo tenemos un documento.
 
+### Consulta de array con índice.
 
+Sintaxis.
 
 ```sh
-
+db.<coleccion>.find({ "<campo>.i": <valor> })
 ```
 
+Recuperemos los documentos que tengan en el primer elemento del campo `actividades` sea `yoga`:
 
 ```sh
-
+> db.clientes.find({ "actividades.0": "yoga" })
+{ "_id" : ObjectId("5e42ed4390d86b85f5fda8f4"), "nombre" : "Pedro", "apellido" : "López", "actividades" : [ "yoga", "zumba" ] }
+> 
 ```
-
+Otro ejemplo:
 
 ```sh
+> db.clientes.find({ "puntuaciones.0": { $gte: 50 }  })
+{ "_id" : ObjectId("5e42f25490d86b85f5fda8f8"), "nombre" : "Rebeca", "puntuaciones" : [ 100, 34, 67 ] }
+{ "_id" : ObjectId("5e42f26d90d86b85f5fda8f9"), "nombre" : "Rocio", "puntuaciones" : [ 95, 88, 21 ] }
+{ "_id" : ObjectId("5e42f2a290d86b85f5fda8fb"), "nombre" : "Rita", "puntuaciones" : [ 78, 92, 52 ] }
+>
 
+> db.clientes.find({ "puntuaciones.0": { $lte: 50 }  })
+{ "_id" : ObjectId("5e42f28b90d86b85f5fda8fa"), "nombre" : "Rosa", "puntuaciones" : [ 15, 49, 44 ] }
+> 
+
+> db.clientes.find({ "puntuaciones.2": { $lte: 50 }  })
+{ "_id" : ObjectId("5e42f26d90d86b85f5fda8f9"), "nombre" : "Rocio", "puntuaciones" : [ 95, 88, 21 ] }
+{ "_id" : ObjectId("5e42f28b90d86b85f5fda8fa"), "nombre" : "Rosa", "puntuaciones" : [ 15, 49, 44 ] }
+>
 ```
 
+#### Consulta de campos en Arrays de Documentos en Cualquier Posición
+
+Sintaxis.
 
 ```sh
-
+db.<coleccion>.find({ "<campo>.<campoDocumento>": <valor> })
 ```
 
+Vamos a insertar algunos documentos para poder hacer estas consultas:
 
 ```sh
-
+> db.clientes.insert({
+... nombre: "Roberto",
+... apellido: "García",
+... direcciones: [
+... { calle: "Alcalá, 40", cp: "02800", localidad: "Madrid" },
+... { calle: "Zamora, 13", cp: "34005", localidad: "Vigo"}
+... ]
+... })
+WriteResult({ "nInserted" : 1 })
+> db.clientes.insert({ nombre: "Carla", apellido: "López", direcciones: [ { calle: "Gran vía, 121", cp: "28025", localidad: "Madrid" }, { calle: "Bogota, 27", cp: "25052", localidad: "Valencia"} ] })
+WriteResult({ "nInserted" : 1 })
+> db.clientes.insert({ nombre: "Roberto", apellido: "Pérez", direcciones: [ { calle: "Gran vía, 23", cp: "28025", localidad: "Madrid" }, { calle: "Toledo, 13", cp: "24122", localidad: "Madrid"} ] })
+WriteResult({ "nInserted" : 1 })
+> 
 ```
+
+Vamos a buscar los documentos que la localidad de su dirección sea Vigo:
+
+```sh
+> db.clientes.find({ "direcciones.localidad": "Vigo" })
+{ "_id" : ObjectId("5e442e4df6a56e42b753ca3a"), "nombre" : "Roberto", "apellido" : "García", "direcciones" : [ { "calle" : "Alcalá, 40", "cp" : "02800", "localidad" : "Madrid" }, { "calle" : "Zamora, 13", "cp" : "34005", "localidad" : "Vigo" } ] }
+> 
+```
+Recuperamos un documento.
+
+#### Consulta de Campos en Arrays de Documentos en una Posición Determinada.
+
+Sintaxis.
+
+```sh
+db.<coleccion>.find({ "<campo>.i.<campoDocumento>": <valor> })
+```
+
+Recuperemos aquellos documentos que en su segunda dirección tengan la localidad de Madrid.
+```sh
+> db.clientes.find({ "direcciones.1.localidad": "Madrid" })
+{ "_id" : ObjectId("5e443161f6a56e42b753ca3c"), "nombre" : "Roberto", "apellido" : "Pérez", "direcciones" : [ { "calle" : "Gran vía, 23", "cp" : "28025", "localidad" : "Madrid" }, { "calle" : "Toledo, 13", "cp" : "24122", "localidad" : "Madrid" } ] }
+> 
+```
+
 
 
 ```sh
