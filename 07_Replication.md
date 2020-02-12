@@ -2506,36 +2506,128 @@ clusterGetafe:PRIMARY> db.isMaster()
         "operationTime" : Timestamp(1581510571, 1)
 }
 clusterGetafe:PRIMARY>
-
 ```
+
+**CREAR APLICACION ANGULAR PARA PINTAR TODOS LOS DATOS QUE ARRAGAN ESTOS COMANDOS DE db, (char.js) **
+
+#### Configurar un miembro como `delayed`
+
+Va con retraso
+
+Vamos a hacer que la replica en un servidor se haga 60s despues, por si alguien borra registros, en el primario en otro servidor tiene los datos hasta una hora después.
+
+No primario, oculto y retrasado 60s
+```sh
+clusterGetafe:PRIMARY> var configuracion = rs.config()
+
+clusterGetafe:PRIMARY> configuracion.members[3].slaveDelay = 60
+60
+clusterGetafe:PRIMARY> configuracion.members[3].priority = 0
+0
+clusterGetafe:PRIMARY> configuracion.members[3].hidden = true
+true
+clusterGetafe:PRIMARY>
+```
+
+Aplico los cambios persistiendolos:
 
 ```sh
-
+clusterGetafe:PRIMARY> rs.reconfig(configuracion)
+{
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581511361, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581511361, 1)
+}
+clusterGetafe:PRIMARY>   
 ```
+**Como se recupera de `rs.config()` recupero toda la configuración y cambio solo lo que quiero y la vuelvo a aplicar.**
+
+Lanzamos el isMaster
+
+```sh
+clusterGetafe:PRIMARY> db.isMaster()
+{
+        "hosts" : [
+                "localhost:27017",
+                "localhost:27018",
+                "localhost:27019"
+        ],
+        "arbiters" : [
+                "localhost:27021"
+        ],
+        "setName" : "clusterGetafe",
+        "setVersion" : 6,
+        "ismaster" : true,
+        "secondary" : false,
+        "primary" : "localhost:27019",
+        "me" : "localhost:27019",
+        "electionId" : ObjectId("7fffffff000000000000000b"),
+        "lastWrite" : {
+                "opTime" : {
+                        "ts" : Timestamp(1581511641, 1),
+                        "t" : NumberLong(11)
+                },
+                "lastWriteDate" : ISODate("2020-02-12T12:47:21Z"),
+                "majorityOpTime" : {
+                        "ts" : Timestamp(1581511641, 1),
+                        "t" : NumberLong(11)
+                },
+                "majorityWriteDate" : ISODate("2020-02-12T12:47:21Z")
+        },
+        "maxBsonObjectSize" : 16777216,
+        "maxMessageSizeBytes" : 48000000,
+        "maxWriteBatchSize" : 100000,
+        "localTime" : ISODate("2020-02-12T12:47:31.153Z"),
+        "logicalSessionTimeoutMinutes" : 30,
+        "connectionId" : 22,
+        "minWireVersion" : 0,
+        "maxWireVersion" : 8,
+        "readOnly" : false,
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581511641, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581511641, 1)
+}
+clusterGetafe:PRIMARY>
+```
+No lo pinta por que ya esta oculto `27020`
+
+En mi primario 
+```sh
+clusterGetafe:PRIMARY> use getafeTest
+switched to db getafeTest
+clusterGetafe:PRIMARY> db.foo5.insert({ m: "hola", fecha: new Date() })
+WriteResult({ "nInserted" : 1 })
+clusterGetafe:PRIMARY>  
+```
+
+Y en la maquina hago .
+
+```sh
+C:\Users\manana>mongoexport --port 27020 -c foo5 -d getafeTest --out=delayed.json
+2020-02-12T13:51:22.151+0100    connected to: mongodb://localhost:27020/
+2020-02-12T13:51:22.236+0100    exported 0 records
+```
+Hasta despues de 60 segundos me debe dar datos
 
 
 ```sh
-
+C:\Users\manana>mongoexport --port 27020 -c foo5 -d getafeTest --out=delayed.json
+2020-02-12T13:52:08.063+0100    connected to: mongodb://localhost:27020/
+2020-02-12T13:52:08.165+0100    exported 1 record
 ```
-
-
-```sh
-
-```
-
-
-```sh
-
-```
-
-
-```sh
-
-```
-
-```sh
-
-```
+Despues de los 60 ya veo que tengo los datos.
 
 
 
