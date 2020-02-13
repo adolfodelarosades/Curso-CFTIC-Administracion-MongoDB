@@ -1538,8 +1538,44 @@ Listemos los documentos que tengan actividades nulas:
 Devuelve aquellos documentos donde la actidad es nula o no existe.
 
 
-### Operadores de Consulta de Elementos
+## Operadores de Consulta de Elementos
 
-Nombre Descripción
-$ existe Coincide con documentos que tienen el campo especificado.
-$ type Selecciona documentos si un campo es del tipo especificado.
+[Element Query Operators](https://docs.mongodb.com/manual/reference/operator/query-element/)
+
+Nombre | Descripción
+-------|------------
+$exists | Coincide con documentos que tienen el campo especificado.
+$type | Selecciona documentos si un campo es del tipo especificado.
+
+### Comprobación de Tipos `$type`
+
+Sintaxis.
+
+```sh
+{ <campo>: { $type: <BSON type> } }
+```
+
+Cada tipo BSON tiene asociado un número:
+
+Type | Number |	Alias |	Notes
+Double | 1 | “double” | 
+String | 2 | “string” | 
+Object | 3 | “object” |	 
+Array | 4 | “array” | 
+Binary data | 5 | “binData” |
+Undefined | 6 |	“undefined” | Deprecated.
+ObjectId | 7 | “objectId” | 
+Boolean	8	“bool”	 
+Date	9	“date”	 
+Null	10	“null”	 
+Regular Expression	11	“regex”	 
+DBPointer	12	“dbPointer”	Deprecated.
+JavaScript	13	“javascript”	 
+Symbol	14	“symbol”	Deprecated.
+JavaScript (with scope)	15	“javascriptWithScope”	 
+32-bit integer	16	“int”	 
+Timestamp	17	“timestamp”	 
+64-bit integer	18	“long”	 
+Decimal128	19	“decimal”	New in version 3.4.
+Min key	-1	“minKey”	 
+Max key	127	“maxKey”	 
