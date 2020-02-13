@@ -1910,7 +1910,7 @@ $and | Une cláusulas de consulta con un AND lógico que devuelve todos los docu
 $not | Invierte el efecto de una expresión de consulta y devuelve documentos que no coinciden con la expresión de consulta.
 Las cláusulas de consulta 
 $nor | Joins con un NOR lógico devuelve todos los documentos que no coinciden con ambas cláusulas.
-$or une cláusulas de consulta con un OR lógico devuelve todos los documentos que coinciden con las condiciones de cualquiera de las cláusulas
+$or | une cláusulas de consulta con un OR lógico devuelve todos los documentos que coinciden con las condiciones de cualquiera de las cláusulas
 ```sh
 
 ```
