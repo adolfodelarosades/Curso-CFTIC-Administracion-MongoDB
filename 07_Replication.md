@@ -3190,8 +3190,17 @@ clusterGetafe:PRIMARY>
 
 #### Colección `oplog` :skull:
 
+* Se ecuentra en la base de datos `local` de todos los miembros.
+* En ella se registran las operaciones del primario en forma idempotente para replicarse en cada secundario y ejecutar la operación de acuerdo a lo registrado en ese documento.
+* Cada operación individual en las colecciones se puede convertir en una o varias operaciones idempotentes.
+* La colección `oplog.rs` es de tipo `capped` y por defecto limita el número de documentos por tamaño de la siguiente manera:
+   [Oplog Size](https://docs.mongodb.com/manual/core/replica-set-oplog/index.html#oplog-size)
+
+
+
 `oplog`: Log de operaciones. Cada servidor tiene su propio `oplog` que tambien nos sirve para replicar, las operaciones las hace `idempotente` evitando problemas en la BD.
 
+`oplog` Es una colección capada.
 
 ```sh
 clusterGetafe:PRIMARY> show dbs
@@ -3365,3 +3374,26 @@ clusterGetafe:PRIMARY>
 Aquí ya veo las 100 operaciones de `Hola`
 
 **Una operación se puede convertir en varias operaciones.**
+
+```sh
+
+```
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
