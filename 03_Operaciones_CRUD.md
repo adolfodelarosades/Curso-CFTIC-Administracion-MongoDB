@@ -1464,15 +1464,80 @@ Type "it" for more
 
 Muestra los campos `nombre` y `direccion` pero en el array de direcciones solo nos muestra la `calle` que fue lo que le indicamos.
 
+**La instrucción se escribe igual pero en uno es un documento y en otro es un array de documentos**.
+
+
+#### Devolución de Elementos Especificos de un Array.
+
+Sintaxis.
+
+```sh
+db.<coleccion>.find({}, { ..., <campo>:  { $elemMatch: { <campo>: <valor>, ...} } })
+```
+
+Veamos nuestra colección monitores:
+
+```sh
+> db.monitores.find()
+{ "_id" : ObjectId("5e4433b8f6a56e42b753ca3d"), "nombre" : "Pedro", "actividades" : [ { "clase" : "aerobics", "turno" : "mañana", "homologado" : false }, { "clase" : "pesas", "turno" : "tarde", "homologado" : false }, { "clase" : "zumba", "turno" : "mañana", "homologado" : true } ] }
+{ "_id" : ObjectId("5e44343ef6a56e42b753ca3e"), "nombre" : "Susana", "actividades" : [ { "clase" : "aerobics", "turno" : "tarde", "homologado" : true }, { "clase" : "step", "turno" : "tarde", "homologado" : false }, { "clase" : "ciclismo", "turno" : "tarde", "homologado" : true } ] }
+{ "_id" : ObjectId("5e443498f6a56e42b753ca3f"), "nombre" : "Alexa", "actividades" : [ { "clase" : "aerobics", "turno" : "mañana", "homologado" : false }, { "clase" : "pesas", "turno" : "mañana", "homologado" : true }, { "clase" : "zumba", "turno" : "mañana", "homologado" : true } ] }
+> 
+```
+
+Listar los documentos que tengan la clase zumba dentro de ellas:
+
+```sh
+> db.monitores.find( {}, { actividades: { $elemMatch: { clase: "zumba" }}} )
+{ "_id" : ObjectId("5e4433b8f6a56e42b753ca3d"), "actividades" : [ { "clase" : "zumba", "turno" : "mañana", "homologado" : true } ] }
+{ "_id" : ObjectId("5e44343ef6a56e42b753ca3e") }
+{ "_id" : ObjectId("5e443498f6a56e42b753ca3f"), "actividades" : [ { "clase" : "zumba", "turno" : "mañana", "homologado" : true } ] }
+> 
+```
+
+En el caso de los clientes tenemos un array de actividades y en el ejemplo pasado tenemos un array de documentos.
 
 
 ```sh
+> db.clientes.find( {}  )
+{ "_id" : ObjectId("5e419e9490d86b85f5fda8ef"), "nombre" : "Juan", "apellido" : "Pérez" }
+{ "_id" : 1, "nombre" : "María", "apellido" : "López" }
+{ "_id" : 2, "nombre" : "Laura", "apellido" : "López" }
+{ "_id" : 3, "nombre" : "Luis", "apellido" : "Pérez" }
+{ "_id" : 4, "nombre" : "Pablo", "apellido" : "Gómez" }
+{ "_id" : 5, "nombre" : "Sara", "apellido" : "García" }
+{ "_id" : 6, "nombre" : "Carlos", "apellido" : "López" }
+{ "_id" : 7, "nombre" : "José" }
+{ "_id" : 8, "nombre" : "Lucia" }
+{ "_id" : 9, "nombre" : "Luisa" }
+{ "_id" : 10, "nombre" : "Carlos" }
+{ "_id" : 11, "nombre" : "Javier", "createAt" : ISODate("2020-02-10T21:29:44.672Z") }
+{ "_id" : 12, "nombre" : "Salma" }
+{ "_id" : 13, "nombre" : "Angelica" }
+{ "_id" : 14, "nombre" : "Veronica" }
+{ "_id" : 15, "nombre" : "José", "apellido" : "López" }
+{ "_id" : 16, "nombre" : "Pedro", "apellido" : "Paramo" }
+{ "_id" : ObjectId("5e41d25290d86b85f5fda8f0"), "nombre" : "Julio", "apellido" : "Cortez" }
+{ "_id" : ObjectId("5e42d23890d86b85f5fda8f1"), "nombre" : "Luis", "apellido" : "González", "direccion" : { "calle" : "Alcalá, 90", "localidad" : "Madrid" } }
+{ "_id" : ObjectId("5e42d29a90d86b85f5fda8f2"), "nombre" : "Mariano", "apellido" : "Mejía", "direccion" : { "calle" : "Gran vía, 100", "localidad" : "Madrid" } }
+Type "it" for more
+> it
+{ "_id" : ObjectId("5e42d2c890d86b85f5fda8f3"), "nombre" : "Enrique", "apellido" : "Flores", "direccion" : { "calle" : "Plaza España, 50", "localidad" : "Sevilla" } }
+{ "_id" : ObjectId("5e42ed4390d86b85f5fda8f4"), "nombre" : "Pedro", "apellido" : "López", "actividades" : [ "yoga", "zumba" ] }
+{ "_id" : ObjectId("5e42ef1590d86b85f5fda8f6"), "nombre" : "Paula", "apellido" : "García", "actividades" : [ "esgrima", "zumba", "padel" ] }
+{ "_id" : ObjectId("5e42ef3b90d86b85f5fda8f7"), "nombre" : "Susana", "apellido" : "González", "actividades" : [ "esgrima", "natación", "step" ] }
+{ "_id" : ObjectId("5e42f25490d86b85f5fda8f8"), "nombre" : "Rebeca", "puntuaciones" : [ 100, 34, 67 ] }
+{ "_id" : ObjectId("5e42f26d90d86b85f5fda8f9"), "nombre" : "Rocio", "puntuaciones" : [ 95, 88, 21 ] }
+{ "_id" : ObjectId("5e42f28b90d86b85f5fda8fa"), "nombre" : "Rosa", "puntuaciones" : [ 15, 49, 44 ] }
+{ "_id" : ObjectId("5e42f2a290d86b85f5fda8fb"), "nombre" : "Rita", "puntuaciones" : [ 78, 92, 52 ] }
+{ "_id" : ObjectId("5e442e4df6a56e42b753ca3a"), "nombre" : "Roberto", "apellido" : "García", "direcciones" : [ { "calle" : "Alcalá, 40", "cp" : "02800", "localidad" : "Madrid" }, { "calle" : "Zamora, 13", "cp" : "34005", "localidad" : "Vigo" } ] }
+{ "_id" : ObjectId("5e442ec5f6a56e42b753ca3b"), "nombre" : "Carla", "apellido" : "López", "direcciones" : [ { "calle" : "Gran vía, 121", "cp" : "28025", "localidad" : "Madrid" }, { "calle" : "Bogota, 27", "cp" : "25052", "localidad" : "Valencia" } ] }
+{ "_id" : ObjectId("5e443161f6a56e42b753ca3c"), "nombre" : "Roberto", "apellido" : "Pérez", "direcciones" : [ { "calle" : "Gran vía, 23", "cp" : "28025", "localidad" : "Madrid" }, { "calle" : "Toledo, 13", "cp" : "24122", "localidad" : "Madrid" } ] }
+{ "_id" : 20 }
+> 
 
 ```
-
-```sh
-
-```
+Si intentamos hacer una consulta similar sería:
 
 ```sh
 
