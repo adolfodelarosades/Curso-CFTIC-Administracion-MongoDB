@@ -1094,34 +1094,278 @@ Valor | Descripción
 
 Devuelve los campos especificados y el campo `_id`
 
-```sh
-
-```
-
+Vamos a insertar un documento que solo tiene el campo `_id`:
 
 ```sh
+> use gimnasio
+switched to db gimnasio
 
+> db.clientes.insert({ _id: 20 })
+WriteResult({ "nInserted" : 1 })
 ```
+
+Ahora si vamos a recuperar toda la colección:
 
 ```sh
-
+> db.clientes.find({})
+{ "_id" : ObjectId("5e419e9490d86b85f5fda8ef"), "nombre" : "Juan", "apellido" : "Pérez" }
+{ "_id" : 1, "nombre" : "María", "apellido" : "López" }
+{ "_id" : 2, "nombre" : "Laura", "apellido" : "López" }
+{ "_id" : 3, "nombre" : "Luis", "apellido" : "Pérez" }
+{ "_id" : 4, "nombre" : "Pablo", "apellido" : "Gómez" }
+{ "_id" : 5, "nombre" : "Sara", "apellido" : "García" }
+{ "_id" : 6, "nombre" : "Carlos", "apellido" : "López" }
+{ "_id" : 7, "nombre" : "José" }
+{ "_id" : 8, "nombre" : "Lucia" }
+{ "_id" : 9, "nombre" : "Luisa" }
+{ "_id" : 10, "nombre" : "Carlos" }
+{ "_id" : 11, "nombre" : "Javier", "createAt" : ISODate("2020-02-10T21:29:44.672Z") }
+{ "_id" : 12, "nombre" : "Salma" }
+{ "_id" : 13, "nombre" : "Angelica" }
+{ "_id" : 14, "nombre" : "Veronica" }
+{ "_id" : 15, "nombre" : "José", "apellido" : "López" }
+{ "_id" : 16, "nombre" : "Pedro", "apellido" : "Paramo" }
+{ "_id" : ObjectId("5e41d25290d86b85f5fda8f0"), "nombre" : "Julio", "apellido" : "Cortez" }
+{ "_id" : ObjectId("5e42d23890d86b85f5fda8f1"), "nombre" : "Luis", "apellido" : "González", "direccion" : { "calle" : "Alcalá, 90", "localidad" : "Madrid" } }
+{ "_id" : ObjectId("5e42d29a90d86b85f5fda8f2"), "nombre" : "Mariano", "apellido" : "Mejía", "direccion" : { "calle" : "Gran vía, 100", "localidad" : "Madrid" } }
+Type "it" for more
+> it
+{ "_id" : ObjectId("5e42d2c890d86b85f5fda8f3"), "nombre" : "Enrique", "apellido" : "Flores", "direccion" : { "calle" : "Plaza España, 50", "localidad" : "Sevilla" } }
+{ "_id" : ObjectId("5e42ed4390d86b85f5fda8f4"), "nombre" : "Pedro", "apellido" : "López", "actividades" : [ "yoga", "zumba" ] }
+{ "_id" : ObjectId("5e42ef1590d86b85f5fda8f6"), "nombre" : "Paula", "apellido" : "García", "actividades" : [ "esgrima", "zumba", "padel" ] }
+{ "_id" : ObjectId("5e42ef3b90d86b85f5fda8f7"), "nombre" : "Susana", "apellido" : "González", "actividades" : [ "esgrima", "natación", "step" ] }
+{ "_id" : ObjectId("5e42f25490d86b85f5fda8f8"), "nombre" : "Rebeca", "puntuaciones" : [ 100, 34, 67 ] }
+{ "_id" : ObjectId("5e42f26d90d86b85f5fda8f9"), "nombre" : "Rocio", "puntuaciones" : [ 95, 88, 21 ] }
+{ "_id" : ObjectId("5e42f28b90d86b85f5fda8fa"), "nombre" : "Rosa", "puntuaciones" : [ 15, 49, 44 ] }
+{ "_id" : ObjectId("5e42f2a290d86b85f5fda8fb"), "nombre" : "Rita", "puntuaciones" : [ 78, 92, 52 ] }
+{ "_id" : ObjectId("5e442e4df6a56e42b753ca3a"), "nombre" : "Roberto", "apellido" : "García", "direcciones" : [ { "calle" : "Alcalá, 40", "cp" : "02800", "localidad" : "Madrid" }, { "calle" : "Zamora, 13", "cp" : "34005", "localidad" : "Vigo" } ] }
+{ "_id" : ObjectId("5e442ec5f6a56e42b753ca3b"), "nombre" : "Carla", "apellido" : "López", "direcciones" : [ { "calle" : "Gran vía, 121", "cp" : "28025", "localidad" : "Madrid" }, { "calle" : "Bogota, 27", "cp" : "25052", "localidad" : "Valencia" } ] }
+{ "_id" : ObjectId("5e443161f6a56e42b753ca3c"), "nombre" : "Roberto", "apellido" : "Pérez", "direcciones" : [ { "calle" : "Gran vía, 23", "cp" : "28025", "localidad" : "Madrid" }, { "calle" : "Toledo, 13", "cp" : "24122", "localidad" : "Madrid" } ] }
+{ "_id" : 20 }
+> 
 ```
+
+Aquí se nos presentan todos los campos existentes, vamos a limitirar para que solo se muestren los campos `nombre` y `apellido`:
 
 ```sh
-
+> db.clientes.find( {}, {nombre: 1, apellido:1} )
+{ "_id" : ObjectId("5e419e9490d86b85f5fda8ef"), "nombre" : "Juan", "apellido" : "Pérez" }
+{ "_id" : 1, "nombre" : "María", "apellido" : "López" }
+{ "_id" : 2, "nombre" : "Laura", "apellido" : "López" }
+{ "_id" : 3, "nombre" : "Luis", "apellido" : "Pérez" }
+{ "_id" : 4, "nombre" : "Pablo", "apellido" : "Gómez" }
+{ "_id" : 5, "nombre" : "Sara", "apellido" : "García" }
+{ "_id" : 6, "nombre" : "Carlos", "apellido" : "López" }
+{ "_id" : 7, "nombre" : "José" }
+{ "_id" : 8, "nombre" : "Lucia" }
+{ "_id" : 9, "nombre" : "Luisa" }
+{ "_id" : 10, "nombre" : "Carlos" }
+{ "_id" : 11, "nombre" : "Javier" }
+{ "_id" : 12, "nombre" : "Salma" }
+{ "_id" : 13, "nombre" : "Angelica" }
+{ "_id" : 14, "nombre" : "Veronica" }
+{ "_id" : 15, "nombre" : "José", "apellido" : "López" }
+{ "_id" : 16, "nombre" : "Pedro", "apellido" : "Paramo" }
+{ "_id" : ObjectId("5e41d25290d86b85f5fda8f0"), "nombre" : "Julio", "apellido" : "Cortez" }
+{ "_id" : ObjectId("5e42d23890d86b85f5fda8f1"), "nombre" : "Luis", "apellido" : "González" }
+{ "_id" : ObjectId("5e42d29a90d86b85f5fda8f2"), "nombre" : "Mariano", "apellido" : "Mejía" }
+Type "it" for more
+> it
+{ "_id" : ObjectId("5e42d2c890d86b85f5fda8f3"), "nombre" : "Enrique", "apellido" : "Flores" }
+{ "_id" : ObjectId("5e42ed4390d86b85f5fda8f4"), "nombre" : "Pedro", "apellido" : "López" }
+{ "_id" : ObjectId("5e42ef1590d86b85f5fda8f6"), "nombre" : "Paula", "apellido" : "García" }
+{ "_id" : ObjectId("5e42ef3b90d86b85f5fda8f7"), "nombre" : "Susana", "apellido" : "González" }
+{ "_id" : ObjectId("5e42f25490d86b85f5fda8f8"), "nombre" : "Rebeca" }
+{ "_id" : ObjectId("5e42f26d90d86b85f5fda8f9"), "nombre" : "Rocio" }
+{ "_id" : ObjectId("5e42f28b90d86b85f5fda8fa"), "nombre" : "Rosa" }
+{ "_id" : ObjectId("5e42f2a290d86b85f5fda8fb"), "nombre" : "Rita" }
+{ "_id" : ObjectId("5e442e4df6a56e42b753ca3a"), "nombre" : "Roberto", "apellido" : "García" }
+{ "_id" : ObjectId("5e442ec5f6a56e42b753ca3b"), "nombre" : "Carla", "apellido" : "López" }
+{ "_id" : ObjectId("5e443161f6a56e42b753ca3c"), "nombre" : "Roberto", "apellido" : "Pérez" }
+{ "_id" : 20 }
+> 
 ```
+Aquí vemos que se nos regresan los documentos mostrando solo los campos `nombre` y `apellido` y si no tiene uno o los dos de los campos también los devuelve como es el caso del último documento `{ "_id" : 20 }`. **Siempre se presentará el campo `_id`** a menos que le digamos lo contrario. 
+
+**Excluir el campo `_id`**
+
+Para excluir el campo `_id` hay que poner `_id: 0`:
 
 ```sh
-
+> db.clientes.find( {}, {_id: 0, nombre: 1, apellido:1} )
+{ "nombre" : "Juan", "apellido" : "Pérez" }
+{ "nombre" : "María", "apellido" : "López" }
+{ "nombre" : "Laura", "apellido" : "López" }
+{ "nombre" : "Luis", "apellido" : "Pérez" }
+{ "nombre" : "Pablo", "apellido" : "Gómez" }
+{ "nombre" : "Sara", "apellido" : "García" }
+{ "nombre" : "Carlos", "apellido" : "López" }
+{ "nombre" : "José" }
+{ "nombre" : "Lucia" }
+{ "nombre" : "Luisa" }
+{ "nombre" : "Carlos" }
+{ "nombre" : "Javier" }
+{ "nombre" : "Salma" }
+{ "nombre" : "Angelica" }
+{ "nombre" : "Veronica" }
+{ "nombre" : "José", "apellido" : "López" }
+{ "nombre" : "Pedro", "apellido" : "Paramo" }
+{ "nombre" : "Julio", "apellido" : "Cortez" }
+{ "nombre" : "Luis", "apellido" : "González" }
+{ "nombre" : "Mariano", "apellido" : "Mejía" }
+Type "it" for more
+> it
+{ "nombre" : "Enrique", "apellido" : "Flores" }
+{ "nombre" : "Pedro", "apellido" : "López" }
+{ "nombre" : "Paula", "apellido" : "García" }
+{ "nombre" : "Susana", "apellido" : "González" }
+{ "nombre" : "Rebeca" }
+{ "nombre" : "Rocio" }
+{ "nombre" : "Rosa" }
+{ "nombre" : "Rita" }
+{ "nombre" : "Roberto", "apellido" : "García" }
+{ "nombre" : "Carla", "apellido" : "López" }
+{ "nombre" : "Roberto", "apellido" : "Pérez" }
+{  }
+> 
 ```
+Vemos que el documento lo presenta vacío, por que no tiene ni `nombre` ni `apellido` y el campo `_id` esta oculto por lo que el resultado es un documento vacio.
+
+Veamos algunos otros ejemplos:
 
 ```sh
-
+> db.clientes.find( {}, {_id:0,  apellido:1} )
+{ "apellido" : "Pérez" }
+{ "apellido" : "López" }
+{ "apellido" : "López" }
+{ "apellido" : "Pérez" }
+{ "apellido" : "Gómez" }
+{ "apellido" : "García" }
+{ "apellido" : "López" }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{ "apellido" : "López" }
+{ "apellido" : "Paramo" }
+{ "apellido" : "Cortez" }
+{ "apellido" : "González" }
+{ "apellido" : "Mejía" }
+Type "it" for more
+> it
+{ "apellido" : "Flores" }
+{ "apellido" : "López" }
+{ "apellido" : "García" }
+{ "apellido" : "González" }
+{  }
+{  }
+{  }
+{  }
+{ "apellido" : "García" }
+{ "apellido" : "López" }
+{ "apellido" : "Pérez" }
+{  }
+> 
 ```
+
+Listemos los documentos mostrando solo su `direccion`:
 
 ```sh
-
+> db.clientes.find( {}, {_id:0,  direccion:1} )
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{ "direccion" : { "calle" : "Alcalá, 90", "localidad" : "Madrid" } }
+{ "direccion" : { "calle" : "Gran vía, 100", "localidad" : "Madrid" } }
+Type "it" for more
+> it
+{ "direccion" : { "calle" : "Plaza España, 50", "localidad" : "Sevilla" } }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+> 
 ```
+
+#### Proyección de Todos los Campos Todos Menos los que Excluyamos.
+
+Sintaxis.
+
+```sh
+db.<coleccion>.find({}, { campo1: 0, campo2: 0, ...} })
+```
+
+Los campos deben ponerse en 0 ó en 1 salvo el campo `_id` en el documento de proyección.
+
+Listamos los documentos excluyendo los campos `_id`, `nombre` y `apellido`:
+
+```sh
+> db.clientes.find( {}, {_id:0,  nombre: 0, apellido: 0} )
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{ "createAt" : ISODate("2020-02-10T21:29:44.672Z") }
+{  }
+{  }
+{  }
+{  }
+{  }
+{  }
+{ "direccion" : { "calle" : "Alcalá, 90", "localidad" : "Madrid" } }
+{ "direccion" : { "calle" : "Gran vía, 100", "localidad" : "Madrid" } }
+Type "it" for more
+> it
+{ "direccion" : { "calle" : "Plaza España, 50", "localidad" : "Sevilla" } }
+{ "actividades" : [ "yoga", "zumba" ] }
+{ "actividades" : [ "esgrima", "zumba", "padel" ] }
+{ "actividades" : [ "esgrima", "natación", "step" ] }
+{ "puntuaciones" : [ 100, 34, 67 ] }
+{ "puntuaciones" : [ 95, 88, 21 ] }
+{ "puntuaciones" : [ 15, 49, 44 ] }
+{ "puntuaciones" : [ 78, 92, 52 ] }
+{ "direcciones" : [ { "calle" : "Alcalá, 40", "cp" : "02800", "localidad" : "Madrid" }, { "calle" : "Zamora, 13", "cp" : "34005", "localidad" : "Vigo" } ] }
+{ "direcciones" : [ { "calle" : "Gran vía, 121", "cp" : "28025", "localidad" : "Madrid" }, { "calle" : "Bogota, 27", "cp" : "25052", "localidad" : "Valencia" } ] }
+{ "direcciones" : [ { "calle" : "Gran vía, 23", "cp" : "28025", "localidad" : "Madrid" }, { "calle" : "Toledo, 13", "cp" : "24122", "localidad" : "Madrid" } ] }
+{  }
+> 
+```
+Vemos que en los documentos que solo existan los campos excluidos nos regresa `{}`.
+
+
 
 ```sh
 
