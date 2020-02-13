@@ -1905,6 +1905,7 @@ Documentos que no tengan las actividades `"esgrima", "padel", "step"` y que exis
 [Logical Query Operators](https://docs.mongodb.com/manual/reference/operator/query-logical/)
 
 Nombre | Descripción
+-------|------------
 $and | Une cláusulas de consulta con un AND lógico que devuelve todos los documentos que coinciden con las condiciones de ambas cláusulas.
 $not | Invierte el efecto de una expresión de consulta y devuelve documentos que no coinciden con la expresión de consulta.
 Las cláusulas de consulta 
