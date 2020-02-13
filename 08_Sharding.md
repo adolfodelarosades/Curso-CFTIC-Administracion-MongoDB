@@ -12,9 +12,7 @@ Componentes:
 
 **DIAGRAMA APUNTES**
 
-<img src="https://docs.mongodb.com/manual/_images/sharded-cluster-production-architecture.bakedsvg.svg">
-
-
+<img src="/images/sharded.svg">
 
 Si mi primario se cuelga por que no es capaz de abastecer el volumen de trafico en ciertos momentos, una alternativa es tener varias maquinas con menos requisitos por que el Escalado Vertical es más caro.
 
