@@ -1074,9 +1074,9 @@ Buscamos documentos con clase aerobics y turno mañana (Como el ejemplo anterior
 > 
 ```
 
-### Proyecciones
+## Proyecciones
 
-#### Proyección de Todos los Campos de los Documentos Seleccionados.
+### Proyección de Todos los Campos de los Documentos Seleccionados.
 
 Sintaxis.
 
@@ -1089,6 +1089,7 @@ Valor | Descripción
 1 | Se visualiza el campo
 -1 | Se oculta el campo
 
+No se puede incluir y excluir en el mismo documento de proyección salvo el campo `_id`.
 
 * No se pasan documentos de proyección 
 
@@ -1187,7 +1188,7 @@ Type "it" for more
 ```
 Aquí vemos que se nos regresan los documentos mostrando solo los campos `nombre` y `apellido` y si no tiene uno o los dos de los campos también los devuelve como es el caso del último documento `{ "_id" : 20 }`. **Siempre se presentará el campo `_id`** a menos que le digamos lo contrario. 
 
-**Excluir el campo `_id`**
+#### Excluir el campo `_id`
 
 Para excluir el campo `_id` hay que poner `_id: 0`:
 
@@ -1313,7 +1314,9 @@ Type "it" for more
 > 
 ```
 
-#### Proyección de Todos los Campos Todos Menos los que Excluyamos.
+### Proyección de Todos los Campos Menos los que Excluyamos.
+
+[Project Fields to Return from Query](https://docs.mongodb.com/manual/tutorial/project-fields-from-query-results/)
 
 Sintaxis.
 
@@ -1372,7 +1375,7 @@ Podemos combinar filtros de lo que queremos consultar con lo que queremos mostra
 { "nombre" : "Juan", "apellido" : "Pérez" }
 ```
 
-#### Devolución de Campos de Documentos Embebidos
+### Devolución de Campos de Documentos Embebidos
 
 Sintaxis.
 
@@ -1421,7 +1424,7 @@ Type "it" for more
 > 
 ```
 
-* **En caso de arrays de documentos es igual** Veamos un ejemplo:
+**En caso de arrays de documentos es igual** Veamos un ejemplo:
 
 ```sh
 > db.clientes.find( {}, { _id: 0, nombre: 1, "direcciones.calle": 1 })
@@ -1467,7 +1470,7 @@ Muestra los campos `nombre` y `direccion` pero en el array de direcciones solo n
 **La instrucción se escribe igual pero en uno es un documento y en otro es un array de documentos**.
 
 
-#### Devolución de Elementos Especificos de un Array.
+### Devolución de Elementos Especificos de un Array.
 
 Sintaxis.
 
@@ -1498,18 +1501,45 @@ Listar los documentos que tengan la clase zumba dentro de ellas:
 
 En el caso de los clientes tenemos un array de actividades pero no es de documentos por lo que no podriamos hacer algo similar. ¿O SI?
 
+### Consulta Para Valores `null` o campos inexistentes.
+[Query for Null or Missing Fields](https://docs.mongodb.com/manual/tutorial/query-for-null-fields/)
 
-
-```sh
-
-```
-
-```sh
-
-```
+Vamos  a insertar dos documentos:
 
 ```sh
+> db.monitores.insert({ nombre: "Juan", apellido: "González" })
+WriteResult({ "nInserted" : 1 })
+> db.monitores.insert({ nombre: "Diego", apellido: "Pérez", actividades: null })
+WriteResult({ "nInserted" : 1 })
+> 
+```
+Uno sin actividades y otro con actividades `null`
 
+Listemos la colección:
+
+```sh
+> db.monitores.find( {}, { _id: 0} )
+{ "nombre" : "Pedro", "actividades" : [ { "clase" : "aerobics", "turno" : "mañana", "homologado" : false }, { "clase" : "pesas", "turno" : "tarde", "homologado" : false }, { "clase" : "zumba", "turno" : "mañana", "homologado" : true } ] }
+{ "nombre" : "Susana", "actividades" : [ { "clase" : "aerobics", "turno" : "tarde", "homologado" : true }, { "clase" : "step", "turno" : "tarde", "homologado" : false }, { "clase" : "ciclismo", "turno" : "tarde", "homologado" : true } ] }
+{ "nombre" : "Alexa", "actividades" : [ { "clase" : "aerobics", "turno" : "mañana", "homologado" : false }, { "clase" : "pesas", "turno" : "mañana", "homologado" : true }, { "clase" : "zumba", "turno" : "mañana", "homologado" : true } ] }
+{ "nombre" : "Juan", "apellido" : "González" }
+{ "nombre" : "Diego", "apellido" : "Pérez", "actividades" : null }
+> 
+```
+Listemos los documentos que tengan actividades nulas:
+
+```sh
+> db.monitores.find({ actividades: null })
+{ "_id" : ObjectId("5e458f398a695f2c39e6da7e"), "nombre" : "Juan", "apellido" : "González" }
+{ "_id" : ObjectId("5e458f618a695f2c39e6da7f"), "nombre" : "Diego", "apellido" : "Pérez", "actividades" : null }
+> 
 ```
 
+Devuelve aquellos documentos donde la actidad es nula o no existe.
 
+
+### Operadores de Consulta de Elementos
+
+Nombre Descripción
+$ existe Coincide con documentos que tienen el campo especificado.
+$ type Selecciona documentos si un campo es del tipo especificado.
