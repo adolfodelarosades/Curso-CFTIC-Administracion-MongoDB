@@ -1742,7 +1742,7 @@ $lte | Coincide con valores inferiores o iguales a un valor especificado.
 $ne | Coincide con todos los valores que no son iguales a un valor especificado.
 $nin | No coincide con ninguno de los valores especificados en una matriz.
 
-### Operador de Igualdad `$eq` 
+### Operador de Igualdad [`$eq`](https://docs.mongodb.com/manual/reference/operator/query/eq/) 
 
 Sintaxis.
 
@@ -1761,7 +1761,7 @@ Documentos que tienen el nombre = "Susana":
 > 
 ```
 
-### Operador de Negación `$ne` 
+### Operador de Negación [`$ne`](https://docs.mongodb.com/manual/reference/operator/query/ne/) 
 
 Sintaxis.
 
@@ -1782,8 +1782,135 @@ Documentos que tienen el nombre <> "Susana":
 ```
 Incluiria también los que no tengan `nombre` que no es el caso.
 
+### Operador [`$in`](https://docs.mongodb.com/manual/reference/operator/query/in/) 
+
+Sintaxis.
+
+```sh
+{ <campo>: { $in: [ <valor>, <valor>, ... ] } }
+```
+
+* Devuelve los documentos que incluyan alguna de los valores contenidos en el array.
+
+Listemos los documentos con actividades.
+
+```sh
+> db.clientes.find( {actividades: {$type: 4 }}, {_id:0, })
+{ "nombre" : "Pedro", "apellido" : "López", "actividades" : [ "yoga", "zumba" ] }
+{ "nombre" : "Paula", "apellido" : "García", "actividades" : [ "esgrima", "zumba", "padel" ] }
+{ "nombre" : "Susana", "apellido" : "González", "actividades" : [ "esgrima", "natación", "step" ] }
+> 
+```
+
+Documentos que en actividades tengan `"step"` o `"yoga"`.
+
+```sh
+> db.clientes.find({ actividades: { $in: ["step", "yoga"] } })
+{ "_id" : ObjectId("5e42ed4390d86b85f5fda8f4"), "nombre" : "Pedro", "apellido" : "López", "actividades" : [ "yoga", "zumba" ] }
+{ "_id" : ObjectId("5e42ef3b90d86b85f5fda8f7"), "nombre" : "Susana", "apellido" : "González", "actividades" : [ "esgrima", "natación", "step" ] }
+> 
+```
+
+### Operador [`$all`](https://docs.mongodb.com/manual/reference/operator/query/all/index.html) 
+
+Sintaxis.
+
+```sh
+{ <campo>: { $all: [ <valor>, <valor>, ... ] } }
+```
+
+* Devuelve los documentos que incluyan todos los valores contenidos en el array.
+
+Documentos que en actividades tengan `"step"` y `"yoga"`.
+
+```sh
+> db.clientes.find({ actividades: { $all: ["step", "yoga"] } })
+> 
+```
+No recuperamos ningún documento.
+
+Documentos que en actividades tengan `"esgrima"` y `"padel"`.
+
+```sh
+> db.clientes.find({ actividades: { $all: ["esgrima", "padel"] } })
+{ "_id" : ObjectId("5e42ef1590d86b85f5fda8f6"), "nombre" : "Paula", "apellido" : "García", "actividades" : [ "esgrima", "zumba", "padel" ] }
+>
+```
+Debe tener ambos elementos, pero el array puede tener más elementos.
+
+
+### Operador [`$nin`](https://docs.mongodb.com/manual/reference/operator/query/nin/index.html) 
+
+Sintaxis.
+
+```sh
+{ <campo>: { $nin: [ <valor>, <valor>, ... ] } }
+```
+
+* Devuelve los documentos que no tengan ninguno de los valores en el array y también los que no tengan ese campo.
+
+Documentos que no tengan las actividades `"esgrima", "padel", "step"`:
+
+```sh
+> db.clientes.find({ actividades: { $nin: ["esgrima", "padel", "step"]} }, {_id: 0})
+{ "nombre" : "Juan", "apellido" : "Pérez" }
+{ "nombre" : "María", "apellido" : "López" }
+{ "nombre" : "Laura", "apellido" : "López" }
+{ "nombre" : "Luis", "apellido" : "Pérez" }
+{ "nombre" : "Pablo", "apellido" : "Gómez" }
+{ "nombre" : "Sara", "apellido" : "García" }
+{ "nombre" : "Carlos", "apellido" : "López" }
+{ "nombre" : "José" }
+{ "nombre" : "Lucia" }
+{ "nombre" : "Luisa" }
+{ "nombre" : "Carlos" }
+{ "nombre" : "Javier", "createAt" : ISODate("2020-02-10T21:29:44.672Z") }
+{ "nombre" : "Salma" }
+{ "nombre" : "Angelica" }
+{ "nombre" : "Veronica" }
+{ "nombre" : "José", "apellido" : "López" }
+{ "nombre" : "Pedro", "apellido" : "Paramo" }
+{ "nombre" : "Julio", "apellido" : "Cortez" }
+{ "nombre" : "Luis", "apellido" : "González", "direccion" : { "calle" : "Alcalá, 90", "localidad" : "Madrid" } }
+{ "nombre" : "Mariano", "apellido" : "Mejía", "direccion" : { "calle" : "Gran vía, 100", "localidad" : "Madrid" } }
+Type "it" for more
+> it
+{ "nombre" : "Enrique", "apellido" : "Flores", "direccion" : { "calle" : "Plaza España, 50", "localidad" : "Sevilla" } }
+{ "nombre" : "Pedro", "apellido" : "López", "actividades" : [ "yoga", "zumba" ] }
+{ "nombre" : "Rebeca", "puntuaciones" : [ 100, 34, 67 ] }
+{ "nombre" : "Rocio", "puntuaciones" : [ 95, 88, 21 ] }
+{ "nombre" : "Rosa", "puntuaciones" : [ 15, 49, 44 ] }
+{ "nombre" : "Rita", "puntuaciones" : [ 78, 92, 52 ] }
+{ "nombre" : "Roberto", "apellido" : "García", "direcciones" : [ { "calle" : "Alcalá, 40", "cp" : "02800", "localidad" : "Madrid" }, { "calle" : "Zamora, 13", "cp" : "34005", "localidad" : "Vigo" } ] }
+{ "nombre" : "Carla", "apellido" : "López", "direcciones" : [ { "calle" : "Gran vía, 121", "cp" : "28025", "localidad" : "Madrid" }, { "calle" : "Bogota, 27", "cp" : "25052", "localidad" : "Valencia" } ] }
+{ "nombre" : "Roberto", "apellido" : "Pérez", "direcciones" : [ { "calle" : "Gran vía, 23", "cp" : "28025", "localidad" : "Madrid" }, { "calle" : "Toledo, 13", "cp" : "24122", "localidad" : "Madrid" } ] }
+{  }
+> 
+```
+
+Documentos que no tengan las actividades `"esgrima", "padel", "step"` y que exista el campo:
+
+
+```sh
+> db.clientes.find({ actividades: { $nin: ["esgrima", "padel", "step"]}, actividades: { $exists: true } }, {_id: 0})
+{ "nombre" : "Pedro", "apellido" : "López", "actividades" : [ "yoga", "zumba" ] }
+{ "nombre" : "Paula", "apellido" : "García", "actividades" : [ "esgrima", "zumba", "padel" ] }
+{ "nombre" : "Susana", "apellido" : "González", "actividades" : [ "esgrima", "natación", "step" ] }
+> 
+```
+**Aquí no hay Projección (solo para quitar el `_id`) es todo consulta**
+
+## Operadores Lógicos
+
+
+
 ```sh
 ```
+
+
+```sh
+```
+
 
 ```sh
 ```
