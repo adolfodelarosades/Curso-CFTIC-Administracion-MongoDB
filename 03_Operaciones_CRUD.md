@@ -1908,17 +1908,58 @@ Nombre | Descripción
 -------|------------
 $and | Une cláusulas de consulta con un AND lógico que devuelve todos los documentos que coinciden con las condiciones de ambas cláusulas.
 $not | Invierte el efecto de una expresión de consulta y devuelve documentos que no coinciden con la expresión de consulta.
-Las cláusulas de consulta 
 $nor | Joins con un NOR lógico devuelve todos los documentos que no coinciden con ambas cláusulas.
-$or | une cláusulas de consulta con un OR lógico devuelve todos los documentos que coinciden con las condiciones de cualquiera de las cláusulas
+$or | Une cláusulas de consulta con un OR lógico devuelve todos los documentos que coinciden con las condiciones de cualquiera de las cláusulas
+
+### Operador `$and`
+
+Sintaxis.
+
+```sh
+{ $and: [ { <expression1> }, { <expression2> } , ... , { <expressionN> } ] }
+```
+
 ```sh
 
+```
+
+### Operador `$or`
+
+Sintaxis.
+
+```sh
+{ $or: [ { <expression1> }, { <expression2> } , ... , { <expressionN> } ] }
+```
+
+```sh
+```
+
+### Operador `$not`
+
+Sintaxis.
+
+```sh
+{ $not: { <expression> }
 ```
 
 
 ```sh
 ```
 
+```sh
+```
+
+### Operador `$nor`
+
+Sintaxis.
+
+```sh
+{ $nor: [ { <expression1> }, { <expression2> }, ...  { <expressionN> } ] }
+```
+
+
+```sh
+```
 
 ```sh
 ```
