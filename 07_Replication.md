@@ -3379,6 +3379,8 @@ Aquí ya veo las 100 operaciones de `Hola`
 
 **Una operación se puede convertir en varias operaciones.**
 
+#### Rollback y reconocimiento de Escritura
+
 ```sh
 
 ```
