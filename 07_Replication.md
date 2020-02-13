@@ -3326,7 +3326,7 @@ clusterGetafe:PRIMARY>
 ```
 Aqui 
 
-Hago una sola operación que afecta 100 documentos
+Hago una sola operación que afecta 100 documentos **TENGO ERROR**
 
 ```sh
 clusterGetafe:PRIMARY> db.foo3.update({}, {mensaje: "Hola"}, {multi: true})
@@ -3341,7 +3341,7 @@ WriteResult({
 })
 ```
 
-El Idempotente lo convertira en 100 operaciones:
+El Idempotente lo convertira en 100 operaciones: **LAS DEBO VER**
 
 ```sh
 clusterGetafe:PRIMARY> use local
