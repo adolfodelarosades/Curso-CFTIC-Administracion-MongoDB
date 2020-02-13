@@ -3272,7 +3272,10 @@ clusterGetafe:PRIMARY>
 ```
 Regreso a `oplog`
 
+`$natural` Indica el orden natural en que se ingresarón los registros.
+
 ```sh
+clusterGetafe:PRIMARY>use local
 clusterGetafe:PRIMARY> db.oplog.rs.find().sort({$natural: -1})
 { "ts" : Timestamp(1581585038, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:10:38.277Z"), "o" : { "msg" : "periodic noop" } }
 { "ts" : Timestamp(1581585028, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:10:28.276Z"), "o" : { "msg" : "periodic noop" } }
@@ -3308,14 +3311,65 @@ Puedo observar que mi operación me la convirtio en IDEMPOTENTE
 
 **Hay algunas operaciones que para convertirlas IDEMPOTENTE las explota en varias condiciones.**
 
+Que ocurre si un primario se cae, como tiene el `oplog` actualizado sigue trabajando, si el primario caido entra de nuevo lo hace como secundario toma las operaciones que le faltan y las ejecuta para estar igual.
 
+Metamos otra operación:
 
 ```sh
+clusterGetafe:PRIMARY> use getafeTest
+switched to db getafeTest
+clusterGetafe:PRIMARY> for(i=0; i < 100; i++){db.foo3.insert({a: 1})}
+WriteResult({ "nInserted" : 1 })
+clusterGetafe:PRIMARY> db.foo3.find().count()
+100
+clusterGetafe:PRIMARY>  
 ```
+Aqui 
+
+Hago una sola operación que afecta 100 documentos
 
 ```sh
+clusterGetafe:PRIMARY> db.foo3.update({}, {mensaje: "Hola"}, {multi: true})
+WriteResult({
+        "nMatched" : 0,
+        "nUpserted" : 0,
+        "nModified" : 0,
+        "writeError" : {
+                "code" : 9,
+                "errmsg" : "multi update is not supported for replacement-style update"
+        }
+})
 ```
 
+El Idempotente lo convertira en 100 operaciones:
 
+```sh
+clusterGetafe:PRIMARY> use local
+switched to db local
+clusterGetafe:PRIMARY> db.oplog.rs.find().sort({$natural: -1})
+{ "ts" : Timestamp(1581585988, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:26:28.351Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585978, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:26:18.350Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585968, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:26:08.349Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585955, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "u", "ns" : "config.system.sessions", "ui" : UUID("e9a1ee6b-cc7f-4e9f-beeb-40d2ea281db3"), "o2" : { "_id" : { "id" : UUID("38f8d414-fcd7-4908-a4d8-aa30f09b6a6f"), "uid" : BinData(0,"47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=") } }, "wall" : ISODate("2020-02-13T09:25:55.926Z"), "o" : { "$v" : 1, "$set" : { "lastUse" : ISODate("2020-02-13T09:25:55.926Z") } } }
+{ "ts" : Timestamp(1581585948, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:25:48.348Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585938, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:25:38.348Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585928, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:25:28.347Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585918, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:25:18.346Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585908, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:25:08.346Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585898, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:24:58.345Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585888, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:24:48.344Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585878, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:24:38.344Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585868, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:24:28.342Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585858, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:24:18.341Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585848, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:24:08.341Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585838, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:23:58.341Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585828, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:23:48.339Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585818, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:23:38.338Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585808, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:23:28.338Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585798, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:23:18.337Z"), "o" : { "msg" : "periodic noop" } }
+Type "it" for more
+clusterGetafe:PRIMARY>  
 
+```
 
+Una operación que se convirte en 1 operación se puede convertir en varias operaciones.
