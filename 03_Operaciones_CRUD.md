@@ -1555,7 +1555,11 @@ Sintaxis.
 { <campo>: { $type: <BSON type> } }
 ```
 
+El `BSON type` lo podemos expresar con un número o un alias, según la tabla BSON Types.
+
 Cada tipo BSON tiene asociado un número:
+
+[BSON Types] (https://docs.mongodb.com/manual/reference/bson-types/#bson-types)
 
 Type | Number |	Alias |	Notes
 -----|--------|-------|------
@@ -1580,3 +1584,206 @@ Timestamp | 17 | “timestamp” |
 Decimal128 | 19	| “decimal” | New in version 3.4.
 Min key | -1 | “minKey” |
 Max key	| 127 | “maxKey” | 
+
+Listemos los documentos que tengan actividades nulas:
+
+```sh
+> db.monitores.find({ actividades: { $type: 10 } })
+{ "_id" : ObjectId("5e458f618a695f2c39e6da7f"), "nombre" : "Diego", "apellido" : "Pérez", "actividades" : null }
+```
+Aquí solo regresa las actividades que sean nulas
+
+También lo podemos expresar así: 
+
+```sh
+> db.monitores.find({ actividades: { $type: "null" } })
+{ "_id" : ObjectId("5e458f618a695f2c39e6da7f"), "nombre" : "Diego", "apellido" : "Pérez", "actividades" : null }
+> 
+```
+
+El comando anterior es más presiso al que ya habiamos visto:
+
+```sh
+```sh
+> db.monitores.find({ actividades: null })
+{ "_id" : ObjectId("5e458f398a695f2c39e6da7e"), "nombre" : "Juan", "apellido" : "González" }
+{ "_id" : ObjectId("5e458f618a695f2c39e6da7f"), "nombre" : "Diego", "apellido" : "Pérez", "actividades" : null }
+> 
+```
+Donde también retorna los que no tienen el campo `actividades`.
+
+Insertemos un documento con una fecha:
+
+```sh
+> db.monitores.insert({
+... nombre: "Francisco",
+... fechaAlta: ISODate("2020-01-20")
+... })
+WriteResult({ "nInserted" : 1 })
+
+> db.monitores.insert({ nombre: "Francisco II", fechaAlta: "2020-01-20" })
+WriteResult({ "nInserted" : 1 })
+> 
+```
+
+Listemos la colección monitores:
+
+```sh
+> db.monitores.find({})
+{ "_id" : ObjectId("5e4433b8f6a56e42b753ca3d"), "nombre" : "Pedro", "actividades" : [ { "clase" : "aerobics", "turno" : "mañana", "homologado" : false }, { "clase" : "pesas", "turno" : "tarde", "homologado" : false }, { "clase" : "zumba", "turno" : "mañana", "homologado" : true } ] }
+{ "_id" : ObjectId("5e44343ef6a56e42b753ca3e"), "nombre" : "Susana", "actividades" : [ { "clase" : "aerobics", "turno" : "tarde", "homologado" : true }, { "clase" : "step", "turno" : "tarde", "homologado" : false }, { "clase" : "ciclismo", "turno" : "tarde", "homologado" : true } ] }
+{ "_id" : ObjectId("5e443498f6a56e42b753ca3f"), "nombre" : "Alexa", "actividades" : [ { "clase" : "aerobics", "turno" : "mañana", "homologado" : false }, { "clase" : "pesas", "turno" : "mañana", "homologado" : true }, { "clase" : "zumba", "turno" : "mañana", "homologado" : true } ] }
+{ "_id" : ObjectId("5e458f398a695f2c39e6da7e"), "nombre" : "Juan", "apellido" : "González" }
+{ "_id" : ObjectId("5e458f618a695f2c39e6da7f"), "nombre" : "Diego", "apellido" : "Pérez", "actividades" : null }
+{ "_id" : ObjectId("5e459a598a695f2c39e6da80"), "nombre" : "Francisco", "fechaAlta" : ISODate("2020-01-20T00:00:00Z") }
+{ "_id" : ObjectId("5e459ac28a695f2c39e6da81"), "nombre" : "Francisco II", "fechaAlta" : "2020-01-20" }
+> 
+```
+
+Busquemos los documentos de tipo fecha en el campo `fechaAlta`
+
+```sh
+> db.monitores.find({ fechaAlta: { $type: 9 } })
+{ "_id" : ObjectId("5e459a598a695f2c39e6da80"), "nombre" : "Francisco", "fechaAlta" : ISODate("2020-01-20T00:00:00Z") }
+```
+Solo nos muetra un registro por que el otro que tiene fechaAlta la tiene de tipo string.
+
+### Comprobación de Existencia `$exists`
+
+Sintaxis.
+
+```sh
+{ <campo>: { $exists: <boolean> } }
+```
+
+Listar documentos que no tengan el campo `actividades`:
+
+```sh
+> db.monitores.find({ actividades: {$exists: false} })
+{ "_id" : ObjectId("5e458f398a695f2c39e6da7e"), "nombre" : "Juan", "apellido" : "González" }
+{ "_id" : ObjectId("5e459a598a695f2c39e6da80"), "nombre" : "Francisco", "fechaAlta" : ISODate("2020-01-20T00:00:00Z") }
+{ "_id" : ObjectId("5e459ac28a695f2c39e6da81"), "nombre" : "Francisco II", "fechaAlta" : "2020-01-20" }
+>
+```
+Listar documentos que tengan el campo `actividades`:
+
+```sh
+> db.monitores.find({ actividades: {$exists: true} })
+{ "_id" : ObjectId("5e4433b8f6a56e42b753ca3d"), "nombre" : "Pedro", "actividades" : [ { "clase" : "aerobics", "turno" : "mañana", "homologado" : false }, { "clase" : "pesas", "turno" : "tarde", "homologado" : false }, { "clase" : "zumba", "turno" : "mañana", "homologado" : true } ] }
+{ "_id" : ObjectId("5e44343ef6a56e42b753ca3e"), "nombre" : "Susana", "actividades" : [ { "clase" : "aerobics", "turno" : "tarde", "homologado" : true }, { "clase" : "step", "turno" : "tarde", "homologado" : false }, { "clase" : "ciclismo", "turno" : "tarde", "homologado" : true } ] }
+{ "_id" : ObjectId("5e443498f6a56e42b753ca3f"), "nombre" : "Alexa", "actividades" : [ { "clase" : "aerobics", "turno" : "mañana", "homologado" : false }, { "clase" : "pesas", "turno" : "mañana", "homologado" : true }, { "clase" : "zumba", "turno" : "mañana", "homologado" : true } ] }
+{ "_id" : ObjectId("5e458f618a695f2c39e6da7f"), "nombre" : "Diego", "apellido" : "Pérez", "actividades" : null }
+> 
+```
+
+## Método `findOne()`
+
+[db.collection.findOne()](https://docs.mongodb.com/manual/reference/method/db.collection.findOne/index.html)
+
+Devuelve el primer documento que encuentra, ya lo regresa con formato `pretty()`.
+
+Sintaxis.
+
+```sh
+db.<coleccion>.findOne(
+   <documento-query>,
+   <documento-projection>
+)
+```
+
+Veamos un ejemplo:
+
+```sh
+> db.monitores.findOne()
+{
+	"_id" : ObjectId("5e4433b8f6a56e42b753ca3d"),
+	"nombre" : "Pedro",
+	"actividades" : [
+		{
+			"clase" : "aerobics",
+			"turno" : "mañana",
+			"homologado" : false
+		},
+		{
+			"clase" : "pesas",
+			"turno" : "tarde",
+			"homologado" : false
+		},
+		{
+			"clase" : "zumba",
+			"turno" : "mañana",
+			"homologado" : true
+		}
+	]
+}
+> 
+```
+
+**Consideraciones**: 
+* Si uso Mongoose(ODM) Si lo hago con `find` me regresa un solo registro en un array, con `findOne` me lo regresa como documento, por lo que es más directo ya que con `find` tengo que recuperar el elemnto [0] del array para  tener el documento.
+* HTTP tiene limite de tamaño del Body, por lo que hay que limitar el número de registros que se retornan.
+
+## Métodos Adicionales de Lectura
+
+Etapa `$match` de agregación.
+
+## Operadores de Comparación
+
+[Comparison Query Operators](https://docs.mongodb.com/manual/reference/operator/query-comparison/)
+
+Nombre | Descripción
+-------|------------
+$eq | Coincide con valores que son iguales a un valor especificado.
+$gt | Coincide con valores que son mayores que un valor especificado.
+$gte | Coincide con valores mayores o iguales que un valor especificado.
+$in | Coincide con cualquiera de los valores especificados en una matriz.
+$lt | Coincide con valores inferiores a un valor especificado.
+$lte | Coincide con valores inferiores o iguales a un valor especificado.
+$ne | Coincide con todos los valores que no son iguales a un valor especificado.
+$nin | No coincide con ninguno de los valores especificados en una matriz.
+
+### Operador de Igualdad `$eq` 
+
+Sintaxis.
+
+```sh
+{ <campo>: { $eq: <valor> } }
+```
+
+Documentos que tienen el nombre = "Susana":
+
+```sh
+> db.monitores.find({ nombre: { $eq: "Susana" } })
+{ "_id" : ObjectId("5e44343ef6a56e42b753ca3e"), "nombre" : "Susana", "actividades" : [ { "clase" : "aerobics", "turno" : "tarde", "homologado" : true }, { "clase" : "step", "turno" : "tarde", "homologado" : false }, { "clase" : "ciclismo", "turno" : "tarde", "homologado" : true } ] }
+> 
+> db.monitores.find({ nombre: "Susana" })
+{ "_id" : ObjectId("5e44343ef6a56e42b753ca3e"), "nombre" : "Susana", "actividades" : [ { "clase" : "aerobics", "turno" : "tarde", "homologado" : true }, { "clase" : "step", "turno" : "tarde", "homologado" : false }, { "clase" : "ciclismo", "turno" : "tarde", "homologado" : true } ] }
+> 
+```
+
+### Operador de Negación `$ne` 
+
+Sintaxis.
+
+```sh
+{ <campo>: { $ne: <valor> } }
+```
+Documentos que tienen el nombre <> "Susana":
+
+```sh
+> db.monitores.find({ nombre: { $ne: "Susana" } }, { _id: 0, nombre: 1})
+{ "nombre" : "Pedro" }
+{ "nombre" : "Alexa" }
+{ "nombre" : "Juan" }
+{ "nombre" : "Diego" }
+{ "nombre" : "Francisco" }
+{ "nombre" : "Francisco II" }
+> 
+```
+Incluiria también los que no tengan `nombre` que no es el caso.
+
+```sh
+```
+
+```sh
+```
