@@ -2876,20 +2876,144 @@ clusterGetafe:PRIMARY> rs.status()
         "operationTime" : Timestamp(1581582568, 1)
 }
 clusterGetafe:PRIMARY>
-
 ```
 
-```sh
+#### Retirar un Miembro del Cluster
 
-```
 
 
 ```sh
-
+clusterGetafe:PRIMARY> db.isMaster()
+{
+        "hosts" : [
+                "localhost:27017",
+                "localhost:27018",
+                "localhost:27019"
+        ],
+        "arbiters" : [
+                "localhost:27021"
+        ],
+        "setName" : "clusterGetafe",
+        "setVersion" : 6,
+        "ismaster" : true,
+        "secondary" : false,
+        "primary" : "localhost:27019",
+        "me" : "localhost:27019",
+        "electionId" : ObjectId("7fffffff000000000000000e"),
+        "lastWrite" : {
+                "opTime" : {
+                        "ts" : Timestamp(1581583255, 1),
+                        "t" : NumberLong(14)
+                },
+                "lastWriteDate" : ISODate("2020-02-13T08:40:55Z"),
+                "majorityOpTime" : {
+                        "ts" : Timestamp(1581583255, 1),
+                        "t" : NumberLong(14)
+                },
+                "majorityWriteDate" : ISODate("2020-02-13T08:40:55Z")
+        },
+        "maxBsonObjectSize" : 16777216,
+        "maxMessageSizeBytes" : 48000000,
+        "maxWriteBatchSize" : 100000,
+        "localTime" : ISODate("2020-02-13T08:40:59.211Z"),
+        "logicalSessionTimeoutMinutes" : 30,
+        "connectionId" : 21,
+        "minWireVersion" : 0,
+        "maxWireVersion" : 8,
+        "readOnly" : false,
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581583255, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581583255, 1)
+}
+clusterGetafe:PRIMARY>                                                                                                                                                                                                                                            
 ```
 
-```sh
+Para el eliminar los servodores `27020` y `27021` primero los apago y luego los elimino:
 
+```sh
+clusterGetafe:PRIMARY> rs.remove("localhost:27020")
+{
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581583397, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581583397, 1)
+}
+clusterGetafe:PRIMARY>
+clusterGetafe:PRIMARY> rs.remove("localhost:27021")
+{
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581583469, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581583469, 1)
+}
+clusterGetafe:PRIMARY>       
+```
+
+Comprobamos que los dos servidores ya estan retirados:
+
+```sh
+clusterGetafe:PRIMARY> db.isMaster()
+{
+        "hosts" : [
+                "localhost:27017",
+                "localhost:27018",
+                "localhost:27019"
+        ],
+        "setName" : "clusterGetafe",
+        "setVersion" : 8,
+        "ismaster" : true,
+        "secondary" : false,
+        "primary" : "localhost:27019",
+        "me" : "localhost:27019",
+        "electionId" : ObjectId("7fffffff000000000000000e"),
+        "lastWrite" : {
+                "opTime" : {
+                        "ts" : Timestamp(1581583488, 1),
+                        "t" : NumberLong(14)
+                },
+                "lastWriteDate" : ISODate("2020-02-13T08:44:48Z"),
+                "majorityOpTime" : {
+                        "ts" : Timestamp(1581583488, 1),
+                        "t" : NumberLong(14)
+                },
+                "majorityWriteDate" : ISODate("2020-02-13T08:44:48Z")
+        },
+        "maxBsonObjectSize" : 16777216,
+        "maxMessageSizeBytes" : 48000000,
+        "maxWriteBatchSize" : 100000,
+        "localTime" : ISODate("2020-02-13T08:44:56.355Z"),
+        "logicalSessionTimeoutMinutes" : 30,
+        "connectionId" : 21,
+        "minWireVersion" : 0,
+        "maxWireVersion" : 8,
+        "readOnly" : false,
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581583488, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581583488, 1)
+}
+clusterGetafe:PRIMARY>
 ```
 
 ```sh
