@@ -3188,12 +3188,132 @@ clusterGetafe:PRIMARY>
 
 ```
 
+#### Colección `oplog` :skull:
+
+`oplog`: Log de operaciones. Cada servidor tiene su propio `oplog` que tambien nos sirve para replicar, las operaciones las hace `idempotente` evitando problemas en la BD.
+
+
 ```sh
+clusterGetafe:PRIMARY> show dbs
+admin       0.000GB
+config      0.000GB
+getafeTest  0.000GB
+local       0.000GB
+clusterGetafe:PRIMARY>      
+```
+
+En Local esta la coleccion que registra todas las operaciones
+
+
+```sh
+clusterGetafe:PRIMARY> use local
+switched to db local
+clusterGetafe:PRIMARY> show collections
+oplog.rs
+replset.election
+replset.minvalid
+replset.oplogTruncateAfterPoint
+startup_log
+system.replset
+system.rollback.id
+clusterGetafe:PRIMARY>     
+```
+
+La que nos importara es `oplog.rs`
+
+
+```sh
+clusterGetafe:PRIMARY> db.oplog.rs.find()
+{ "ts" : Timestamp(1581421304, 1), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-11T11:41:44.446Z"), "o" : { "msg" : "initiating set" } }
+{ "ts" : Timestamp(1581421316, 1), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "c", "ns" : "config.$cmd", "ui" : UUID("8fcdfa7e-8ad2-4020-9bd4-71fa4b3a58ab"), "wall" : ISODate("2020-02-11T11:41:56.735Z"), "o" : { "create" : "transactions", "idIndex" : { "v" : 2, "key" : { "_id" : 1 }, "name" : "_id_", "ns" : "config.transactions" } } }
+{ "ts" : Timestamp(1581421316, 2), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-11T11:41:56.735Z"), "o" : { "msg" : "new primary" } }
+{ "ts" : Timestamp(1581421316, 3), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "c", "ns" : "admin.$cmd", "ui" : UUID("06b01d66-1d0b-488c-b739-99b26c478ea3"), "wall" : ISODate("2020-02-11T11:41:56.906Z"), "o" : { "create" : "system.keys", "idIndex" : { "v" : 2, "key" : { "_id" : 1 }, "name" : "_id_", "ns" : "admin.system.keys" } } }
+{ "ts" : Timestamp(1581421316, 4), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "i", "ns" : "admin.system.keys", "ui" : UUID("06b01d66-1d0b-488c-b739-99b26c478ea3"), "wall" : ISODate("2020-02-11T11:41:56.907Z"), "o" : { "_id" : NumberLong("6792152833417281538"), "purpose" : "HMAC", "key" : BinData(0,"N9T/mQ67HSW1fiv6Z0XL3VaPOAc="), "expiresAt" : Timestamp(1589197316, 0) } }
+{ "ts" : Timestamp(1581421317, 1), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "i", "ns" : "admin.system.keys", "ui" : UUID("06b01d66-1d0b-488c-b739-99b26c478ea3"), "wall" : ISODate("2020-02-11T11:41:57.886Z"), "o" : { "_id" : NumberLong("6792152833417281539"), "purpose" : "HMAC", "key" : BinData(0,"2mclaIGXlCayIqnr3dCE3pPYIpI="), "expiresAt" : Timestamp(1596973316, 0) } }
+{ "ts" : Timestamp(1581421336, 1), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-11T11:42:16.739Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581421346, 1), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-11T11:42:26.740Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581421356, 1), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-11T11:42:36.740Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581421360, 1), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "c", "ns" : "config.$cmd", "ui" : UUID("e9a1ee6b-cc7f-4e9f-beeb-40d2ea281db3"), "wall" : ISODate("2020-02-11T11:42:40.515Z"), "o" : { "create" : "system.sessions", "idIndex" : { "v" : 2, "key" : { "_id" : 1 }, "name" : "_id_", "ns" : "config.system.sessions" } } }
+{ "ts" : Timestamp(1581421360, 2), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-11T11:42:40.760Z"), "o" : { "msg" : "Creating indexes. Coll: config.system.sessions" } }
+{ "ts" : Timestamp(1581421360, 3), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "c", "ns" : "config.$cmd", "ui" : UUID("e9a1ee6b-cc7f-4e9f-beeb-40d2ea281db3"), "wall" : ISODate("2020-02-11T11:42:40.810Z"), "o" : { "createIndexes" : "system.sessions", "v" : 2, "key" : { "lastUse" : 1 }, "name" : "lsidTTLIndex", "expireAfterSeconds" : 1800 } }
+{ "ts" : Timestamp(1581421360, 4), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "i", "ns" : "config.system.sessions", "ui" : UUID("e9a1ee6b-cc7f-4e9f-beeb-40d2ea281db3"), "wall" : ISODate("2020-02-11T11:42:40.832Z"), "o" : { "_id" : { "id" : UUID("3aac91d5-6218-43c9-a587-d89acc6837ff"), "uid" : BinData(0,"47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=") }, "lastUse" : ISODate("2020-02-11T11:42:40.832Z") } }
+{ "ts" : Timestamp(1581421376, 1), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-11T11:42:56.741Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581421386, 1), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-11T11:43:06.742Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581421396, 1), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-11T11:43:16.742Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581421406, 1), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-11T11:43:26.742Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581421416, 1), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-11T11:43:36.743Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581421426, 1), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-11T11:43:46.744Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581421436, 1), "t" : NumberLong(1), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-11T11:43:56.744Z"), "o" : { "msg" : "periodic noop" } }
+Type "it" for more
+clusterGetafe:PRIMARY>  
 
 ```
 
-```sh
+Hago una operación:
 
+```sh
+clusterGetafe:PRIMARY> use getafeTest
+switched to db getafeTest
+clusterGetafe:PRIMARY> show collections
+biblioteca
+foo
+foo5
+clusterGetafe:PRIMARY> db.foo2.insert({puntuacion: 0})
+WriteResult({ "nInserted" : 1 })
+clusterGetafe:PRIMARY>                       
+```
+
+Hago una operación "dinámica" que cada vez que la ejecutara incrementaria:
+
+```sh
+clusterGetafe:PRIMARY> db.foo2.update({ puntuacion: 0 }, { $inc: { puntuacion: 1} } )
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+clusterGetafe:PRIMARY>
+```
+Regreso a `oplog`
+
+```sh
+clusterGetafe:PRIMARY> db.oplog.rs.find().sort({$natural: -1})
+{ "ts" : Timestamp(1581585038, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:10:38.277Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585028, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:10:28.276Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585018, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:10:18.276Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581585008, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:10:08.274Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581584998, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:09:58.274Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581584988, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:09:48.273Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581584978, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:09:38.272Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581584968, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:09:28.272Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581584958, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:09:18.271Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581584948, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:09:08.270Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581584938, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:08:58.269Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581584928, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:08:48.269Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581584918, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:08:38.268Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581584905, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "u", "ns" : "getafeTest.foo2", "ui" : UUID("5b8b0548-73ae-4a1e-b62f-1ec885e8c1f8"), "o2" : { "_id" : ObjectId("5e451197f37a0bc48f6bcaca") }, "wall" : ISODate("2020-02-13T09:08:25.601Z"), "o" : { "$v" : 1, "$set" : { "puntuacion" : 1 } } }
+{ "ts" : Timestamp(1581584898, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:08:18.267Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581584888, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:08:08.266Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581584878, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:07:58.266Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581584868, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:07:48.266Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581584858, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:07:38.265Z"), "o" : { "msg" : "periodic noop" } }
+{ "ts" : Timestamp(1581584848, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "n", "ns" : "", "wall" : ISODate("2020-02-13T09:07:28.264Z"), "o" : { "msg" : "periodic noop" } }
+Type "it" for more
+clusterGetafe:PRIMARY>                                                                                                             
+```
+
+Puedo observar que mi operación me la convirtio en IDEMPOTENTE
+
+```sh
+{ "ts" : Timestamp(1581584905, 1), "t" : NumberLong(14), "h" : NumberLong(0), "v" : 2, "op" : "u", "ns" : "getafeTest.foo2", "ui" : UUID("5b8b0548-73ae-4a1e-b62f-1ec885e8c1f8"), "o2" : { "_id" : ObjectId("5e451197f37a0bc48f6bcaca") }, "wall" : ISODate("2020-02-13T09:08:25.601Z"), "o" : { "$v" : 1, "$set" : { "puntuacion" : 1 } } }
+```
+
+**El `oplog` recibe las operaciones de actualización y las converte en IDEMPOTENTES para pasarselas al secundario y este secundario una vez que la tiene las ejecuta de forma idempotente.**
+
+**Hay algunas operaciones que para convertirlas IDEMPOTENTE las explota en varias condiciones.**
+
+
+
+```sh
+```
+
+```sh
 ```
 
 
