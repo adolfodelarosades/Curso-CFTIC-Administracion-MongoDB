@@ -14,7 +14,12 @@ Componentes:
 
 Despliegue:
 
-1. Desplegar el cluster Config Servers
+1. Desplegar el cluster Config Servers 
+   idem cluster replica set
+   * Al iniciar añadir `--configsvr`
+   * En `rs.initiate()` añadir `configsvr: true`
+
+2. Desplegar los shards(2)
 
 
 
@@ -78,6 +83,15 @@ Esto hace que las carpetas creadas se llenen de información.
 
 Esto se hace cada que quiero levantar el Replica Set lo puedo automatizar.
 
+Crear dos carpetas en la carpeta `datash` para los dos sarders `shServer1` y `shServer2` darles los puertos `27200`, `27201`
+
+Hay que levantarlos 
+
+```sh
+C:\Users\manana>mongod --dbpath datash\shServer1 --port 27200 --shardsvr
+C:\Users\manana>mongod --dbpath datash\shServer2 --port 27201 --shardsvr
+```
+`--shardsvr` Esto indica que pertenece al Sarding
 
 
 
