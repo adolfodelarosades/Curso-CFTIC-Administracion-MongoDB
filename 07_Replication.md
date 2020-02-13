@@ -2880,7 +2880,8 @@ clusterGetafe:PRIMARY>
 
 #### Retirar un Miembro del Cluster
 
-
+* Apagar el miembro.
+* Eliminar con `rs.remove("<dominio-ip>:<puerto>")`
 
 ```sh
 clusterGetafe:PRIMARY> db.isMaster()
@@ -2933,6 +2934,7 @@ clusterGetafe:PRIMARY> db.isMaster()
 }
 clusterGetafe:PRIMARY>                                                                                                                                                                                                                                            
 ```
+Recordemos que teniamos el `27020` Oculto
 
 Para el eliminar los servodores `27020` y `27021` primero los apago y luego los elimino:
 
@@ -3016,7 +3018,173 @@ clusterGetafe:PRIMARY> db.isMaster()
 clusterGetafe:PRIMARY>
 ```
 
+Veo el Status
+
 ```sh
+clusterGetafe:PRIMARY> rs.status()
+{
+        "set" : "clusterGetafe",
+        "date" : ISODate("2020-02-13T08:49:48.907Z"),
+        "myState" : 1,
+        "term" : NumberLong(14),
+        "syncingTo" : "",
+        "syncSourceHost" : "",
+        "syncSourceId" : -1,
+        "heartbeatIntervalMillis" : NumberLong(2000),
+        "majorityVoteCount" : 2,
+        "writeMajorityCount" : 2,
+        "optimes" : {
+                "lastCommittedOpTime" : {
+                        "ts" : Timestamp(1581583788, 1),
+                        "t" : NumberLong(14)
+                },
+                "lastCommittedWallTime" : ISODate("2020-02-13T08:49:48.181Z"),
+                "readConcernMajorityOpTime" : {
+                        "ts" : Timestamp(1581583788, 1),
+                        "t" : NumberLong(14)
+                },
+                "readConcernMajorityWallTime" : ISODate("2020-02-13T08:49:48.181Z"),
+                "appliedOpTime" : {
+                        "ts" : Timestamp(1581583788, 1),
+                        "t" : NumberLong(14)
+                },
+                "durableOpTime" : {
+                        "ts" : Timestamp(1581583788, 1),
+                        "t" : NumberLong(14)
+                },
+                "lastAppliedWallTime" : ISODate("2020-02-13T08:49:48.181Z"),
+                "lastDurableWallTime" : ISODate("2020-02-13T08:49:48.181Z")
+        },
+        "lastStableRecoveryTimestamp" : Timestamp(1581583738, 1),
+        "lastStableCheckpointTimestamp" : Timestamp(1581583738, 1),
+        "electionCandidateMetrics" : {
+                "lastElectionReason" : "priorityTakeover",
+                "lastElectionDate" : ISODate("2020-02-13T08:26:13.357Z"),
+                "electionTerm" : NumberLong(14),
+                "lastCommittedOpTimeAtElection" : {
+                        "ts" : Timestamp(1581582364, 1),
+                        "t" : NumberLong(13)
+                },
+                "lastSeenOpTimeAtElection" : {
+                        "ts" : Timestamp(1581582364, 1),
+                        "t" : NumberLong(13)
+                },
+                "numVotesNeeded" : 3,
+                "priorityAtElection" : 2,
+                "electionTimeoutMillis" : NumberLong(10000),
+                "priorPrimaryMemberId" : 1,
+                "numCatchUpOps" : NumberLong(0),
+                "newTermStartDate" : ISODate("2020-02-13T08:26:18.058Z"),
+                "wMajorityWriteAvailabilityDate" : ISODate("2020-02-13T08:26:19.599Z")
+        },
+        "electionParticipantMetrics" : {
+                "votedForCandidate" : true,
+                "electionTerm" : NumberLong(13),
+                "lastVoteDate" : ISODate("2020-02-13T08:26:01.762Z"),
+                "electionCandidateMemberId" : 1,
+                "voteReason" : "",
+                "lastAppliedOpTimeAtElection" : {
+                        "ts" : Timestamp(1581512091, 1),
+                        "t" : NumberLong(11)
+                },
+                "maxAppliedOpTimeInSet" : {
+                        "ts" : Timestamp(1581512091, 1),
+                        "t" : NumberLong(11)
+                },
+                "priorityAtElection" : 2
+        },
+        "members" : [
+                {
+                        "_id" : 0,
+                        "name" : "localhost:27017",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 1428,
+                        "optime" : {
+                                "ts" : Timestamp(1581583778, 1),
+                                "t" : NumberLong(14)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581583778, 1),
+                                "t" : NumberLong(14)
+                        },
+                        "optimeDate" : ISODate("2020-02-13T08:49:38Z"),
+                        "optimeDurableDate" : ISODate("2020-02-13T08:49:38Z"),
+                        "lastHeartbeat" : ISODate("2020-02-13T08:49:47.876Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-13T08:49:47.885Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27019",
+                        "syncSourceHost" : "localhost:27019",
+                        "syncSourceId" : 2,
+                        "infoMessage" : "",
+                        "configVersion" : 8
+                },
+                {
+                        "_id" : 1,
+                        "name" : "localhost:27018",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 1428,
+                        "optime" : {
+                                "ts" : Timestamp(1581583778, 1),
+                                "t" : NumberLong(14)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581583778, 1),
+                                "t" : NumberLong(14)
+                        },
+                        "optimeDate" : ISODate("2020-02-13T08:49:38Z"),
+                        "optimeDurableDate" : ISODate("2020-02-13T08:49:38Z"),
+                        "lastHeartbeat" : ISODate("2020-02-13T08:49:47.876Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-13T08:49:47.904Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27019",
+                        "syncSourceHost" : "localhost:27019",
+                        "syncSourceId" : 2,
+                        "infoMessage" : "",
+                        "configVersion" : 8
+                },
+                {
+                        "_id" : 2,
+                        "name" : "localhost:27019",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 1,
+                        "stateStr" : "PRIMARY",
+                        "uptime" : 1435,
+                        "optime" : {
+                                "ts" : Timestamp(1581583788, 1),
+                                "t" : NumberLong(14)
+                        },
+                        "optimeDate" : ISODate("2020-02-13T08:49:48Z"),
+                        "syncingTo" : "",
+                        "syncSourceHost" : "",
+                        "syncSourceId" : -1,
+                        "infoMessage" : "",
+                        "electionTime" : Timestamp(1581582373, 1),
+                        "electionDate" : ISODate("2020-02-13T08:26:13Z"),
+                        "configVersion" : 8,
+                        "self" : true,
+                        "lastHeartbeatMessage" : ""
+                }
+        ],
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581583788, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581583788, 1)
+}
+clusterGetafe:PRIMARY>                                                                                             
 
 ```
 
