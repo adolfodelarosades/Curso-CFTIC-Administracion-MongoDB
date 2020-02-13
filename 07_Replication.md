@@ -2627,7 +2627,283 @@ C:\Users\manana>mongoexport --port 27020 -c foo5 -d getafeTest --out=delayed.jso
 2020-02-12T13:52:08.063+0100    connected to: mongodb://localhost:27020/
 2020-02-12T13:52:08.165+0100    exported 1 record
 ```
-Despues de los 60 ya veo que tengo los datos.
+Despues de los 60s ya veo que tengo los datos.
+
+
+* **Resumen**
+   * Tolerancia a fallos.
+   * Configuración de miembros. :skull:...:skull: Sencillas
+      * Prioridad
+      * Árbitro.
+      * Miembro Oculto.
+      * Miembro Delayed.
+   
+#### Votos de los miembros.
+
+[Configure Non-Voting Replica Set Member](https://docs.mongodb.com/manual/tutorial/configure-a-non-voting-replica-set-member/index.html)
+
+Propiedades de los votos de un miembro permite a este participar en la elección del nuevo primario cuando el actual quede fuera de servicio.
+
+* No. Miembros totales < 50
+* No. Miembros con derecho a voto < 7
+
+En cluster con más de 7 miembros hay que asignar la propiedad votes como 0 para limitar a 7 miembros el número de miembros que pueden votar.
+
+
+Abrimos nuestros 5 servidores y la consola del primario:
+
+```sh
+C:\Users\manana>mongod --dbpath data/server1 --port 27017 --replSet clusterGetafe
+C:\Users\manana>mongod --dbpath data/server2 --port 27018 --replSet clusterGetafe
+C:\Users\manana>mongod --dbpath data/server3 --port 27019 --replSet clusterGetafe
+C:\Users\manana>mongod --dbpath data/server4 --port 27020 --replSet clusterGetafe
+C:\Users\manana>mongod --dbpath data/arbitro --port 27021 --replSet clusterGetafe
+
+mongod --port 27019
+
+```
+
+En mi servidor Primary vemos el Status
+
+```sh
+clusterGetafe:PRIMARY> rs.status()
+{
+        "set" : "clusterGetafe",
+        "date" : ISODate("2020-02-13T08:29:29.828Z"),
+        "myState" : 1,
+        "term" : NumberLong(14),
+        "syncingTo" : "",
+        "syncSourceHost" : "",
+        "syncSourceId" : -1,
+        "heartbeatIntervalMillis" : NumberLong(2000),
+        "majorityVoteCount" : 3,
+        "writeMajorityCount" : 3,
+        "optimes" : {
+                "lastCommittedOpTime" : {
+                        "ts" : Timestamp(1581582568, 1),
+                        "t" : NumberLong(14)
+                },
+                "lastCommittedWallTime" : ISODate("2020-02-13T08:29:28.072Z"),
+                "readConcernMajorityOpTime" : {
+                        "ts" : Timestamp(1581582568, 1),
+                        "t" : NumberLong(14)
+                },
+                "readConcernMajorityWallTime" : ISODate("2020-02-13T08:29:28.072Z"),
+                "appliedOpTime" : {
+                        "ts" : Timestamp(1581582568, 1),
+                        "t" : NumberLong(14)
+                },
+                "durableOpTime" : {
+                        "ts" : Timestamp(1581582568, 1),
+                        "t" : NumberLong(14)
+                },
+                "lastAppliedWallTime" : ISODate("2020-02-13T08:29:28.072Z"),
+                "lastDurableWallTime" : ISODate("2020-02-13T08:29:28.072Z")
+        },
+        "lastStableRecoveryTimestamp" : Timestamp(1581582528, 1),
+        "lastStableCheckpointTimestamp" : Timestamp(1581582528, 1),
+        "electionCandidateMetrics" : {
+                "lastElectionReason" : "priorityTakeover",
+                "lastElectionDate" : ISODate("2020-02-13T08:26:13.357Z"),
+                "electionTerm" : NumberLong(14),
+                "lastCommittedOpTimeAtElection" : {
+                        "ts" : Timestamp(1581582364, 1),
+                        "t" : NumberLong(13)
+                },
+                "lastSeenOpTimeAtElection" : {
+                        "ts" : Timestamp(1581582364, 1),
+                        "t" : NumberLong(13)
+                },
+                "numVotesNeeded" : 3,
+                "priorityAtElection" : 2,
+                "electionTimeoutMillis" : NumberLong(10000),
+                "priorPrimaryMemberId" : 1,
+                "numCatchUpOps" : NumberLong(0),
+                "newTermStartDate" : ISODate("2020-02-13T08:26:18.058Z"),
+                "wMajorityWriteAvailabilityDate" : ISODate("2020-02-13T08:26:19.599Z")
+        },
+        "electionParticipantMetrics" : {
+                "votedForCandidate" : true,
+                "electionTerm" : NumberLong(13),
+                "lastVoteDate" : ISODate("2020-02-13T08:26:01.762Z"),
+                "electionCandidateMemberId" : 1,
+                "voteReason" : "",
+                "lastAppliedOpTimeAtElection" : {
+                        "ts" : Timestamp(1581512091, 1),
+                        "t" : NumberLong(11)
+                },
+                "maxAppliedOpTimeInSet" : {
+                        "ts" : Timestamp(1581512091, 1),
+                        "t" : NumberLong(11)
+                },
+                "priorityAtElection" : 2
+        },
+        "members" : [
+                {
+                        "_id" : 0,
+                        "name" : "localhost:27017",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 209,
+                        "optime" : {
+                                "ts" : Timestamp(1581582568, 1),
+                                "t" : NumberLong(14)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581582568, 1),
+                                "t" : NumberLong(14)
+                        },
+                        "optimeDate" : ISODate("2020-02-13T08:29:28Z"),
+                        "optimeDurableDate" : ISODate("2020-02-13T08:29:28Z"),
+                        "lastHeartbeat" : ISODate("2020-02-13T08:29:29.539Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-13T08:29:29.495Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27019",
+                        "syncSourceHost" : "localhost:27019",
+                        "syncSourceId" : 2,
+                        "infoMessage" : "",
+                        "configVersion" : 6
+                },
+                {
+                        "_id" : 1,
+                        "name" : "localhost:27018",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 209,
+                        "optime" : {
+                                "ts" : Timestamp(1581582568, 1),
+                                "t" : NumberLong(14)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581582568, 1),
+                                "t" : NumberLong(14)
+                        },
+                        "optimeDate" : ISODate("2020-02-13T08:29:28Z"),
+                        "optimeDurableDate" : ISODate("2020-02-13T08:29:28Z"),
+                        "lastHeartbeat" : ISODate("2020-02-13T08:29:29.539Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-13T08:29:29.318Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27019",
+                        "syncSourceHost" : "localhost:27019",
+                        "syncSourceId" : 2,
+                        "infoMessage" : "",
+                        "configVersion" : 6
+                },
+                {
+                        "_id" : 2,
+                        "name" : "localhost:27019",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 1,
+                        "stateStr" : "PRIMARY",
+                        "uptime" : 216,
+                        "optime" : {
+                                "ts" : Timestamp(1581582568, 1),
+                                "t" : NumberLong(14)
+                        },
+                        "optimeDate" : ISODate("2020-02-13T08:29:28Z"),
+                        "syncingTo" : "",
+                        "syncSourceHost" : "",
+                        "syncSourceId" : -1,
+                        "infoMessage" : "",
+                        "electionTime" : Timestamp(1581582373, 1),
+                        "electionDate" : ISODate("2020-02-13T08:26:13Z"),
+                        "configVersion" : 6,
+                        "self" : true,
+                        "lastHeartbeatMessage" : ""
+                },
+                {
+                        "_id" : 3,
+                        "name" : "localhost:27020",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 194,
+                        "optime" : {
+                                "ts" : Timestamp(1581582508, 1),
+                                "t" : NumberLong(14)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581582508, 1),
+                                "t" : NumberLong(14)
+                        },
+                        "optimeDate" : ISODate("2020-02-13T08:28:28Z"),
+                        "optimeDurableDate" : ISODate("2020-02-13T08:28:28Z"),
+                        "lastHeartbeat" : ISODate("2020-02-13T08:29:29.534Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-13T08:29:29.454Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27019",
+                        "syncSourceHost" : "localhost:27019",
+                        "syncSourceId" : 2,
+                        "infoMessage" : "",
+                        "configVersion" : 6
+                },
+                {
+                        "_id" : 4,
+                        "name" : "localhost:27021",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 7,
+                        "stateStr" : "ARBITER",
+                        "uptime" : 147,
+                        "lastHeartbeat" : ISODate("2020-02-13T08:29:28.545Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-13T08:29:28.278Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "",
+                        "syncSourceHost" : "",
+                        "syncSourceId" : -1,
+                        "infoMessage" : "",
+                        "configVersion" : 6
+                }
+        ],
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581582568, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581582568, 1)
+}
+clusterGetafe:PRIMARY>
+
+```
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
 
 
 
