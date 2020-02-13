@@ -3194,8 +3194,12 @@ clusterGetafe:PRIMARY>
 * En ella se registran las operaciones del primario en forma idempotente para replicarse en cada secundario y ejecutar la operación de acuerdo a lo registrado en ese documento.
 * Cada operación individual en las colecciones se puede convertir en una o varias operaciones idempotentes.
 * La colección `oplog.rs` es de tipo `capped` y por defecto limita el número de documentos por tamaño de la siguiente manera:
+   * 5% del espacio en disco
+   * Si requerimos más espacio del predeterminado arrancamos el miembro con:
+      `mongod ... --oplogSize <megabytes> `
    [Oplog Size](https://docs.mongodb.com/manual/core/replica-set-oplog/index.html#oplog-size)
-
+   :skull: Posible pregunta en que casos puedo querer más espacio en el `oplog` la respuesta esta en [Workloads that Might Require a Larger Oplog Size](https://docs.mongodb.com/manual/core/replica-set-oplog/index.html#workloads-that-might-require-a-larger-oplog-size)
+   Si quiero cambiar el tamaño por default se hace al configurar el servidor 
 
 
 `oplog`: Log de operaciones. Cada servidor tiene su propio `oplog` que tambien nos sirve para replicar, las operaciones las hace `idempotente` evitando problemas en la BD.
