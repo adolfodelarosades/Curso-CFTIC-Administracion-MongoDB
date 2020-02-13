@@ -3381,25 +3381,39 @@ Aquí ya veo las 100 operaciones de `Hola`
 
 #### Rollback y reconocimiento de Escritura
 
-```sh
+[Rollbacks During Replica Set Failover](https://docs.mongodb.com/manual/core/replica-set-rollbacks/index.html)
 
-```
-```sh
+**EXPLICACION APUNTES**
 
-```
+`writeConcern`
+En el documento de opciones
 
-```sh
-
-```
+Sintaxis
 
 ```sh
-
+{ w: <valor>, j:<booleano>, wtimeout: <milisegundos> }
 ```
 
+* w: 0 por defecto => No hay reconocimiento.
+* w: número => número de miembros en los que al menos debe replicarse la operación.
+* w: `"majority"` => La operación debe replicarse en la mayoría del cluster para considerarla válida.
+
+   "Mayoría" será la menor de las siguientes: 
+   * La mayoria de los miembros con derecho a voto árbitros incluidos.
+   * La mayoría de los miembros con datos (excluyendo los delayed)
+   
+El comando para hacerlo es:   
+
 ```sh
+clusterGetafe:PRIMARY> db.foo.insert({ a: 1}, {w: "majority", j: true, wtimeout: 5000})
+WriteResult({ "nInserted" : 1 })
+```   
+   
+Esto debe hacerse a nivel de documento.
 
-```
+Otro ejemplo:
 
 ```sh
-
+clusterGetafe:PRIMARY> db.foo3.update({}, {$set: {mensaje: "Hola"}}, {multi: true, w: "majority"})
+WriteResult({ "nMatched" : 100, "nUpserted" : 0, "nModified" : 0 })
 ```
