@@ -1365,19 +1365,106 @@ Type "it" for more
 ```
 Vemos que en los documentos que solo existan los campos excluidos nos regresa `{}`.
 
-
-
-```sh
-
-```
+Podemos combinar filtros de lo que queremos consultar con lo que queremos mostrar. En el siguiente ejemplo listamos los documentos que tienen de nombre Juan sin mostrar el campo `_id`
 
 ```sh
-
+> db.clientes.find( { nombre: "Juan" }, { _id: 0 } )
+{ "nombre" : "Juan", "apellido" : "Pérez" }
 ```
+
+#### Devolución de Campos de Documentos Embebidos
+
+Sintaxis.
 
 ```sh
-
+db.<coleccion>.find({}, { ..., "<campo>.<campoDoc>": 1, ...} })
 ```
+
+Mostremos la estructura de dirección pero solo el campo `localidad`
+
+```sh
+> db.clientes.find( {}, { _id: 0, nombre: 1, "direccion.localidad": 1 } )
+{ "nombre" : "Juan" }
+{ "nombre" : "María" }
+{ "nombre" : "Laura" }
+{ "nombre" : "Luis" }
+{ "nombre" : "Pablo" }
+{ "nombre" : "Sara" }
+{ "nombre" : "Carlos" }
+{ "nombre" : "José" }
+{ "nombre" : "Lucia" }
+{ "nombre" : "Luisa" }
+{ "nombre" : "Carlos" }
+{ "nombre" : "Javier" }
+{ "nombre" : "Salma" }
+{ "nombre" : "Angelica" }
+{ "nombre" : "Veronica" }
+{ "nombre" : "José" }
+{ "nombre" : "Pedro" }
+{ "nombre" : "Julio" }
+{ "nombre" : "Luis", "direccion" : { "localidad" : "Madrid" } }
+{ "nombre" : "Mariano", "direccion" : { "localidad" : "Madrid" } }
+Type "it" for more
+> it
+{ "nombre" : "Enrique", "direccion" : { "localidad" : "Sevilla" } }
+{ "nombre" : "Pedro" }
+{ "nombre" : "Paula" }
+{ "nombre" : "Susana" }
+{ "nombre" : "Rebeca" }
+{ "nombre" : "Rocio" }
+{ "nombre" : "Rosa" }
+{ "nombre" : "Rita" }
+{ "nombre" : "Roberto" }
+{ "nombre" : "Carla" }
+{ "nombre" : "Roberto" }
+{  }
+> 
+```
+
+* **En caso de arrays de documentos es igual** Veamos un ejemplo:
+
+```sh
+> db.clientes.find( {}, { _id: 0, nombre: 1, "direcciones.calle": 1 })
+{ "nombre" : "Juan" }
+{ "nombre" : "María" }
+{ "nombre" : "Laura" }
+{ "nombre" : "Luis" }
+{ "nombre" : "Pablo" }
+{ "nombre" : "Sara" }
+{ "nombre" : "Carlos" }
+{ "nombre" : "José" }
+{ "nombre" : "Lucia" }
+{ "nombre" : "Luisa" }
+{ "nombre" : "Carlos" }
+{ "nombre" : "Javier" }
+{ "nombre" : "Salma" }
+{ "nombre" : "Angelica" }
+{ "nombre" : "Veronica" }
+{ "nombre" : "José" }
+{ "nombre" : "Pedro" }
+{ "nombre" : "Julio" }
+{ "nombre" : "Luis" }
+{ "nombre" : "Mariano" }
+Type "it" for more
+> it
+{ "nombre" : "Enrique" }
+{ "nombre" : "Pedro" }
+{ "nombre" : "Paula" }
+{ "nombre" : "Susana" }
+{ "nombre" : "Rebeca" }
+{ "nombre" : "Rocio" }
+{ "nombre" : "Rosa" }
+{ "nombre" : "Rita" }
+{ "nombre" : "Roberto", "direcciones" : [ { "calle" : "Alcalá, 40" }, { "calle" : "Zamora, 13" } ] }
+{ "nombre" : "Carla", "direcciones" : [ { "calle" : "Gran vía, 121" }, { "calle" : "Bogota, 27" } ] }
+{ "nombre" : "Roberto", "direcciones" : [ { "calle" : "Gran vía, 23" }, { "calle" : "Toledo, 13" } ] }
+{  }
+> 
+```
+
+Muestra los campos `nombre` y `direccion` pero en el array de direcciones solo nos muestra la `calle` que fue lo que le indicamos.
+
+
 
 ```sh
 
