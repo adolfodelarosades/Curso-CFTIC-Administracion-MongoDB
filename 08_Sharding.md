@@ -21,6 +21,19 @@ Despliegue:
 
 2. Desplegar los shards(2)
 
+3. Desplegar mongos
+
+Elección del **shard key**
+(Una vez lanzado el método `sh.enableSharding(<basedatos>)` y sobre todo `sh.shardCollection("namespace", <shard-key>)` no se puede cambiar).
+* El documento que se insertta debe tener el campo o campos elegidos commo shard key.
+
+1. Shard key sobre un campo de los documentos.
+   * Debería tener la suficiente granularidad para evitar un Jimbo chunck (por ejemplo el sexo no es muy bueno ya que si tengo 5 servidores sharding, no reparte en los 5 solo en dos). :skull:
+   * Debería evitar que en ese campo la colección sea monótona. (Por ejemplo la fecha, siempre se van al último chunck con lo que ese chuck crece cuando llega a su limite crea otro chunck pero siempre todo se va al sharding más alto).
+   Un campo ideal es algo random como mi edad en el script.
+   
+2. **Shard key hashed**
+
 
 
 **DIAGRAMA APUNTES**
@@ -579,11 +592,55 @@ mongos> load("main4.js")
 
 ```
 
+Si abro otra consola y veo el estado:
 
 ```sh
+mongos> sh.status()
+--- Sharding Status ---
+  sharding version: {
+        "_id" : 1,
+        "minCompatibleVersion" : 5,
+        "currentVersion" : 6,
+        "clusterId" : ObjectId("5e4540d099a9016be483ade2")
+  }
+  shards:
+        {  "_id" : "shard0000",  "host" : "localhost:27201",  "state" : 1 }
+        {  "_id" : "shard0001",  "host" : "localhost:27200",  "state" : 1 }
+  active mongoses:
+        "4.2.2" : 1
+  autosplit:
+        Currently enabled: yes
+  balancer:
+        Currently enabled:  yes
+        Currently running:  yes
+        Collections with active migrations:
+                shop.clientes started at Fri Feb 14 2020 11:04:00 GMT+0100
+        Failed balancer rounds in last 5 attempts:  0
+        Migration Results for the last 24 hours:
+                8 : Success
+  databases:
+        {  "_id" : "config",  "primary" : "config",  "partitioned" : true }
+                config.system.sessions
+                        shard key: { "_id" : 1 }
+                        unique: false
+                        balancing: true
+                        chunks:
+                                shard0000       1
+                        { "_id" : { "$minKey" : 1 } } -->> { "_id" : { "$maxKey" : 1 } } on : shard0000 Timestamp(1, 0)
+        {  "_id" : "shop",  "primary" : "shard0001",  "partitioned" : true,  "version" : {  "uuid" : UUID("2c71c621-1911-49de-b069-da7586c42e73"),  "lastMod" : 1 } }
+                shop.clientes
+                        shard key: { "edad" : 1 }
+                        unique: false
+                        balancing: true
+                        chunks:
+                                shard0000       10
+                                shard0001       13
+                        too many chunks to print, use verbose if you want to force print
+
+mongos>
 
 ```
-
+Me dice que el balaceador esta ejecutando actualmente.
 
 ```sh
 
