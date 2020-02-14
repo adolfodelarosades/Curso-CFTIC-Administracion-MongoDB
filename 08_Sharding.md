@@ -32,7 +32,13 @@ Elección del **shard key**
    * Debería evitar que en ese campo la colección sea monótona. (Por ejemplo la fecha, siempre se van al último chunck con lo que ese chuck crece cuando llega a su limite crea otro chunck pero siempre todo se va al sharding más alto).
    Un campo ideal es algo random como mi edad en el script.
    
-2. **Shard key hashed**
+2. **Shard key hashed** genera algo aleatorio que se aplica a un campo monotono para hacer que sea random y distribuya equitativamente.
+   [Hashed Sharding](https://docs.mongodb.com/manual/core/hashed-sharding/index.html)
+   
+   `db.shardCollection("namespace", {<campo>: "hashed"})`
+   El problema que tiene es que en la consulta con raangos se pierde velocidad por que los datos estan distribuidos a las del campo clave.
+   
+   
 
 
 
