@@ -275,12 +275,30 @@ maraton  0.047GB
 ```
 Como entre con el usuario que solo tiene acceso a maraton.
 
+
+Si entro solo con `mongo`
 ```sh
+C:\Users\manana>mongo
+MongoDB shell version v4.2.2
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("f67a0b80-8cc6-429b-907b-8b20e8efc9b8") }
+MongoDB server version: 4.2.2
+> show dbs
+>
+```
+No veo nada
+
+Si en la shell que me conecte bien intento cambiarme de BD me deja pero no puedo hacer nada sobre ella:
+
+```sh
+> use gimnasio
+switched to db gimnasio
+> show collections
+Warning: unable to run listCollections, attempting to approximate collection names by parsing connectionStatus
+>
 ```
 
 
-```sh
-```
 
 
 ```sh
