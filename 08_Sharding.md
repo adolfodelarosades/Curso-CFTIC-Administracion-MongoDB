@@ -38,6 +38,8 @@ Elección del **shard key**
    `db.shardCollection("namespace", {<campo>: "hashed"})`
    El problema que tiene es que en la consulta con raangos se pierde velocidad por que los datos estan distribuidos a las del campo clave.
    
+   **Explicación APUNNTES**
+   
    
 
 
