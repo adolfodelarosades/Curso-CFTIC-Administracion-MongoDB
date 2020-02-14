@@ -14,5 +14,21 @@ Adicionales en la versión Enterprise)
 * LDAP proxy authentication
 * Kerberos auth
 
-¿Cómo se implementa?
+* La autenticación de los usuarios al sistema gestor de base de datos se lleva a cabo a nivel de base de datos.
+
+1. Creación de usuarios.
+   Método `createUser()`
+   
+   ```sh
+   db.createUser({
+      user: "<nombre-usuario>",
+      pwd: "<contraseña>",
+      customData: <documento-datos>,  // Opcional
+      roles: [
+        ... roles y permisos
+      ]
+    })
+   ```
+
+
 
