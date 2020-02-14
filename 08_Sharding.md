@@ -293,6 +293,7 @@ C:\Users\manana>mongo --port 27300
 ...
 mongos>
 ```
+PUEDO TENER VARIOS MONGOS Tiene que tener buen procesador por que es el que recibe el trafico de entrada
 
 Vamos a decirle al sistema que servidores van a almacenar los datos con `sh.addShard()`, `sh` es el Objeto de Sharding:
 
@@ -364,30 +365,106 @@ mongos> sh.status()
 mongos>
 ```
 
+Balanceador :-1:
+
+[Sharded Cluster Balancer](https://docs.mongodb.com/manual/core/sharding-balancer-administration/)
+Explicación Apuntes Diagrama de shard key y distribución.
+Tenerlo bien repartido
+El balanceador automatico hace el trabajo por nosotros.
+Problema al elegir la clave.
+
+Segun la clave que pongamos Mongo Elige la distribución, para repartirlos equitativamente.
+
+
+Reducimos el tamaño de los chunks a 16MB
+
 ```sh
+mongos> use config
+switched to db config
+mongos> db.settings.save({_id: "chunksize", value: 16})
+WriteResult({ "nMatched" : 0, "nUpserted" : 1, "nModified" : 0, "_id" : "chunksize" })
+mongos> 
 
 ```
 
-```sh
-
-```
-
+Ahora, creamos la BD `shop`: 
+Ya puedo hacer sarding en esa bd
 
 ```sh
+mongos> sh.enableSharding("shop")
+{
+        "ok" : 1,
+        "operationTime" : Timestamp(1581672355, 5),
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581672355, 5),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        }
+}
+mongos>    
+```
 
+Crear la colección con la clave de sharding:
+
+```sh
+mongos> sh.shardCollection("shop.clientes", { edad: 1})
+{
+        "collectionsharded" : "shop.clientes",
+        "collectionUUID" : UUID("f9715165-ad5d-4523-be03-ea9c6b604563"),
+        "ok" : 1,
+        "operationTime" : Timestamp(1581672564, 6),
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581672564, 6),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        }
+}
+mongos>      
+```
+Aquí hemos sardeado por `edad`.
+Si la coleccion ya existirta debería haber un índice en el campo de la key.
+
+```sh
+mongos> show dbs
+admin   0.000GB
+config  0.001GB
+shop    0.000GB
+mongos> use shop
+switched to db shop
+mongos> show collections
+clientes
+mongos>    
 ```
 
 ```sh
+db = db.getSiblingDB("shop");
 
+let nombres = ["Carlos", "Lucía", "Juan", "María"];
+let apellidos = ["Rodríguez", "López", "Gómez", "García"];
+let letras = ["A","C","F","U","J","K", "P"];
+let clientes = [];
+
+for( i=0; i < 1000000; i++){
+    clientes.push({
+        nombre: nombres[Math.floor(Math.random()* nombres.length)],
+        apellido1: apellidos[Math.floor(Math.random()* apellidos.length)],
+        apellido2: apellidos[Math.floor(Math.random()* apellidos.length)],
+        edad: Math.floor(Math.random()*100),
+        dni: Math.floor(Math.random() * 100000000) + letras[Math.floor(Math.random() * letras.length)]
+    });
+}
+
+db.clientes.insert(clientes);
 ```
 
 ```sh
-
+mongos> load("main4.js") 
 ```
-
-```sh
-
-```
+Esto tarda más que cuando lo haciamos sin el sharding.
 
 ```sh
 
