@@ -351,6 +351,7 @@ test            0.000GB
 >            
 ```
 
+**Para logearme desde dentro para el superUsuario tengo que estar en la BD `admin`**
 
 ```sh
 ```
