@@ -462,13 +462,126 @@ db.clientes.insert(clientes);
 ```
 
 ```sh
-mongos> load("main4.js") 
+mongos> load("main4.js")
+true
 ```
 Esto tarda más que cuando lo haciamos sin el sharding.
 
 ```sh
+mongos> db.clientes.find().count()
+1352515
+mongos>  
+```
+Hay mas del millon que le dijimos.
+
+
+Vamos a ver como lo distribuyo con `getShardDistribution()`:
+
+```sh
+mongos> db.clientes.getShardDistribution()
+
+Shard shard0001 at localhost:27200
+ data : 98.56MiB docs : 862082 chunks : 6
+ estimated data per chunk : 16.42MiB
+ estimated docs per chunk : 143680
+
+Shard shard0000 at localhost:27201
+ data : 56.07MiB docs : 490433 chunks : 5
+ estimated data per chunk : 11.21MiB
+ estimated docs per chunk : 98086
+
+Totals
+ data : 154.64MiB docs : 1352515 chunks : 11
+ Shard shard0001 contains 63.73% data, 63.73% docs in cluster, avg obj size on shard : 119B
+ Shard shard0000 contains 36.26% data, 36.26% docs in cluster, avg obj size on shard : 119B
+
+
+mongos>   
+```
+
+En 
+
+Damos un `sh.status()` 
+```sh
+mongos> sh.status()
+--- Sharding Status ---
+  sharding version: {
+        "_id" : 1,
+        "minCompatibleVersion" : 5,
+        "currentVersion" : 6,
+        "clusterId" : ObjectId("5e4540d099a9016be483ade2")
+  }
+  shards:
+        {  "_id" : "shard0000",  "host" : "localhost:27201",  "state" : 1 }
+        {  "_id" : "shard0001",  "host" : "localhost:27200",  "state" : 1 }
+  active mongoses:
+        "4.2.2" : 1
+  autosplit:
+        Currently enabled: yes
+  balancer:
+        Currently enabled:  yes
+        Currently running:  no
+        Failed balancer rounds in last 5 attempts:  0
+        Migration Results for the last 24 hours:
+                5 : Success
+  databases:
+        {  "_id" : "config",  "primary" : "config",  "partitioned" : true }
+                config.system.sessions
+                        shard key: { "_id" : 1 }
+                        unique: false
+                        balancing: true
+                        chunks:
+                                shard0000       1
+                        { "_id" : { "$minKey" : 1 } } -->> { "_id" : { "$maxKey" : 1 } } on : shard0000 Timestamp(1, 0)
+        {  "_id" : "shop",  "primary" : "shard0001",  "partitioned" : true,  "version" : {  "uuid" : UUID("2c71c621-1911-49de-b069-da7586c42e73"),  "lastMod" : 1 } }
+                shop.clientes
+                        shard key: { "edad" : 1 }
+                        unique: false
+                        balancing: true
+                        chunks:
+                                shard0000       5
+                                shard0001       6
+                        { "edad" : { "$minKey" : 1 } } -->> { "edad" : 0 } on : shard0000 Timestamp(3, 0)
+                        { "edad" : 0 } -->> { "edad" : 14 } on : shard0000 Timestamp(8, 0) 
+                        { "edad" : 14 } -->> { "edad" : 29 } on : shard0000 Timestamp(9, 0)
+                        { "edad" : 29 } -->> { "edad" : 35 } on : shard0000 Timestamp(10, 0)
+                        { "edad" : 35 } -->> { "edad" : 49 } on : shard0000 Timestamp(11, 0)
+                        { "edad" : 49 } -->> { "edad" : 64 } on : shard0001 Timestamp(10, 1)
+                        { "edad" : 64 } -->> { "edad" : 70 } on : shard0001 Timestamp(11, 1)
+                        { "edad" : 70 } -->> { "edad" : 82 } on : shard0001 Timestamp(7, 1)
+                        { "edad" : 82 } -->> { "edad" : 95 } on : shard0001 Timestamp(7, 2)
+                        { "edad" : 95 } -->> { "edad" : 98 } on : shard0001 Timestamp(7, 3)
+                        { "edad" : 98 } -->> { "edad" : { "$maxKey" : 1 } } on : shard0001 Timestamp(8, 1)
+
+mongos>                                                                                                                                             
+```
+Estos rangos de edad que se muestran serán dinámicos.
+
+```sh
 
 ```
+
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
 
 ```sh
 
