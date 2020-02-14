@@ -56,11 +56,6 @@ Elección del **shard key**
 
 
 
-Panorama.
-Puede ser que en un server del sardin pueda tener una coleccion que recupere y la copie en ese servidor.
-Tengo 3 sarding.
-
-Antes de Ejecutar los 2 pasos anteriores
 
 
 
@@ -694,7 +689,13 @@ Totals
 mongos>
 
 ```
+Una vez que inserta los 10,000,000 veo como hizo el balanceo.
 
+**Panorama.**
+Puede ser que en un server del sardin pueda tener una coleccion que recupere y la copie en ese servidor.
+Tengo 3 sarding.
+
+Antes de Ejecutar los 2 pasos anteriores
 
 Vamos a ver cual es el primario
 
@@ -703,8 +704,9 @@ mongos> db.databases.find()
 { "_id" : "shop", "primary" : "shard0001", "partitioned" : true, "version" : { "uuid" : UUID("2c71c621-1911-49de-b069-da7586c42e73"), "lastMod" : 1 } }
 mongos>
 ```
+El primario es: `"shard0001"`
 
-Creo una base de datos y una collección
+Creo una base de datos y una collección (que solo se va a crear en el primario):
 
 ```sh
 mongos> db.monitores.insert({nombre: "Juan", apellidos:"Pérez"})
@@ -717,10 +719,7 @@ WriteResult({ "nInserted" : 1 })
 mongos> db.monitores.insert({nombre: "Juan", apellidos:"Álvarez"})
 WriteResult({ "nInserted" : 1 })
 ```
-Esta sse crea en el primario por que no esta sardeada. En `27200` Estara y en el `27201` no estara.
-
-
-
+Esta se crea en el primario y no esta sardeada. En `27200` Estara y en el `27201` no estara.
 
 ```sh
 mongos> sh.enableSharding("gimnasio")
@@ -761,3 +760,31 @@ Me exige que la colección que quiero sardear tenga un índice.
 
 ```
 
+```sh
+
+```
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
