@@ -40,7 +40,29 @@ Elección del **shard key**
    
    **Explicación APUNNTES**
    
-3.   
+3. Shared key compuesta
+   db.shardCollection("namespace", {<campo>:1, <campo>:1 })
+   * En cada caso habría que estudiart qué campos del modelo de datos se eligen.
+      * El primer campo debería tener granuñlada
+   * Con el segundo campo se puede aprovechar para romper la monotonía.
+   
+   
+#### Convertir una colección no-sharding en sharding.
+
+* Crear un índice con la/las claves que vaya a aplicar en el sharding.
+* Usar el método sh.enableSharding(...)
+* Usar el método sh.shardCollection(...)
+
+
+
+
+Panorama.
+Puede ser que en un server del sardin pueda tener una coleccion que recupere y la copie en ese servidor.
+Tengo 3 sarding.
+
+Antes de Ejecutar los 2 pasos anteriores
+
+
 
 
 
@@ -674,9 +696,65 @@ mongos>
 ```
 
 
-```sh
+Vamos a ver cual es el primario
 
+```sh
+mongos> db.databases.find()
+{ "_id" : "shop", "primary" : "shard0001", "partitioned" : true, "version" : { "uuid" : UUID("2c71c621-1911-49de-b069-da7586c42e73"), "lastMod" : 1 } }
+mongos>
 ```
+
+Creo una base de datos y una collección
+
+```sh
+mongos> db.monitores.insert({nombre: "Juan", apellidos:"Pérez"})
+WriteResult({ "nInserted" : 1 })
+mongos>
+
+mongos> db.participantes.insert({nombre: "Juan", apellidos:"Pérez"})
+WriteResult({ "nInserted" : 1 })
+
+mongos> db.monitores.insert({nombre: "Juan", apellidos:"Álvarez"})
+WriteResult({ "nInserted" : 1 })
+```
+Esta sse crea en el primario por que no esta sardeada. En `27200` Estara y en el `27201` no estara.
+
+
+
+
+```sh
+mongos> sh.enableSharding("gimnasio")
+{
+        "ok" : 1,
+        "operationTime" : Timestamp(1581680602, 3),
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581680602, 3),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        }
+}
+mongos> sh.shardCollection("gimnasio.monitores", { apellidos: 1 })
+{
+        "ok" : 0,
+        "errmsg" : "Please create an index that starts with the proposed shard key before sharding the collection",
+        "code" : 72,
+        "codeName" : "InvalidOptions",
+        "operationTime" : Timestamp(1581680661, 4),
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581680661, 4),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        }
+}
+mongos>
+```
+
+Me exige que la colección que quiero sardear tenga un índice.
+
 
 
 ```sh
