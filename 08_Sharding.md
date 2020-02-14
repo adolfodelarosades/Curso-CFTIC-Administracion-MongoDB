@@ -752,39 +752,5 @@ mongos> sh.shardCollection("gimnasio.monitores", { apellidos: 1 })
 mongos>
 ```
 
-Me exige que la colección que quiero sardear tenga un índice.
+Me exige que la colección que quiero sardear tenga un índice `"Please create an index that starts with the proposed shard key before sharding the collection"`.
 
-
-
-```sh
-
-```
-
-```sh
-
-```
-
-```sh
-
-```
-
-
-```sh
-
-```
-
-```sh
-
-```
-
-```sh
-
-```
-
-```sh
-
-```
-
-```sh
-
-```
