@@ -40,7 +40,7 @@ Elección del **shard key**
    
    **Explicación APUNNTES**
    
-   
+3.   
 
 
 
@@ -649,8 +649,27 @@ mongos>
 
 ```
 Me dice que el balaceador esta ejecutando actualmente.
-
+Una vez que carga los 1000000
 ```sh
+mongos> db.clientes.getShardDistribution()
+
+Shard shard0000 at localhost:27201
+ data : 571.77MiB docs : 5000905 chunks : 48
+ estimated data per chunk : 11.91MiB
+ estimated docs per chunk : 104185
+
+Shard shard0001 at localhost:27200
+ data : 571.57MiB docs : 4999095 chunks : 48
+ estimated data per chunk : 11.9MiB
+ estimated docs per chunk : 104147
+
+Totals
+ data : 1.11GiB docs : 10000000 chunks : 96
+ Shard shard0000 contains 50% data, 50% docs in cluster, avg obj size on shard : 119B
+ Shard shard0001 contains 49.99% data, 49.99% docs in cluster, avg obj size on shard : 119B
+
+
+mongos>
 
 ```
 
