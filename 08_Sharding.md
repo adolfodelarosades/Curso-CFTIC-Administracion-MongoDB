@@ -93,7 +93,7 @@ C:\Users\manana>mongod --dbpath datash\shServer2 --port 27201 --shardsvr
 ```
 `--shardsvr` Esto indica que pertenece al Sarding
 
-
+### Practica
 
 Levantar mis servidores:
 
@@ -294,12 +294,74 @@ C:\Users\manana>mongo --port 27300
 mongos>
 ```
 
-```sh
+Vamos a decirle al sistema que servidores van a almacenar los datos con `sh.addShard()`, `sh` es el Objeto de Sharding:
 
+```sh
+mongos> sh.addShard("localhost:27200")
+{
+        "shardAdded" : "shard0001",
+        "ok" : 1,
+        "operationTime" : Timestamp(1581671053, 1),
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581671053, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        }
+}
+mongos>
+mongos>
+mongos> sh.addShard("localhost:27201")
+{
+        "shardAdded" : "shard0000",
+        "ok" : 1,
+        "operationTime" : Timestamp(1581670393, 1),
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581670393, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        }
+}
+mongos>
 ```
+Aplico un sh.status
 
 ```sh
+mongos> sh.status()
+--- Sharding Status ---
+  sharding version: {
+        "_id" : 1,
+        "minCompatibleVersion" : 5,
+        "currentVersion" : 6,
+        "clusterId" : ObjectId("5e4540d099a9016be483ade2")
+  }
+  shards:
+        {  "_id" : "shard0000",  "host" : "localhost:27201",  "state" : 1 }
+        {  "_id" : "shard0001",  "host" : "localhost:27200",  "state" : 1 }
+  active mongoses:
+        "4.2.2" : 1
+  autosplit:
+        Currently enabled: yes
+  balancer:
+        Currently enabled:  yes
+        Currently running:  no
+        Failed balancer rounds in last 5 attempts:  0
+        Migration Results for the last 24 hours:
+                No recent migrations
+  databases:
+        {  "_id" : "config",  "primary" : "config",  "partitioned" : true }
+                config.system.sessions
+                        shard key: { "_id" : 1 }
+                        unique: false
+                        balancing: true
+                        chunks:
+                                shard0000       1
+                        { "_id" : { "$minKey" : 1 } } -->> { "_id" : { "$maxKey" : 1 } } on : shard0000 Timestamp(1, 0)
 
+mongos>
 ```
 
 ```sh
