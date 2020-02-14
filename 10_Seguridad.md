@@ -233,16 +233,47 @@ Veo la colección:
 
 Ya tengo el nuevo usuario creado.
 
-```sh
-```
 
-```sh
-```
+Paramos nuestro servidor y lo levantamos con la autenticación activada.
 
 
 ```sh
+C:\Users\manana>mongod --auth
+```
+Con esto ya me pedira la autenticación.
+
+```sh
+C:\Users\manana>mongo
+MongoDB shell version v4.2.2
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("7ea12432-9572-4ae3-a90f-bdfd623aa630") }
+MongoDB server version: 4.2.2
+>
 ```
 
+
+```sh
+C:\Users\manana>mongo
+MongoDB shell version v4.2.2
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("7ea12432-9572-4ae3-a90f-bdfd623aa630") }
+MongoDB server version: 4.2.2
+> ^C
+bye
+
+C:\Users\manana>mongo --authenticationDatabase "maraton" -u "adolfo"
+MongoDB shell version v4.2.2
+Enter password:
+
+connecting to: mongodb://127.0.0.1:27017/?authSource=maraton&compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("ed104782-432f-4a23-a7ba-a766a6129c21") }
+MongoDB server version: 4.2.2
+
+> show dbs
+maraton  0.047GB
+>
+```
+Como entre con el usuario que solo tiene acceso a maraton.
 
 ```sh
 ```
