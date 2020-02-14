@@ -298,14 +298,57 @@ Warning: unable to run listCollections, attempting to approximate collection nam
 >
 ```
 
+**CUANDO ENTRO SIEMPRE ENTRA A test DEBO SIEMPRE CAMBAIRRME A MI BD `maraton`**
 
+Estando en mi BD ya puedo hacer cualquier operación.
 
+**Me puedo autenticar desde adentro:**
 
 ```sh
+C:\Users\manana>mongo
+MongoDB shell version v4.2.2
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("8c46c31a-9331-4c25-9f53-8fe27f0f7274") }
+MongoDB server version: 4.2.2
+> show dbs
+> use maraton
+switched to db maraton
+> db.auth("adolfo","adolfo1234")
+1
+>       
 ```
+He entrado solo con Mongo y desde dentro me Logeo.
 
+
+**Conectarme al Super Usuario**
 
 ```sh
+C:\Users\manana>mongo --authenticationDatabase "admin" -u "superAdmin"
+MongoDB shell version v4.2.2
+Enter password:
+connecting to: mongodb://127.0.0.1:27017/?authSource=admin&compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("c713ee44-7097-440d-bbab-6747d40b4aa0") }
+MongoDB server version: 4.2.2
+
+> show dbs
+admin           0.000GB
+biblioteca      0.000GB
+clinica         0.000GB
+clinica2        0.000GB
+config          0.000GB
+gimnasio        0.059GB
+gimnasio2       0.000GB
+ingenieria      0.000GB
+local           0.000GB
+maraton         0.047GB
+maraton2        0.000GB
+shop            0.000GB
+shop2           0.000GB
+shop3           0.000GB
+shop4           0.000GB
+sweetscomplete  0.000GB
+test            0.000GB
+>            
 ```
 
 
