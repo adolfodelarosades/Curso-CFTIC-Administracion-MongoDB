@@ -283,12 +283,15 @@ Falta un tercer componente `mongos` (un binario) el enrutador que tambien es un 
 Levantar Mongos
 
 ```sh
-C:\Users\manana>mongos --configdb configServerGetafe\localhost:27100,localhost:27101,localhost27102 --port 27300
+C:\Users\manana>mongos --configdb configServerGetafe/localhost:27100,localhost:27101,localhost:27102 --port 27300
 ```
 
+Levantamos una shell y levantamos la `27300`
 
 ```sh
-
+C:\Users\manana>mongo --port 27300
+...
+mongos>
 ```
 
 ```sh
