@@ -95,8 +95,240 @@ C:\Users\manana>mongod --dbpath datash\shServer2 --port 27201 --shardsvr
 
 
 
+Levantar mis servidores:
+
+```sh
+C:\Users\manana>mongod --dbpath datash\configServer1 --port 27100 -replSet configServerGetafe --configsvr
+C:\Users\manana>mongod --dbpath datash\configServer2 --port 27101 -replSet configServerGetafe --configsvr
+C:\Users\manana>mongod --dbpath datash\configServer3 --port 27102 -replSet configServerGetafe --configsvr
+```
+
+Me conecto con una shell a uno de ellos:
+
+```sh
+C:\Users\manana>mongo --port 27100
+>
+>configServerGetafe:PRIMARY> rs.status()
+{
+        "set" : "configServerGetafe",
+        "date" : ISODate("2020-02-14T08:24:38.593Z"),
+        "myState" : 1,
+        "term" : NumberLong(2),
+        "syncingTo" : "",
+        "syncSourceHost" : "",
+        "syncSourceId" : -1,
+        "configsvr" : true,
+        "heartbeatIntervalMillis" : NumberLong(2000),
+        "majorityVoteCount" : 2,
+        "writeMajorityCount" : 2,
+        "optimes" : {
+                "lastCommittedOpTime" : {
+                        "ts" : Timestamp(1581668675, 1),
+                        "t" : NumberLong(2)
+                },
+                "lastCommittedWallTime" : ISODate("2020-02-14T08:24:35.690Z"),
+                "readConcernMajorityOpTime" : {
+                        "ts" : Timestamp(1581668675, 1),
+                        "t" : NumberLong(2)
+                },
+                "readConcernMajorityWallTime" : ISODate("2020-02-14T08:24:35.690Z"),
+                "appliedOpTime" : {
+                        "ts" : Timestamp(1581668675, 1),
+                        "t" : NumberLong(2)
+                },
+                "durableOpTime" : {
+                        "ts" : Timestamp(1581668675, 1),
+                        "t" : NumberLong(2)
+                },
+                "lastAppliedWallTime" : ISODate("2020-02-14T08:24:35.690Z"),
+                "lastDurableWallTime" : ISODate("2020-02-14T08:24:35.690Z")
+        },
+        "lastStableRecoveryTimestamp" : Timestamp(1581668625, 1),
+        "lastStableCheckpointTimestamp" : Timestamp(1581668625, 1),
+        "electionCandidateMetrics" : {
+                "lastElectionReason" : "electionTimeout",
+                "lastElectionDate" : ISODate("2020-02-14T08:23:31.143Z"),
+                "electionTerm" : NumberLong(2),
+                "lastCommittedOpTimeAtElection" : {
+                        "ts" : Timestamp(0, 0),
+                        "t" : NumberLong(-1)
+                },
+                "lastSeenOpTimeAtElection" : {
+                        "ts" : Timestamp(1581598511, 1),
+                        "t" : NumberLong(1)
+                },
+                "numVotesNeeded" : 2,
+                "priorityAtElection" : 1,
+                "electionTimeoutMillis" : NumberLong(10000),
+                "numCatchUpOps" : NumberLong(0),
+                "newTermStartDate" : ISODate("2020-02-14T08:23:35.613Z"),
+                "wMajorityWriteAvailabilityDate" : ISODate("2020-02-14T08:23:35.954Z")
+        },
+        "members" : [
+                {
+                        "_id" : 0,
+                        "name" : "localhost:27100",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 1,
+                        "stateStr" : "PRIMARY",
+                        "uptime" : 106,
+                        "optime" : {
+                                "ts" : Timestamp(1581668675, 1),
+                                "t" : NumberLong(2)
+                        },
+                        "optimeDate" : ISODate("2020-02-14T08:24:35Z"),
+                        "syncingTo" : "",
+                        "syncSourceHost" : "",
+                        "syncSourceId" : -1,
+                        "infoMessage" : "could not find member to sync from",
+                        "electionTime" : Timestamp(1581668611, 1),
+                        "electionDate" : ISODate("2020-02-14T08:23:31Z"),
+                        "configVersion" : 1,
+                        "self" : true,
+                        "lastHeartbeatMessage" : ""
+                },
+                {
+                        "_id" : 1,
+                        "name" : "localhost:27101",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 77,
+                        "optime" : {
+                                "ts" : Timestamp(1581668675, 1),
+                                "t" : NumberLong(2)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581668675, 1),
+                                "t" : NumberLong(2)
+                        },
+                        "optimeDate" : ISODate("2020-02-14T08:24:35Z"),
+                        "optimeDurableDate" : ISODate("2020-02-14T08:24:35Z"),
+                        "lastHeartbeat" : ISODate("2020-02-14T08:24:37.314Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-14T08:24:38.437Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27100",
+                        "syncSourceHost" : "localhost:27100",
+                        "syncSourceId" : 0,
+                        "infoMessage" : "",
+                        "configVersion" : 1
+                },
+                {
+                        "_id" : 2,
+                        "name" : "localhost:27102",
+                        "ip" : "127.0.0.1",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 58,
+                        "optime" : {
+                                "ts" : Timestamp(1581668675, 1),
+                                "t" : NumberLong(2)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1581668675, 1),
+                                "t" : NumberLong(2)
+                        },
+                        "optimeDate" : ISODate("2020-02-14T08:24:35Z"),
+                        "optimeDurableDate" : ISODate("2020-02-14T08:24:35Z"),
+                        "lastHeartbeat" : ISODate("2020-02-14T08:24:38.090Z"),
+                        "lastHeartbeatRecv" : ISODate("2020-02-14T08:24:37.208Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncingTo" : "localhost:27101",
+                        "syncSourceHost" : "localhost:27101",
+                        "syncSourceId" : 1,
+                        "infoMessage" : "",
+                        "configVersion" : 1
+                }
+        ],
+        "ok" : 1,
+        "$gleStats" : {
+                "lastOpTime" : Timestamp(0, 0),
+                "electionId" : ObjectId("7fffffff0000000000000002")
+        },
+        "lastCommittedOpTime" : Timestamp(1581668675, 1),
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1581668675, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1581668675, 1)
+}
+configServerGetafe:PRIMARY>
+
+```
 
 
+Levantar los dos servidores sharding
+
+```sh
+C:\Users\manana>mongod --dbpath datash\shServer1 --port 27200 --shardsvr
+C:\Users\manana>mongod --dbpath datash\shServer2 --port 27201 --shardsvr
+```
 
 
+Tenemos levantado el config Server Cluster (Tres Servidores Conectados entre si) en los puertos 27100, 27101 y 27102 que solo tendran metadatos (son más pequeños).
+
+Y tenemos dos servidores más grandes levantados en el 27200 y 27201 estos van a recibir los datos.
+
+Falta un tercer componente `mongos` (un binario) el enrutador que tambien es un servidor, que es el encargado de repartir los datos ente mis dos sardins. No le hace falta su carpeta. 
+
+
+Levantar Mongos
+
+```sh
+C:\Users\manana>mongos --configdb configServerGetafe\localhost:27100,localhost:27101,localhost27102 --port 27300
+```
+
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
 
