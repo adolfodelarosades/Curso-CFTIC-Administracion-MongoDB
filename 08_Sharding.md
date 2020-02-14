@@ -472,7 +472,7 @@ mongos> db.clientes.find().count()
 1352515
 mongos>  
 ```
-Hay mas del millon que le dijimos.
+Hay mas del millon que le dijimos. Es un problema entre los cursores y el sarding.
 
 
 Vamos a ver como lo distribuyo con `getShardDistribution()`:
@@ -495,11 +495,10 @@ Totals
  Shard shard0001 contains 63.73% data, 63.73% docs in cluster, avg obj size on shard : 119B
  Shard shard0000 contains 36.26% data, 36.26% docs in cluster, avg obj size on shard : 119B
 
-
 mongos>   
 ```
 
-En 
+En el primer shard tenemos 6 chunks y en el otro 5. 
 
 Damos un `sh.status()` 
 ```sh
@@ -557,13 +556,26 @@ mongos>
 ```
 Estos rangos de edad que se muestran serán dinámicos.
 
-```sh
+Podríamos repetir el ejercicio cambiando a 8 y volviendo a cargar la colección ( primero debemos eliminar la colección).
+O cargando otro millón.
 
+Borramos los datos de la colección.
+
+```sh
+mongos> db.clientes.remove({})
+WriteResult({ "nRemoved" : 1000000 })
+mongos> db.clientes.find()
+mongos>
 ```
+Borro el millon y ya no tengo registros.
 
+Cambio el script a 10 millones y lo cargo de nuevo **DEBO SALIR DE LA CONSOLA POR LET**.
 
 
 ```sh
+mongos> use shop
+switched to db shop
+mongos> load("main4.js")
 
 ```
 
