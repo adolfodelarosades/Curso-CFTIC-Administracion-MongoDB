@@ -26,7 +26,7 @@ Realiza backup del servidor completo, base de datos, colecciones.
 
 Sintaxis:
 
-````sh
+```sh
 mongodump <opciones>
 --host <direccón del servidor>
 --port <puerto>
@@ -36,24 +36,22 @@ mongodump <opciones>
 --query <json-consulta>
 ```
 
-
 Creamos las carpetas data2\server y data2\backup
 
-
 Levantar nuestro nuevo servidor
-````sh
+```sh
 C:\Users\manana>mongod --port 27300 --dbpath data2\server
 ```
 
 Levanto la shell para ese servidor:
 
-````sh
+```sh
 C:\Users\manana>mongo --port 27300
 ```
 
 Creamos BD y le metemos 1000 registros.
 
-````sh
+```sh
 > use getafe
 switched to db getafe
 > for(i=0; i < 1000; i++){
@@ -68,10 +66,11 @@ switched to db mostoles
 WriteResult({ "nInserted" : 1 })
 >
 ```
+
 Creamos un indice para comprobar que tambieén se respaldan los indices:
 
 
-````sh
+```sh
 > db.foo2.createIndex({ b: 1})
 {
         "createdCollectionAutomatically" : false,
@@ -103,10 +102,22 @@ Reviso en la carpeta backup
 <img src="/images/backup.png">
 
 
-````sh
-
+```sh
 
 ```
 
+```sh
 
-   
+```
+
+```sh
+
+```
+
+```sh
+
+```
+
+```sh
+
+```
