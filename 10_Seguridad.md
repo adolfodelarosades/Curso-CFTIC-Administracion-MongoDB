@@ -404,6 +404,8 @@ Método `createRole()`: Permite crear roles que se almacenan el la BD admin a lo
 
 
 
+
+
 Cargo mi servidor con `mongod --auth` **IMPORTANTE** Sino paso de los permisos.
 
 Entro con mi usuario Super Admin
@@ -832,16 +834,75 @@ WriteCommandError({
 >
 ```
 
+Roles User-defined
+
+Creación de un rol particular y especifico.
+
+```sh
+> use gimnasio
+switched to db gimnasio
+> shoe collections
+2020-02-17T12:16:06.333+0100 E  QUERY    [js] uncaught exception: SyntaxError: unexpected token: identifier :
+@(shell):1:5
+> show collections
+asociaciones
+clientes
+fii
+foo2
+fuu
+games
+interesados
+monitores
+> db.createRole({
+... role: "soloEscrituraInteresados",
+... privileges: [
+... {resources: {db: "gimnasio", collection: "interesados"}, actions: ["find", "insert","update","remove"]}
+... ],
+... roles: [{role: "read", db: "gimnasio"}]
+... })  
+2020-02-17T12:27:36.261+0100 E  QUERY    [js] uncaught exception: Error: missing resource field :
+_getErrorWithCode@src/mongo/shell/utils.js:25:13
+DB.prototype.createRole@src/mongo/shell/db.js:1654:15
+@(shell):1:1
+```
+**ME FALLO**
+
+Creo usuario con rol personalizado
+
+```sh
+> db.createUser({
+... user: "maria73",
+... pwd: "maria1234",
+... roles: ["soloEscrituraInteresados"]
+... })
+2020-02-17T12:29:36.774+0100 E  QUERY    [js] uncaught exception: Error: couldn't add user: No role named soloEscrituraInteresados@gimnasio :
+_getErrorWithCode@src/mongo/shell/utils.js:25:13
+DB.prototype.createUser@src/mongo/shell/db.js:1370:11
+@(shell):1:1
+>        
+```
+**Me falla**
+
+En otra shell entro como "maria73":
+
+y compruebo que 
+
 
 
 ```sh
-```
+mongo --authenticationDatabase "gimnasio" -u "maria73"
+>use gimnasio
 
-```sh
+> db.interesados.insert({a:1})
+WriteResult({ "nInserted" : 1 })
+>
+> db.foo.insert({a:1})
+FALLA
 ```
+En interesados puedo insertar, y en otras colecciones solo puedo leerlas.
+**Comprobar cuando pueda crear el rol personalizado que me fallo**
 
-```sh
-```
+
 
 ```sh
 ```
