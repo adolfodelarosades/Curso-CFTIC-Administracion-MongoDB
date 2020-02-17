@@ -362,13 +362,16 @@ Roles propios de MongoDB
 
 Los usuarios se crean a nivel de base de datos
 
-rol "read"
-rol "readWrite"
-rol "dbAdmin" => Idem a readWrite con permisos de operaciones sobre el system.profile
-rol "userAdmin" = Permite al usuario administrar los usuarios de esa base de datos.
-rol "dbOwner" => Engloba los anteriores (Super usuario a nivel de BD)
+* rol "read"
+* rol "readWrite"
+* rol "dbAdmin" => Idem a readWrite con permisos de operaciones sobre el system.profile
+* rol "userAdmin" = Permite al usuario administrar los usuarios de esa base de datos.
+* rol "dbOwner" => Engloba los anteriores (Super usuario a nivel de BD)
 
 
+Roles para todas las bases de datos(deben estar asociados a la base de datos admin)
+
+* rol "readAnyDatabase" 
 
 Cargo mi servidor con `mongod --auth` **IMPORTANTE** Sino paso de los permisos.
 
@@ -590,6 +593,9 @@ switched to db maraton
 ... roles: ["userAdmin"]
 ... })
 Successfully added user: { "user" : "laura73", "roles" : [ "userAdmin" ] }
+
+> db.createUser({ user: "laura73", pwd: "laura1234", roles: ["userAdmin"] })
+Successfully added user: { "user" : "laura73", "roles" : [ "userAdmin" ] }
 >   
 ```
 
@@ -613,3 +619,235 @@ Successfully added user: { "user" : "manuel73", "roles" : [ "readWrite" ] }
 >
 ```
 
+Roles Sobre BD
+
+Añado roles a usuario existente:
+
+```sh
+> db.runCommand({ grantRolesToUser: "juan73", roles: [{role: "readAnyDatabase", db: "admin"}] })
+{ "ok" : 1 }
+>        
+```
+
+```sh
+>  db.runCommand({ usersInfo: "juan73", showPrivileges: true})
+{
+        "users" : [
+                {
+                        "_id" : "gimnasio.juan73",
+                        "userId" : UUID("3f3b060a-875a-4a67-ae4c-033f83670b41"),
+                        "user" : "juan73",
+                        "db" : "gimnasio",
+                        "mechanisms" : [
+                                "SCRAM-SHA-1",
+                                "SCRAM-SHA-256"
+                        ],
+                        "roles" : [
+                                {
+                                        "role" : "readAnyDatabase",
+                                        "db" : "admin"
+                                },
+                                {
+                                        "role" : "readWrite",
+                                        "db" : "gimnasio"
+                                }
+                        ],
+                        "inheritedRoles" : [
+                                {
+                                        "role" : "readAnyDatabase",
+                                        "db" : "admin"
+                                },
+                                {
+                                        "role" : "readWrite",
+                                        "db" : "gimnasio"
+                                }
+                        ],
+                        "inheritedPrivileges" : [
+                                {
+                                        "resource" : {
+                                                "db" : "",
+                                                "collection" : ""
+                                        },
+                                        "actions" : [
+                                                "changeStream",
+                                                "collStats",
+                                                "dbHash",
+                                                "dbStats",
+                                                "find",
+                                                "killCursors",
+                                                "listCollections",
+                                                "listIndexes",
+                                                "planCacheRead"
+                                        ]
+                                },
+                                {
+                                        "resource" : {
+                                                "cluster" : true
+                                        },
+                                        "actions" : [
+                                                "listDatabases"
+                                        ]
+                                },
+                                {
+                                        "resource" : {
+                                                "db" : "",
+                                                "collection" : "system.js"
+                                        },
+                                        "actions" : [
+                                                "changeStream",
+                                                "collStats",
+                                                "dbHash",
+                                                "dbStats",
+                                                "find",
+                                                "killCursors",
+                                                "listCollections",
+                                                "listIndexes",
+                                                "planCacheRead"
+                                        ]
+                                },
+                                {
+                                        "resource" : {
+                                                "db" : "gimnasio",
+                                                "collection" : ""
+                                        },
+                                        "actions" : [
+                                                "changeStream",
+                                                "collStats",
+                                                "convertToCapped",
+                                                "createCollection",
+                                                "createIndex",
+                                                "dbHash",
+                                                "dbStats",
+                                                "dropCollection",
+                                                "dropIndex",
+                                                "emptycapped",
+                                                "find",
+                                                "insert",
+                                                "killCursors",
+                                                "listCollections",
+                                                "listIndexes",
+                                                "planCacheRead",
+                                                "remove",
+                                                "renameCollectionSameDB",
+                                                "update"
+                                        ]
+                                },
+                                {
+                                        "resource" : {
+                                                "db" : "gimnasio",
+                                                "collection" : "system.js"
+                                        },
+                                        "actions" : [
+                                                "changeStream",
+                                                "collStats",
+                                                "convertToCapped",
+                                                "createCollection",
+                                                "createIndex",
+                                                "dbHash",
+                                                "dbStats",
+                                                "dropCollection",
+                                                "dropIndex",
+                                                "emptycapped",
+                                                "find",
+                                                "insert",
+                                                "killCursors",
+                                                "listCollections",
+                                                "listIndexes",
+                                                "planCacheRead",
+                                                "remove",
+                                                "renameCollectionSameDB",
+                                                "update"
+                                        ]
+                                }
+                        ],
+                        "inheritedAuthenticationRestrictions" : [ ]
+                }
+        ],
+        "ok" : 1
+}
+>              
+```
+
+Me logeo para comprobarlo:
+
+```sh
+C:\Users\manana>mongo --authenticationDatabase "gimnasio" -u "juan73"
+
+```
+
+En Gimnasio me dejara leer y escribir en las otras solo consultarlas.
+
+
+```sh
+> use gimnasio
+switched to db gimnasio
+> db.fii.insert({ a: 1})
+WriteResult({ "nInserted" : 1 })
+>
+```
+
+
+en shop no me deja escribir
+```sh
+> use shop
+switched to db shop
+> db.shop.insert({ a:1 })
+WriteCommandError({
+        "ok" : 0,
+        "errmsg" : "not authorized on shop to execute command { insert: \"shop\", ordered: true, lsid: { id: UUID(\"712e14cd-e07c-472b-af3c-8676b2793f7f\") }, $db: \"shop\" }",
+        "code" : 13,
+        "codeName" : "Unauthorized"
+})
+>
+```
+
+* rol "readAnyDatabase"
+* rol "readWriteAnyDatabase"
+* rol "dbAdminAnyDatabase" idem dbAdmin para todas las bases de datos
+* rol "userAdminAnyDatabase" Administrar usuarios para todas las BD
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+```sh
+```
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+```sh
+```
+
+
+```sh
+```
