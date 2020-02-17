@@ -412,9 +412,19 @@ Métodos de Administración de Usarios.
 
 [User Management Methods](https://docs.mongodb.com/manual/reference/method/js-user-management/)
 
+RESUMEN
 
+* A Nivel de Certificación
+   * Tener claro que los usauarios se crean y se les conceden permisos a nivel de bas de datos.
+   * Que los datos de usuarios se almacenan (aunque se creen a nivel de BD) en la collection `system.users` de la BD admin.
+   * Que los roles que afectan a todas las bases de datos se añaden sobre la BD `admin`.
+   * Distinguir correctamente los roles de base de datos concreta sobre los roles de cualquier bd (normalmente incluye "any")
+   * MongoDB permite crear roles a medida que pueden configurarse a nivel de colección.
+   
+   
+   
 
-
+### Practicas
 
 Cargo mi servidor con `mongod --auth` **IMPORTANTE** Sino paso de los permisos.
 
