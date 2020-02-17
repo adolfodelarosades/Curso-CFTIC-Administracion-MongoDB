@@ -353,16 +353,131 @@ test            0.000GB
 
 **Para logearme desde dentro para el superUsuario tengo que estar en la BD `admin`**
 
+
+## ROLES
+
+-Colección systrem.users
+
+Roles propios de MongoDB
+
+Los usuarios se crean a nivel de base de datos
+
+rol "read"
+rol "readWrite"
+
+
+Entro con mi usuario Super Admin
+
+```sh
+C:\Users\manana>mongo --authenticationDatabase "admin" -u "superAdmin"
+MongoDB shell version v4.2.2
+Enter password: NoHay2sin3
+connecting to: mongodb://127.0.0.1:27017/?authSource=admin&compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("c713ee44-7097-440d-bbab-6747d40b4aa0") }
+MongoDB server version: 4.2.2
+```
+
+Creo usuario:
+
+```sh
+> db.createUser({ user: "juan73", pwd: "juan1234", roles: ["read"] })
+Successfully added user: { "user" : "juan73", "roles" : [ "read" ] }
+```
+
+Ver privilegios del usuarrio creado:
+
+```sh
+> db.runCommand({ usersInfo: "juan73", showPrivileges: true})
+{
+        "users" : [
+                {
+                        "_id" : "gimnasio.juan73",
+                        "userId" : UUID("3f3b060a-875a-4a67-ae4c-033f83670b41"),
+                        "user" : "juan73",
+                        "db" : "gimnasio",
+                        "mechanisms" : [
+                                "SCRAM-SHA-1",
+                                "SCRAM-SHA-256"
+                        ],
+                        "roles" : [
+                                {
+                                        "role" : "read",
+                                        "db" : "gimnasio"
+                                }
+                        ],
+                        "inheritedRoles" : [
+                                {
+                                        "role" : "read",
+                                        "db" : "gimnasio"
+                                }
+                        ],
+                        "inheritedPrivileges" : [
+                                {
+                                        "resource" : {
+                                                "db" : "gimnasio",
+                                                "collection" : ""
+                                        },
+                                        "actions" : [
+                                                "changeStream",
+                                                "collStats",
+                                                "dbHash",
+                                                "dbStats",
+                                                "find",
+                                                "killCursors",
+                                                "listCollections",
+                                                "listIndexes",
+                                                "planCacheRead"
+                                        ]
+                                },
+                                {
+                                        "resource" : {
+                                                "db" : "gimnasio",
+                                                "collection" : "system.js"
+                                        },
+                                        "actions" : [
+                                                "changeStream",
+                                                "collStats",
+                                                "dbHash",
+                                                "dbStats",
+                                                "find",
+                                                "killCursors",
+                                                "listCollections",
+                                                "listIndexes",
+                                                "planCacheRead"
+                                        ]
+                                }
+                        ],
+                        "inheritedAuthenticationRestrictions" : [ ]
+                }
+        ],
+        "ok" : 1
+}
+>
+```
+
+
+Entro en otra consola con el usuario de Juan73
 ```sh
 ```
 
 
-```sh
-```
+
+Como le cambio el Rol al usuario:
 
 
 ```sh
+> use gimnasio
+switched to db gimnasio
+> db.runCommand({
+... updateUser: "juan73",
+... roles: [{ role: "readWrite", db: "gimnasio"}]
+... })
+{ "ok" : 1 }
+>       
 ```
+A partir de aquí ya puedo Leer y Escribir.
+
+
 
 
 ```sh
