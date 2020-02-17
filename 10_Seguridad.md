@@ -356,6 +356,7 @@ test            0.000GB
 
 ## ROLES
 
+[Built-In Roles](https://docs.mongodb.com/manual/reference/built-in-roles/index.html)
 -Colección systrem.users
 
 Roles propios de MongoDB
@@ -365,7 +366,7 @@ Los usuarios se crean a nivel de base de datos
 * rol "read"
 * rol "readWrite"
 * rol "dbAdmin" => Idem a readWrite con permisos de operaciones sobre el system.profile
-* rol "userAdmin" = Permite al usuario administrar los usuarios de esa base de datos.
+* rol "userAdmin" = Permite al usuario administrar los usuarios de esa base de datos **A NIVEL DE BD** .
 * rol "dbOwner" => Engloba los anteriores (Super usuario a nivel de BD)
 
 
@@ -374,7 +375,28 @@ Roles para todas las bases de datos(deben estar asociados a la base de datos adm
 * rol "readAnyDatabase" 
 * rol "readWriteAnyDatabase"
 * rol "dbAdminAnyDatabase" idem dbAdmin para todas las bases de datos
-* rol "userAdminAnyDatabase" Administrar usuarios para todas las BD
+* rol "userAdminAnyDatabase" Administrar usuarios para todas las BD **A NIVEL DE TODAS LAS BD**
+
+Tener claro que un usuario tiene permsos para su base de datos(escritura) y otras para admin (readAnyDatabase)
+
+
+Roles relacionados con los Clusters
+
+
+* rol "clusterMonitor" // Permisos de lectura de tareas de monitorización de cluster
+* rol "hostManager" // Permisos de gestión de servidores del cluster
+* rol "clusterManager" // Permisos de configuración del cluster 
+* rol "clusterAdmin" // Todos los permisos relacionados con la administración del cluster.
+
+Roles de Backup y Restauración
+
+* rol "backup"
+* rol "restore"
+
+Rol con todos los permisos
+
+* rol "root"
+
 
 Cargo mi servidor con `mongod --auth` **IMPORTANTE** Sino paso de los permisos.
 
@@ -803,6 +825,7 @@ WriteCommandError({
 })
 >
 ```
+
 
 
 ```sh
