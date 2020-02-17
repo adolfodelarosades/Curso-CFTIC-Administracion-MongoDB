@@ -401,6 +401,16 @@ Roles User-defined
 
 Método `createRole()`: Permite crear roles que se almacenan el la BD admin a los que le añadimos privilegios que actuan sobre recursos y acciones.
 
+Eliminar Usuarios a nivel de Base de Datos.
+
+````sh
+db.dropUser("<nombre>")
+db.dropAllUsers()
+```
+
+Métodos de Administración de Usarios.
+
+[User Management Methods](https://docs.mongodb.com/manual/reference/method/js-user-management/)
 
 
 
@@ -903,8 +913,211 @@ En interesados puedo insertar, y en otras colecciones solo puedo leerlas.
 **Comprobar cuando pueda crear el rol personalizado que me fallo**
 
 
+Como Borrar un Usuario:
+estando en SuperAdmin
 
 ```sh
+> use admin
+switched to db admin
+> db.system.users.find().pretty()
+{
+        "_id" : "maraton.adolfo",
+        "userId" : UUID("182196d1-9937-4064-9a05-34169e6cb811"),
+        "user" : "adolfo",
+        "db" : "maraton",
+        "credentials" : {
+                "SCRAM-SHA-1" : {
+                        "iterationCount" : 10000,
+                        "salt" : "kj6Du7fgSrNNzRB0akw8SQ==",
+                        "storedKey" : "d3PujkUfp3Gqsycqr74TKsBUzK8=",
+                        "serverKey" : "rNYmvZipC69mvD7CQz1rWnYmxOk="
+                },
+                "SCRAM-SHA-256" : {
+                        "iterationCount" : 15000,
+                        "salt" : "GHkL+no0vLlfmqQL7p+iqk3JhWlZJSQk7fPQoA==",
+                        "storedKey" : "f6BCcaBRfpm/NsD/8rybFn/u6BYzcQNoMntNRYSXINI=",
+                        "serverKey" : "cJ8TeVXuSq/LrAr/hTOzxf6xBDOQnw0DMLL87O0qRsI="
+                }
+        },
+        "customData" : {
+                "dni" : "X883838S"
+        },
+        "roles" : [
+                {
+                        "role" : "readWrite",
+                        "db" : "maraton"
+                }
+        ]
+}
+{
+        "_id" : "admin.superAdmin",
+        "userId" : UUID("227cd5bc-7d73-4983-8965-3b80accd14b2"),
+        "user" : "superAdmin",
+        "db" : "admin",
+        "credentials" : {
+                "SCRAM-SHA-1" : {
+                        "iterationCount" : 10000,
+                        "salt" : "pwaGtp7fu+r/3rKwPwJvJQ==",
+                        "storedKey" : "YGGYI7gPhlSUfWsySjwsTFs6g+Q=",
+                        "serverKey" : "rVXzKhE+H/YxEXDCnUu1Ygw/ZdI="
+                },
+                "SCRAM-SHA-256" : {
+                        "iterationCount" : 15000,
+                        "salt" : "mG7SSBJiFxrBeRx35qaxEUpSM/1q2SOdS8iSsA==",
+                        "storedKey" : "/1sYk7qqhJsiqMAitM588DXvR9OL0YUUE1qA5BWXEzE=",
+                        "serverKey" : "c1xSAg2IAiINeIAY6+WRg1WAIn1aY9F7J2jFKepYdaQ="
+                }
+        },
+        "roles" : [
+                {
+                        "role" : "userAdminAnyDatabase",
+                        "db" : "admin"
+                },
+                {
+                        "role" : "readWriteAnyDatabase",
+                        "db" : "admin"
+                }
+        ]
+}
+{
+        "_id" : "gimnasio.juan73",
+        "userId" : UUID("3f3b060a-875a-4a67-ae4c-033f83670b41"),
+        "user" : "juan73",
+        "db" : "gimnasio",
+        "credentials" : {
+                "SCRAM-SHA-1" : {
+                        "iterationCount" : 10000,
+                        "salt" : "AT1iIkRRsac56h1THkdShA==",
+                        "storedKey" : "LcwiObBvz1VDotCnKCjldR8KMnc=",
+                        "serverKey" : "YWmdOwLEdIQiNkchuL82CCKDjkY="
+                },
+                "SCRAM-SHA-256" : {
+                        "iterationCount" : 15000,
+                        "salt" : "H7bqbqWmVf9CHXj587ILRk8TxcwEEPUHdhqmDw==",
+                        "storedKey" : "UxVy5UgAi6xIFQ/+1M8Ftt7IRBW+qI6dt5hvM+PrD/s=",
+                        "serverKey" : "6nvLVqwDOUzoNliIWtz+fhxd+kt34LrduQKP0NBk564="
+                }
+        },
+        "roles" : [
+                {
+                        "role" : "readAnyDatabase",
+                        "db" : "admin"
+                },
+                {
+                        "role" : "readWrite",
+                        "db" : "gimnasio"
+                }
+        ]
+}
+{
+        "_id" : "maraton.laura73",
+        "userId" : UUID("94bb8feb-7b22-40bb-b7f4-1481a0e12b78"),
+        "user" : "laura73",
+        "db" : "maraton",
+        "credentials" : {
+                "SCRAM-SHA-1" : {
+                        "iterationCount" : 10000,
+                        "salt" : "syonuVSSkvZSWKt3i7pWAA==",
+                        "storedKey" : "2IPRmGfTPJJ6ESEwl1aK/TVcpXs=",
+                        "serverKey" : "Oy6/7gNZaMtdkgf4tlNsIYhCe54="
+                },
+                "SCRAM-SHA-256" : {
+                        "iterationCount" : 15000,
+                        "salt" : "lEjTG0xxULYFCZqF6EvSheW3OSxEQ83GQD+k+A==",
+                        "storedKey" : "0+63cIfvrPlLmPtN7T2d/FNiboSKkY2xONcoPXrhg5Q=",
+                        "serverKey" : "5FyGojGM6rDflsdtyFGBzAQPQdZj+JgkHyzzdkpcpC4="
+                }
+        },
+        "roles" : [
+                {
+                        "role" : "userAdmin",
+                        "db" : "maraton"
+                }
+        ]
+}
+{
+        "_id" : "maraton.manuel73",
+        "userId" : UUID("28e35ee5-e7f3-4a12-ae9f-b16d02128506"),
+        "user" : "manuel73",
+        "db" : "maraton",
+        "credentials" : {
+                "SCRAM-SHA-1" : {
+                        "iterationCount" : 10000,
+                        "salt" : "R4utsddqdJIP2FCwQV9xmA==",
+                        "storedKey" : "TAiKGhw0q9XsNM80StPQomVFdGU=",
+                        "serverKey" : "DYA5sPRjoCWIT2LzaCJ/xswVFAs="
+                },
+                "SCRAM-SHA-256" : {
+                        "iterationCount" : 15000,
+                        "salt" : "aHVUt48yuT6JtYnMLn0OfuFQiYEENRJ8jA/Wdw==",
+                        "storedKey" : "s077cv2rb1K2zdzWetHdsUXxsuzR6MqBCcPaWaIH4Qo=",
+                        "serverKey" : "dMkJwqoaloeqmXl/4kIwbEFs2rr+bxRCUeY3mwaJHG8="
+                }
+        },
+        "roles" : [
+                {
+                        "role" : "readWrite",
+                        "db" : "maraton"
+                }
+        ]
+}
+{
+        "_id" : "biblioteca.manuel73",
+        "userId" : UUID("b8e127ff-168c-4ac7-bc62-66f87140d1f6"),
+        "user" : "manuel73",
+        "db" : "biblioteca",
+        "credentials" : {
+                "SCRAM-SHA-1" : {
+                        "iterationCount" : 10000,
+                        "salt" : "Lnm9QX6jcKeocUDE5x1ZkA==",
+                        "storedKey" : "8TG8ocyW3Yd9NWufVQ9VvCufy6Q=",
+                        "serverKey" : "4RH/crkxRcIC2bXrvBfBIZYpr70="
+                },
+                "SCRAM-SHA-256" : {
+                        "iterationCount" : 15000,
+                        "salt" : "7rUqox3bqyWBYJzKwsXKO1bega8PAzQrZ1HTlw==",
+                        "storedKey" : "tcFrRelEIsUWvCxYjOJQNmQdxiYDPAQRmIiYvOR1KwM=",
+                        "serverKey" : "KV4M7Soj4pIf9g3OdEYPojZuKn/2ZOZGwu2WHr4fQKw="
+                }
+        },
+        "roles" : [
+                {
+                        "role" : "readWrite",
+                        "db" : "biblioteca"
+                }
+        ]
+}
+{
+        "_id" : "test.laura73",
+        "userId" : UUID("3674d48b-a618-44b8-89b3-f92661104fe0"),
+        "user" : "laura73",
+        "db" : "test",
+        "credentials" : {
+                "SCRAM-SHA-1" : {
+                        "iterationCount" : 10000,
+                        "salt" : "0UgIeK/vkKtX9zL6q4Bgbw==",
+                        "storedKey" : "xSoeRm1vfpmSq5zO3BwGFm4UB1w=",
+                        "serverKey" : "iwZZhUtnLM2ilOHbR75mQQi+d94="
+                },
+                "SCRAM-SHA-256" : {
+                        "iterationCount" : 15000,
+                        "salt" : "YQSPSWHA75i3XaIveS4SJrD+lAlFSG6H5FIW9Q==",
+                        "storedKey" : "LWLj0lrJY+F89S6J2PqQmgvT6AA8cCUJOcTN0FiNkgU=",
+                        "serverKey" : "Ai2Iunj9/SChtIAi0exKGraxRK034rQOxR7Sai99tBE="
+                }
+        },
+        "roles" : [
+                {
+                        "role" : "userAdmin",
+                        "db" : "test"
+                }
+        ]
+}
+> use maraton
+switched to db maraton
+> db.dropUser("pedro")
+false
+>
 ```
 
 ```sh
