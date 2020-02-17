@@ -34,7 +34,12 @@ mongodump <opciones>
 --db <base-de-datos>
 --collection <colección>
 --query <json-consulta>
+--oplog // Almacena un oplog.json por el tiempo que tarde para cosas que se generen mientras se hace el respaldo
 ```
+
+## mongorestore
+
+
 
 Creamos las carpetas data2\server y data2\backup
 
@@ -69,7 +74,6 @@ WriteResult({ "nInserted" : 1 })
 
 Creamos un indice para comprobar que tambieén se respaldan los indices:
 
-
 ```sh
 > db.foo2.createIndex({ b: 1})
 {
@@ -102,22 +106,93 @@ Reviso en la carpeta backup
 <img src="/images/backup.png">
 
 
-```sh
 
+Borramos Colleccion con 
+```sh
+> show dbs
+admin     0.000GB
+config    0.000GB
+getafe    0.000GB
+local     0.000GB
+mostoles  0.000GB
+> use mostoles
+switched to db mostoles
+> show collections
+foo2
+> db.foo2.drop()
+true
+>      
 ```
 
-```sh
-
-```
+Como Restauramos:
 
 ```sh
-
+C:\Users\manana>mongorestore --port 27300 data2\backup\bk17022020 
+...
+2020-02-17T13:52:46.539+0100    no indexes to restore
+2020-02-17T13:52:46.540+0100    finished restoring getafe.foo (0 documents, 1000 failures)
+2020-02-17T13:52:46.540+0100    1000 document(s) restored successfully. 1000 document(s) failed to restore.
 ```
+Vuelvo a entrar al shell.
 
 ```sh
-
+C:\Users\manana>mongo --port 27300
 ```
+
+Reviso si ya existen mis datos otra vez:
 
 ```sh
-
+> show dbs
+admin     0.000GB
+config    0.000GB
+getafe    0.000GB
+local     0.000GB
+mostoles  0.000GB
+> use mostoles
+switched to db mostoles
+> show collections
+foo2
+> db.foo2.find().count()
+1000
+>       
 ```
+
+Para hacerlos sobre una sola colección
+```sh
+C:\Users\manana>mongodump --port 27300 --out=data2\backup\bkgetafefoo17022020 --db "getafe" --collection "foo"
+2020-02-17T13:58:38.622+0100    writing getafe.foo to
+2020-02-17T13:58:38.705+0100    done dumping getafe.foo (1000 documents)
+```
+
+Entro y borro 5 documentos
+
+````sh
+> use getafe
+switched to db getafe
+> db.foo.deleteOne({})
+{ "acknowledged" : true, "deletedCount" : 1 }
+> db.foo.deleteOne({})
+{ "acknowledged" : true, "deletedCount" : 1 }
+>
+> db.foo.deleteOne({})
+{ "acknowledged" : true, "deletedCount" : 1 }
+> db.foo.deleteOne({})
+{ "acknowledged" : true, "deletedCount" : 1 }
+> db.foo.deleteOne({})
+{ "acknowledged" : true, "deletedCount" : 1 }
+>            
+```
+
+Desde la consola restauro
+
+```sh
+C:\Users\manana>mongorestore --port 27300 data2\backup\bkgetafefoo17022020\getafe\foo.bson --db "getafe" --collection "foo" 
+....
+ex: _id_ dup key: { _id: ObjectId('5e4a8698f9571bc97a8de385') }
+2020-02-17T14:03:06.022+0100    no indexes to restore
+2020-02-17T14:03:06.023+0100    finished restoring getafe.foo (5 documents, 995 failures)
+2020-02-17T14:03:06.023+0100    5 document(s) restored successfully. 995 document(s) failed to restore.
+```
+
+Me restaura los 5 archivos que yo había borrado.
+
