@@ -22,7 +22,19 @@
 
 ## Mongodump
 
-Realiza backup del servidor completo, base de datos, colecciones
+Realiza backup del servidor completo, base de datos, colecciones.
+
+Sintaxis:
+
+````sh
+mongodump <opciones>
+--host <direccón del servidor>
+--port <puerto>
+--out= <ruta de salida>
+--db <base-de-datos>
+--collection <colección>
+--query <json-consulta>
+```
 
 
 Creamos las carpetas data2\server y data2\backup
@@ -74,7 +86,7 @@ Creamos un indice para comprobar que tambieén se respaldan los indices:
 
 Desde la terminal
 
-````sh
+```sh
 C:\Users\manana>mongodump --port 27300 --out=data2\backup\bk17022020
 2020-02-17T13:36:59.823+0100    writing admin.system.version to
 2020-02-17T13:37:00.172+0100    done dumping admin.system.version (1 document)
