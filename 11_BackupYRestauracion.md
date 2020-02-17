@@ -88,6 +88,8 @@ C:\Users\manana>
 
 Reviso en la carpeta backup
 
+<img src="/images/backup.png">
+
 
 ````sh
 
