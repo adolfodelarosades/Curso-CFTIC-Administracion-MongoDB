@@ -39,7 +39,17 @@ mongodump <opciones>
 
 ## mongorestore
 
-
+```sh
+mongorestore <opciones>
+--host <direccón del servidor>
+--port <puerto>
+  <ruta de archivos de backup>
+  - directorio de todo
+  - archivo .bson para colleccion
+--db <base-de-datos>
+--collection <colección>
+--oplogReplay
+```
 
 Creamos las carpetas data2\server y data2\backup
 
