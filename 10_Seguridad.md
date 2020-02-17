@@ -421,7 +421,13 @@ RESUMEN
    * Distinguir correctamente los roles de base de datos concreta sobre los roles de cualquier bd (normalmente incluye "any")
    * MongoDB permite crear roles a medida que pueden configurarse a nivel de colección.
    
+   Ej.
    
+   El usuario juan está creado en la BD colegio con el rol userAdminAnyDtabase. :+1:
+   a) Puede crear usarios en todas las BD. :+1:
+   b) Puede crear usuarios en la BD colegio.
+   c) Puede realñizar operaciones de escritura en la BD colegios
+   d) Puede realizar operaciones de escritura en todas las BD-
    
 
 ### Practicas
