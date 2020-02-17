@@ -366,8 +366,11 @@ rol "read"
 rol "readWrite"
 rol "dbAdmin" => Idem a readWrite con permisos de operaciones sobre el system.profile
 rol "userAdmin" = Permite al usuario administrar los usuarios de esa base de datos.
+rol "dbOwner" => Engloba los anteriores (Super usuario a nivel de BD)
 
 
+
+Cargo mi servidor con `mongod --auth` **IMPORTANTE** Sino paso de los permisos.
 
 Entro con mi usuario Super Admin
 
@@ -466,7 +469,7 @@ C:\Users\manana>mongo --authenticationDatabase "gimnasio" -u "juan73"
 ```
 
 En teoría solo puedo leer en mi base de datos.
-**COMPROBAR** Por que si pude.
+**COMPROBAR** Por que si pude. No había puesto `--auth`
 
 
 
@@ -596,7 +599,7 @@ En otra consola entro con "laura73":
 C:\Users\manana>mongo --authenticationDatabase "maraton" -u "laura73"
 ```
 
-Puedo crear un usuario:
+Puedo crear un usuario desde `laura73`:
 
 ```sh
 > use maraton
