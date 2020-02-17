@@ -364,6 +364,9 @@ Los usuarios se crean a nivel de base de datos
 
 rol "read"
 rol "readWrite"
+rol "dbAdmin" => Idem a readWrite con permisos de operaciones sobre el system.profile
+rol "userAdmin" = Permite al usuario administrar los usuarios de esa base de datos.
+
 
 
 Entro con mi usuario Super Admin
@@ -456,9 +459,14 @@ Ver privilegios del usuarrio creado:
 ```
 
 
-Entro en otra consola con el usuario de Juan73
+Entro en otra consola con el usuario de "juan73".
+
 ```sh
+C:\Users\manana>mongo --authenticationDatabase "gimnasio" -u "juan73"
 ```
+
+En teoría solo puedo leer en mi base de datos.
+**COMPROBAR** Por que si pude.
 
 
 
@@ -475,16 +483,130 @@ switched to db gimnasio
 { "ok" : 1 }
 >       
 ```
-A partir de aquí ya puedo Leer y Escribir.
+A partir de aquí ya puedo Leer y Escribir con "juan73".
 
 
 
 
 ```sh
+> db.runCommand({ usersInfo: "juan73", showPrivileges: true})
+{
+        "users" : [
+                {
+                        "_id" : "gimnasio.juan73",
+                        "userId" : UUID("3f3b060a-875a-4a67-ae4c-033f83670b41"),
+                        "user" : "juan73",
+                        "db" : "gimnasio",
+                        "mechanisms" : [
+                                "SCRAM-SHA-1",
+                                "SCRAM-SHA-256"
+                        ],
+                        "roles" : [
+                                {
+                                        "role" : "readWrite",
+                                        "db" : "gimnasio"
+                                }
+                        ],
+                        "inheritedRoles" : [
+                                {
+                                        "role" : "readWrite",
+                                        "db" : "gimnasio"
+                                }
+                        ],
+                        "inheritedPrivileges" : [
+                                {
+                                        "resource" : {
+                                                "db" : "gimnasio",
+                                                "collection" : ""
+                                        },
+                                        "actions" : [
+                                                "changeStream",
+                                                "collStats",
+                                                "convertToCapped",
+                                                "createCollection",
+                                                "createIndex",
+                                                "dbHash",
+                                                "dbStats",
+                                                "dropCollection",
+                                                "dropIndex",
+                                                "emptycapped",
+                                                "find",
+                                                "insert",
+                                                "killCursors",
+                                                "listCollections",
+                                                "listIndexes",
+                                                "planCacheRead",
+                                                "remove",
+                                                "renameCollectionSameDB",
+                                                "update"
+                                        ]
+                                },
+                                {
+                                        "resource" : {
+                                                "db" : "gimnasio",
+                                                "collection" : "system.js"
+                                        },
+                                        "actions" : [
+                                                "changeStream",
+                                                "collStats",
+                                                "convertToCapped",
+                                                "createCollection",
+                                                "createIndex",
+                                                "dbHash",
+                                                "dbStats",
+                                                "dropCollection",
+                                                "dropIndex",
+                                                "emptycapped",
+                                                "find",
+                                                "insert",
+                                                "killCursors",
+                                                "listCollections",
+                                                "listIndexes",
+                                                "planCacheRead",
+                                                "remove",
+                                                "renameCollectionSameDB",
+                                                "update"
+                                        ]
+                                }
+                        ],
+                        "inheritedAuthenticationRestrictions" : [ ]
+                }
+        ],
+        "ok" : 1
+}
+>          
 ```
 
+Creo usuario que me permite administrar los usuarios
+```sh
+> use maraton
+switched to db maraton
+> db.createUser({
+... user: "laura73",
+... pwd: "laura1234",
+... roles: ["userAdmin"]
+... })
+Successfully added user: { "user" : "laura73", "roles" : [ "userAdmin" ] }
+>   
+```
+
+En otra consola entro con "laura73":
 
 ```sh
+C:\Users\manana>mongo --authenticationDatabase "maraton" -u "laura73"
 ```
 
+Puedo crear un usuario:
+
+```sh
+> use maraton
+switched to db maraton
+> db.createUser({
+... user: "manuel73",
+... pwd: "manuel1234",
+... roles: ["readWrite"]
+... })
+Successfully added user: { "user" : "manuel73", "roles" : [ "readWrite" ] }
+>
+```
 
