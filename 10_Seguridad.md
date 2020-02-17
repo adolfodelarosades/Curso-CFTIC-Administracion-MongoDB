@@ -372,6 +372,9 @@ Los usuarios se crean a nivel de base de datos
 Roles para todas las bases de datos(deben estar asociados a la base de datos admin)
 
 * rol "readAnyDatabase" 
+* rol "readWriteAnyDatabase"
+* rol "dbAdminAnyDatabase" idem dbAdmin para todas las bases de datos
+* rol "userAdminAnyDatabase" Administrar usuarios para todas las BD
 
 Cargo mi servidor con `mongod --auth` **IMPORTANTE** Sino paso de los permisos.
 
@@ -801,10 +804,6 @@ WriteCommandError({
 >
 ```
 
-* rol "readAnyDatabase"
-* rol "readWriteAnyDatabase"
-* rol "dbAdminAnyDatabase" idem dbAdmin para todas las bases de datos
-* rol "userAdminAnyDatabase" Administrar usuarios para todas las BD
 
 ```sh
 ```
