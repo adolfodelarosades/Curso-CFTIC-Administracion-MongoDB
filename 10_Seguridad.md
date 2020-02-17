@@ -397,6 +397,12 @@ Rol con todos los permisos
 
 * rol "root"
 
+Roles User-defined
+
+Método `createRole()`: Permite crear roles que se almacenan el la BD admin a los que le añadimos privilegios que actuan sobre recursos y acciones.
+
+
+
 
 Cargo mi servidor con `mongod --auth` **IMPORTANTE** Sino paso de los permisos.
 
