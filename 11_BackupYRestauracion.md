@@ -174,6 +174,8 @@ C:\Users\manana>mongodump --port 27300 --out=data2\backup\bkgetafefoo17022020 --
 2020-02-17T13:58:38.705+0100    done dumping getafe.foo (1000 documents)
 ```
 
+<img src="/images/backupcoleccion.png">
+
 Entro y borro 5 documentos
 
 ````sh
