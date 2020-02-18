@@ -208,3 +208,21 @@ ex: _id_ dup key: { _id: ObjectId('5e4a8698f9571bc97a8de385') }
 
 Me restaura los 5 archivos que yo había borrado.
 
+
+### Mongodump y mongorestore
+Exportación e importación de datos (binarios)
+
+```sh
+mongoexport` <opciones>
+--host <direccion:puerto> |
+--uri <formato-uri>
+--db=<nombre-basededatos>
+--collection=<nombre-coleccion>
+--fields=<campo1, campo2>
+--type=csv
+--noHeaderLine
+--out=ruta/<archivo>.json | .csv
+
+
+```
+
