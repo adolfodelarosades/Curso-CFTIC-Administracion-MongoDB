@@ -565,19 +565,44 @@ switched to db colegio
 
 Los que ya existian les agrega lo que no tenia y si no existia lo inserta.
 
+Cargo restaurants.json
+
 
 ```sh
+C:\Users\manana>mongoimport --db="newyork" --collection="restaurants" --file="restaurant.json"
+2020-02-18T10:53:26.366+0100    connected to: mongodb://localhost/
+2020-02-18T10:53:27.309+0100    25359 document(s) imported successfully. 0 document(s) failed to import.
+
+C:\Users\manana>
 ```
 
 
 ```sh
+> use newyork
+switched to db newyork
+> show collections
+restaurants
+>
 ```
 
+<img src="/images/compass-restaurantes.png">
 
+<img src="/images/compass-schema.png">
+
+<img src="/images/compass-circulo.png">
+
+Me genera una consulta:
 ```sh
+{'address.coord': {$geoWithin: { $centerSphere: [ [ -73.99612354056683, 40.74378514302997 ], 0.00038464636632964445 ]}}}
 ```
 
+Si la analizo me restringe la vista
 
+<img src="/images/compass-circulo2.png">
+
+<img src="/images/compass-rombo.png">
+
+<img src="/images/compass-rombo2.png">
 ```sh
 ```
 
