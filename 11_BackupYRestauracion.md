@@ -224,8 +224,15 @@ mongoexport` <opciones>
 --type=csv
 --noHeaderLine
 --out=ruta/<archivo>.json | .csv
+
 ```
 
+#### URI Mongodb <string>
+  
+`"mongodb://<direccion>:<puerto>"`
+`"mongodb://<direccion>:<puerto>/<basededatos>"`
+
+Lo que usan los dives para conectarse
 
 Levanto servidor
 
@@ -324,21 +331,124 @@ C:\Users\manana>mongoexport --db="maraton" --collection="participantes" --fields
 <img src="/images/export.png">
 
 
+Usando el HOST
+
 ```sh
+C:\Users\manana>mongoexport --host="localhost:27017" --db="maraton" --collection="participantes" --out=maraton\participantes-host.json
+2020-02-18T09:42:20.944+0100    connected to: mongodb://localhost:27017/
+2020-02-18T09:42:22.027+0100    [#.......................]  maraton.participantes  56000/1000000  (5.6%)
+2020-02-18T09:42:23.028+0100    [###.....................]  maraton.participantes  128000/1000000  (12.8%)
+2020-02-18T09:42:24.026+0100    [####....................]  maraton.participantes  200000/1000000  (20.0%)
+2020-02-18T09:42:25.028+0100    [######..................]  maraton.participantes  264000/1000000  (26.4%)
+2020-02-18T09:42:26.026+0100    [########................]  maraton.participantes  336000/1000000  (33.6%)
+2020-02-18T09:42:27.028+0100    [#########...............]  maraton.participantes  400000/1000000  (40.0%)
+2020-02-18T09:42:28.026+0100    [###########.............]  maraton.participantes  480000/1000000  (48.0%)
+2020-02-18T09:42:34.706+0100    [######################..]  maraton.participantes  952000/1000000  (95.2%)
+2020-02-18T09:42:35.026+0100    [#######################.]  maraton.participantes  976000/1000000  (97.6%)
+2020-02-18T09:42:35.330+0100    [########################]  maraton.participantes  1000000/1000000  (100.0%)
+2020-02-18T09:42:35.330+0100    exported 1000000 records
+
+C:\Users\manana>
+```
+
+Usando URI:
+
+```sh
+C:\Users\manana>mongoexport --uri="mongodb://localhost:27017/maraton" --collection="participantes" --out=maraton\participantes-uri.json
+2020-02-18T09:51:48.160+0100    connected to: mongodb://localhost:27017/maraton
+2020-02-18T09:51:49.270+0100    [#.......................]  maraton.participantes  64000/1000000  (6.4%)
+2020-02-18T09:51:50.272+0100    [###.....................]  maraton.participantes  128000/1000000  (12.8%)
+2020-02-18T09:51:51.270+0100    [####....................]  maraton.participantes  208000/1000000  (20.8%)
+2020-02-18T09:51:52.272+0100    [######..................]  maraton.participantes  272000/1000000  (27.2%)
+2020-02-18T09:51:53.270+0100    [########................]  maraton.participantes  352000/1000000  (35.2%)
+2020-02-18T09:51:54.271+0100    [#########...............]  maraton.participantes  416000/1000000  (41.6%)
+2020-02-18T09:51:55.272+0100    [###########.............]  maraton.participantes  496000/1000000  (49.6%)
+2020-02-18T09:51:56.270+0100    [#############...........]  maraton.participantes  568000/1000000  (56.8%)
+2020-02-18T09:51:57.272+0100    [###############.........]  maraton.participantes  640000/1000000  (64.0%)
+2020-02-18T09:51:58.270+0100    [#################.......]  maraton.participantes  712000/1000000  (71.2%)
+2020-02-18T09:51:59.272+0100    [##################......]  maraton.participantes  776000/1000000  (77.6%)
+2020-02-18T09:52:00.272+0100    [####################....]  maraton.participantes  848000/1000000  (84.8%)
+2020-02-18T09:52:01.270+0100    [######################..]  maraton.participantes  920000/1000000  (92.0%)
+2020-02-18T09:52:02.235+0100    [########################]  maraton.participantes  1000000/1000000  (100.0%)
+2020-02-18T09:52:02.235+0100    exported 1000000 records
+
+C:\Users\manana>
+```
+
+Usando usuario/password:
+
+```sh
+C:\Users\manana>mongoexport --uri="mongodb://usuario:password@localhost:27017/maraton" --collection="participantes" --out=maraton\participantes-uri.json
+```
+
+### Mongoimport
+
+```sh
+mongoimport <opciones>
+--host <direccion:puerto> | --uri <formato-uri>
+--db=<nombre-basededatos>
+--collection=<nombre-coleccion>
+--type=<json|csv|tsv>
+--file=<archivo>.json | .csv | .tsv
+-mode=<insert|upsert|merge>
+```
+
+Entro al Shell y creo BD y colección
+
+```sh
+> use colegio
+switched to db colegio
+> db.createCollection("alumnos")
+{ "ok" : 1 }
+>
+
+```
+
+Tengo un JSON que es el que quiero importar esta en la carpeta `colegio`
+```sh
+{"_id": 1, "nombre": "Laura"}
+{"_id": 2, "nombre": "Juan"}
+{"_id": 3, "nombre": "Lucía"}
+{"_id": 4, "nombre": "Carlos"}
+{"_id": 5, "nombre": "Sara"}
+```
+
+Importar el JSON en la BD colegio colección alumnos:
+
+```sh
+C:\Users\manana>mongoimport --db="colegio" --collection="alumnos" --file="colegio\alumnos.json"
+2020-02-18T10:18:40.077+0100    connected to: mongodb://localhost/
+2020-02-18T10:18:40.158+0100    5 document(s) imported successfully. 0 document(s) failed to import.
+
+C:\Users\manana>
+```
+
+```sh
+
 ```
 
 
 ```sh
+
 ```
 
 
 ```sh
+
 ```
 
 
 ```sh
+
 ```
 
+
 ```sh
+
+```
+
+
+```sh
+
 ```
 
