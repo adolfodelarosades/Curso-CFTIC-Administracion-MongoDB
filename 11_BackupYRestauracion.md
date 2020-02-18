@@ -486,11 +486,57 @@ Si lo verifico en la shell:
 Modo upsert, cambia el documento o lo crea si no existe
 
 ```sh
-
+{"_id": 1, "nombre": "María Rosa"}
+{"_id": 2, "nombre": "Pedro José"}
+{"_id": 3, "nombre": "Luis Carlos"}
+{"_id": 4, "nombre": "Jose Luis"}
+{"_id": 20, "nombre": "José María"}
 ```
+
+Upser los cambia y si no existe lo crea.
+
+```sh
+C:\Users\manana>mongoimport --db="colegio" --collection="alumnos" --file="colegio\alumnos.json" --mode=upsert
+2020-02-18T10:36:02.660+0100    connected to: mongodb://localhost/
+2020-02-18T10:36:02.742+0100    5 document(s) imported successfully. 0 document(s) failed to import.
+
+C:\Users\manana>
+```
+
+En la shell
+
+```sh
+> use colegio
+switched to db colegio
+> db.alumnos.find()
+{ "_id" : 2, "nombre" : "Pedro José" }
+{ "_id" : 5, "nombre" : "Sara" }
+{ "_id" : 4, "nombre" : "Jose Luis" }
+{ "_id" : 1, "nombre" : "María Rosa" }
+{ "_id" : 3, "nombre" : "Luis Carlos" }
+{ "_id" : 6, "nombre" : "María" }
+{ "_id" : 8, "nombre" : "Fernando" }
+{ "_id" : 7, "nombre" : "Pedro" }
+{ "_id" : 9, "nombre" : "Raquel" }
+{ "_id" : 20, "nombre" : "José María" }
+>
+```
+Me cambio los que existian y me ingreso los que no existian.
+
+
 
 
 ```sh
+
+
+```
+
+```sh
+
+
+```
+```sh
+
 
 ```
 
