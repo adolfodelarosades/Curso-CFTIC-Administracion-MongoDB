@@ -395,6 +395,7 @@ mongoimport <opciones>
   En todos los casos el campo de comparación es _id
   insert => Inserta con operación de escritura desordenada
   upsert => Modifica el documento que encuentra o lo crea si no existe ese _id.
+  merge => Fusiona los campos de los registros que encuentra o crea el registro si no existe ese _id
   
 ```
 
@@ -523,20 +524,68 @@ switched to db colegio
 ```
 Me cambio los que existian y me ingreso los que no existian.
 
-
+Merge
 
 
 ```sh
-
+{"_id": 1, "apellidos": "Pérea"}
+{"_id": 2, "apellidos": "Gómez"}
+{"_id": 3, "apellidos": "López"}
+{"_id": 4, "apellidos": "García"}
+{"_id": 30, "apellidos": "López"}
 
 ```
 
 ```sh
 
+C:\Users\manana>mongoimport --db="colegio" --collection="alumnos" --file="colegio\alumnos.json" --mode=merge
+2020-02-18T10:43:30.499+0100    connected to: mongodb://localhost/
+2020-02-18T10:43:30.580+0100    5 document(s) imported successfully. 0 document(s) failed to import.
+```
+
+Comprobamos en el Shell
+```sh
+> use colegio
+switched to db colegio
+> db.alumnos.find()
+{ "_id" : 2, "nombre" : "Pedro José", "apellidos" : "Gómez" }
+{ "_id" : 5, "nombre" : "Sara" }
+{ "_id" : 4, "nombre" : "Jose Luis", "apellidos" : "García" }
+{ "_id" : 1, "nombre" : "María Rosa", "apellidos" : "Pérea" }
+{ "_id" : 3, "nombre" : "Luis Carlos", "apellidos" : "López" }
+{ "_id" : 6, "nombre" : "María" }
+{ "_id" : 8, "nombre" : "Fernando" }
+{ "_id" : 7, "nombre" : "Pedro" }
+{ "_id" : 9, "nombre" : "Raquel" }
+{ "_id" : 20, "nombre" : "José María" }
+{ "_id" : 30, "apellidos" : "López" }
+>
 
 ```
+
+Los que ya existian les agrega lo que no tenia y si no existia lo inserta.
+
+
 ```sh
+```
 
 
+```sh
+```
+
+
+```sh
+```
+
+
+```sh
+```
+
+
+```sh
+```
+
+
+```sh
 ```
 
