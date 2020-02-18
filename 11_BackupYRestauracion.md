@@ -592,6 +592,7 @@ restaurants
 <img src="/images/compass-circulo.png">
 
 Me genera una consulta:
+
 ```sh
 {'address.coord': {$geoWithin: { $centerSphere: [ [ -73.99612354056683, 40.74378514302997 ], 0.00038464636632964445 ]}}}
 ```
@@ -603,6 +604,30 @@ Si la analizo me restringe la vista
 <img src="/images/compass-rombo.png">
 
 <img src="/images/compas-rombo2.png">
+
+
+## Motor de Almacenamiento en MongoDB
+
+Existen dos motores de almacenamiento
+
+* WiredTiger (Default)
+* in-memory
+
+### WiredTiger
+
+WireTiger MVCC( Control de concurrencia de conversión múltiple)
+
+¿Como realiza WiredTiger las operaciones de escritura?
+
+1. Sin tener activado el journal (desaconsejado)
+
+**explicacion apuntes 18022020**
+
+### WiredTiger
+
+
+
+
 ```sh
 ```
 
