@@ -685,7 +685,22 @@ config.system.sessions      0ms     0ms      0ms
    newyork.restaurants      0ms     0ms      0ms
 
 ```
-  
+ 
+### Database profiling (o profiler)
+
+Mecanismo que recolecta información sobre las operaciones ineficientes a nivel de BD.
+
+* Hay que activarlo a nivel de BD.
+* 3 niveles de recolección de información
+   * Nivel 0. No recolecta info sobre las operaciones.
+   * Nivel 1. Recolecta info sobre las operaciones que superen el valor de `slowms` (milisegundos y por defecto 100ms).
+   * Nivel 2. Recolecta info sobre todas las operaciones.
+   
+   
+
+
+ 
+ 
 ### Server Status ( a nivel de BD).
 
 [serverStatus](https://docs.mongodb.com/manual/reference/command/serverStatus/index.html)
@@ -694,6 +709,8 @@ db.serverStatus()
 
 [Output](https://docs.mongodb.com/manual/reference/command/serverStatus/index.html#output)
 ```sh
+> use newyork
+
 > db.serverStatus()
 {
         "host" : "G24-EQ09",
@@ -1660,11 +1677,15 @@ db.serverStatus()
         "ok" : 1
 }
 >
-
 ```
+Un Objeto muy grande
 
 
 ```sh
+> status = db.serverStatus()
+> status.connections
+{ "current" : 2, "available" : 999998, "totalCreated" : 291, "active" : 1 }
+>
 ```
 
 
