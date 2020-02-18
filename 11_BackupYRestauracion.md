@@ -391,6 +391,11 @@ mongoimport <opciones>
 --type=<json|csv|tsv>
 --file=<archivo>.json | .csv | .tsv
 -mode=<insert|upsert|merge>
+  
+  En todos los casos el campo de comparación es _id
+  insert => Inserta con operación de escritura desordenada
+  upsert => Modifica el documento que encuentra o lo crea si no existe ese _id.
+  
 ```
 
 Entro al Shell y creo BD y colección
@@ -423,25 +428,62 @@ C:\Users\manana>mongoimport --db="colegio" --collection="alumnos" --file="colegi
 C:\Users\manana>
 ```
 
-```sh
+Si me meto en la shell puedo comprobar:
 
+```sh
+> use colegio
+switched to db colegio
+> db.alumnos.find()
+{ "_id" : 2, "nombre" : "Juan" }
+{ "_id" : 5, "nombre" : "Sara" }
+{ "_id" : 4, "nombre" : "Carlos" }
+{ "_id" : 1, "nombre" : "Laura" }
+{ "_id" : 3, "nombre" : "Lucía" }
+>
 ```
 
 
+Que pasa si tengo un id repetido
+
 ```sh
+{"_id": 6, "nombre": "María"}
+{"_id": 7, "nombre": "Pedro"}
+{"_id": 3, "nombre": "Luis"}
+{"_id": 8, "nombre": "Fernando"}
+{"_id": 9, "nombre": "Raquel"}
+```
+
+Cargo este archivo
+
+```sh
+C:\Users\manana>mongoimport --db="colegio" --collection="alumnos" --file="colegio\alumnos.json"
+2020-02-18T10:28:11.263+0100    connected to: mongodb://localhost/
+2020-02-18T10:28:11.344+0100    continuing through error: E11000 duplicate key error collection: colegio.alumnos index: _id_ dup key: { _id: 3 }
+2020-02-18T10:28:11.348+0100    4 document(s) imported successfully. 1 document(s) failed to import.
+
+C:\Users\manana>
 
 ```
 
+Me marca un error del id repetido, pero continua con el resto.
+
+Si lo verifico en la shell:
 
 ```sh
-
+> db.alumnos.find()
+{ "_id" : 2, "nombre" : "Juan" }
+{ "_id" : 5, "nombre" : "Sara" }
+{ "_id" : 4, "nombre" : "Carlos" }
+{ "_id" : 1, "nombre" : "Laura" }
+{ "_id" : 3, "nombre" : "Lucía" }
+{ "_id" : 6, "nombre" : "María" }
+{ "_id" : 8, "nombre" : "Fernando" }
+{ "_id" : 7, "nombre" : "Pedro" }
+{ "_id" : 9, "nombre" : "Raquel" }
+>
 ```
 
-
-```sh
-
-```
-
+Modo upsert, cambia el documento o lo crea si no existe
 
 ```sh
 
