@@ -602,7 +602,7 @@ Si la analizo me restringe la vista
 
 <img src="/images/compass-rombo.png">
 
-<img src="/images/compass-rombo2.png">
+<img src="/images/compas-rombo2.png">
 ```sh
 ```
 
