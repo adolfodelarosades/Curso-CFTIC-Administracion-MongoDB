@@ -143,6 +143,7 @@ C:\Users\manana>mongorestore --port 27300 data2\backup\bk17022020
 2020-02-17T13:52:46.540+0100    finished restoring getafe.foo (0 documents, 1000 failures)
 2020-02-17T13:52:46.540+0100    1000 document(s) restored successfully. 1000 document(s) failed to restore.
 ```
+
 Vuelvo a entrar al shell.
 
 ```sh
@@ -168,6 +169,7 @@ foo2
 ```
 
 Para hacerlos sobre una sola colección
+
 ```sh
 C:\Users\manana>mongodump --port 27300 --out=data2\backup\bkgetafefoo17022020 --db "getafe" --collection "foo"
 2020-02-17T13:58:38.622+0100    writing getafe.foo to
@@ -178,7 +180,7 @@ C:\Users\manana>mongodump --port 27300 --out=data2\backup\bkgetafefoo17022020 --
 
 Entro y borro 5 documentos
 
-````sh
+```sh
 > use getafe
 switched to db getafe
 > db.foo.deleteOne({})
@@ -218,12 +220,10 @@ mongoexport` <opciones>
 --uri <formato-uri>
 --db=<nombre-basededatos>
 --collection=<nombre-coleccion>
---fields=<campo1, campo2>
+--fields=<campo1, campo2> *Obligatorio en caso de exportar en .csv
 --type=csv
 --noHeaderLine
 --out=ruta/<archivo>.json | .csv
-
-
 ```
 
 
@@ -243,10 +243,12 @@ participantes
 1000000
 >
 ```
+solo comprobe que maraton tenga datos en la colección `participantes`.
 
 Desde la terminal
 
 Hago la exportación
+
 ```sh
 C:\Users\manana>mongoexport --db="maraton" --collection="participantes" --out=maraton\participantes.json
 2020-02-18T09:22:19.634+0100    connected to: mongodb://localhost/
@@ -318,7 +320,9 @@ C:\Users\manana>mongoexport --db="maraton" --collection="participantes" --fields
 2020-02-18T09:27:09.819+0100    exported 1000000 records
 
 ```
+
 <img src="/images/export.png">
+
 
 ```sh
 ```
