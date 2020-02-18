@@ -697,9 +697,68 @@ Mecanismo que recolecta información sobre las operaciones ineficientes a nivel 
    * Nivel 2. Recolecta info sobre todas las operaciones.
    
    
+```sh
+db.setProfillingLevel(
+<nivel>,
+{slowns: <ms>}
+```
 
+En la BD se crea una colección:
+`system.profile`  //capped
 
+Con el nivel 1 no hay menores de 100ms.
+
+```sh
+> use newyork
+switched to db newyork
+> db.setProfilingLevel(1)
+{ "was" : 0, "slowms" : 100, "sampleRate" : 1, "ok" : 1 }
+>    
+```
+
+```sh
+> db.restaurants.find({"address.zipcode": {$gte: "1000"}}) 
+> show collections
+restaurants
+system.profile
+> 
+```
  
+ Cambiamos al nivel que recolecta todas.
+```sh
+> db.setProfilingLevel(2)
+{ "was" : 1, "slowms" : 100, "sampleRate" : 1, "ok" : 1 }
+> db.restaurants.find({"address.zipcode": {$gte: "1000"}})
+
+```
+
+Aqui se va metiendo todo (En este caso todas serian ineficientes > 100ms), incluyendo las operaciones sobre si mismo.
+```sh
+> show collections
+restaurants
+system.profile
+> db.system.profile.find()
+{ "op" : "query", "ns" : "newyork.restaurants", "command" : { "find" : "restaurants", "filter" : { "address.zipcode" : { "$gte" : "1000" } }, "lsid" : { "id" : UUID("e33c9a1f-f3b1-4b85-8d3b-9086b68181d9") }, "$db" : "newyork" }, "cursorid" : NumberLong("4100965560843527124"), "keysExamined" : 0, "docsExamined" : 101, "numYield" : 0, "nreturned" : 101, "queryHash" : "B9AF5D5B", "planCacheKey" : "B9AF5D5B", "locks" : { "ReplicationStateTransition" : { "acquireCount" : { "w" : NumberLong(1) } }, "Global" : { "acquireCount" : { "r" : NumberLong(1) } }, "Database" : { "acquireCount" : { "r" : NumberLong(1) } }, "Collection" : { "acquireCount" : { "r" : NumberLong(1) } }, "Mutex" : { "acquireCount" : { "r" : NumberLong(1) } } }, "flowControl" : {  }, "responseLength" : 46590, "protocol" : "op_msg", "millis" : 0, "planSummary" : "COLLSCAN", "execStats" : { "stage" : "COLLSCAN", "filter" : { "address.zipcode" : { "$gte" : "1000" } }, "nReturned" : 101, "executionTimeMillisEstimate" : 0, "works" : 102, "advanced" : 101, "needTime" : 1, "needYield" : 0, "saveState" : 1, "restoreState" : 0, "isEOF" : 0, "direction" : "forward", "docsExamined" : 101 }, "ts" : ISODate("2020-02-18T12:15:39.218Z"), "client" : "127.0.0.1", "appName" : "MongoDB Shell", "allUsers" : [ ], "user" : "" }
+>             
+```
+
+Este es la mejor opción:
+
+```sh
+> db.setProfilingLevel(1)
+{ "was" : 2, "slowms" : 100, "sampleRate" : 1, "ok" : 1 }
+>   
+```
+
+### OPS MANAGER / CLOUD MANAGER
+
+Herramientas de monitorización y automatización de despliegues en producción de MongoDB.
+
+* **Ops Manage**r sería para instalar en despliegues "on premise" (centros de datos propios).
+
+* **Cloud Manager** sería en la plataforma de servicios en la nube (paaS) de MongoDB.
+
+En ambos casos exige la versión Enterprise de MongoDB.
  
 ### Server Status ( a nivel de BD).
 
