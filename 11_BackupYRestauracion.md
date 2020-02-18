@@ -623,7 +623,7 @@ WireTiger MVCC( Control de concurrencia de conversión múltiple)
 
 **explicacion apuntes 18022020**
 
-### WiredTiger
+
 
 
 
