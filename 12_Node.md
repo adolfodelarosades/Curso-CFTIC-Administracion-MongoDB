@@ -175,4 +175,7 @@ Para documentar librerías:
 
 [https://swagger.io/](https://swagger.io/)
 
+<img src="postman-get.png">
+
+<img src="postman-get-2.png">
 
