@@ -131,6 +131,7 @@ Cannot GET /
 ```
 Esto indica que mi servidor esta levantado.
 
+## GET
 
 Petición GET con express:
 
@@ -255,4 +256,62 @@ app.get('/:_id', (req, res)=> {
 ```
 
 <img src="images/postman-cliente-2.png">
+
+## POST
+
+```
+// POST
+app.post('/', (req, res)=>{
+    console.log(req.body);
+    res.status(200).json({});
+    
+})
+```
+
+```
+// POST
+//Body-Parser me sirve para que en las entradas me parse el JSON si no sale 
+// me pone undefined
+app.post('/', (req, res)=>{
+    console.log(req.body);
+    res.status(200).json({});
+
+})
+
+[nodemon] restarting due to changes...
+[nodemon] starting `node app.js`
+App esta escuchando en http://localhost:3000
+undefined
+```
+
+## Body Parser
+
+`PS C:\Users\manana\Documents\apiexpress> npm i body-parser --save`
+
+Instalo Body Parser
+
+<img src="images/body-parser.png">
+
+Una vez instalado lo puedo usar:
+
+```
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({ extended: true}));
+
+```
+
+
+Una vez que ya lo tiende y si vuelvo a cargar el URL:
+
+<img src="images/postma-post.png">
+
+```
+[nodemon] restarting due to changes...
+[nodemon] starting `node app.js`
+App esta escuchando en http://localhost:3000
+{ nombre: '"Fernando"', apellidos: '"Gutierrez"', dni: '"12345678H"' }
+```
+
+Ahora ya me sale bien en consola.
 
