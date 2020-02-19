@@ -170,3 +170,9 @@ http://localhost:3000/getafe
 }
 
 ```
+Para documentar librerías:
+
+
+[https://swagger.io/](https://swagger.io/)
+
+
