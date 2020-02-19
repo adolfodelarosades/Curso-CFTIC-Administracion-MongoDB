@@ -232,9 +232,27 @@ app.get('/:_id', (req, res)=> {
 })
 ```
 
-Lllamo mi URL con parámetro:
+Llamo mi URL con parámetro:
 
 ```
 http://localhost:3000/12
 ```
 En la terminal sale 12.
+
+Sabe que es un parámetro por que despues de '/' hay ':'.
+
+Regresar el que le pida
+```
+// Paso de parámetros
+app.get('/:_id', (req, res)=> {
+    console.log(req.params._id);
+
+    let cliente = clientes.find(cliente => {
+        return cliente._id === Number(req.params._id);
+    });
+    res.status(200).json({cliente});
+})
+```
+
+<img src="images/postman-cliente-2.png">
+
