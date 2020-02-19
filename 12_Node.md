@@ -220,5 +220,21 @@ app.listen(3000, () => {
 
 
 
-<img src="postman-get-clientes.png">
+<img src="images/postman-get-clientes.png">
 
+Get con parámetros:
+
+```
+// Paso de parámetros
+app.get('/:_id', (req, res)=> {
+    console.log(req.params._id);
+    res.status(200).json({});
+})
+```
+
+Lllamo mi URL con parámetro:
+
+```
+http://localhost:3000/12
+```
+En la terminal sale 12.
