@@ -290,7 +290,7 @@ undefined
 
 Instalo Body Parser
 
-<img src="images/body-parser.png">
+<img src="images/body-parse.png">
 
 Una vez instalado lo puedo usar:
 
@@ -304,7 +304,7 @@ app.use(bodyParser.urlencoded({ extended: true}));
 
 Una vez que ya lo tiende y si vuelvo a cargar el URL:
 
-<img src="images/postma-post.png">
+<img src="images/postman-post.png">
 
 ```
 [nodemon] restarting due to changes...
