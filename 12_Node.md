@@ -130,5 +130,13 @@ App esta escuchando en http://localhost:3000
 Esto me permite que los cambios que haga en mi proyecto los detecte automaticamente. Si lanzo directamente `nodemon app` hace lo mismo 
 pero en windows hay lios que es un poco complicado detectar, por eso lo metemos en los scripts.
 
+Si en Chrome llamo:
+
+```
+http://localhost:3000/
+
+Cannot GET /
+```
+Esto indica que mi servidor esta levantado.
 
 
