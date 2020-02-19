@@ -179,3 +179,46 @@ Para documentar librerías:
 
 <img src="postman-get-2.png">
 
+```sh
+const express = require('express');
+const app = express(); //Toda la coleccione de métodos de la libreria express
+
+let clientes = [
+   {
+       _id: 1,
+       nombre: "Juan",
+       apellido: "Pérez",
+       dni: "02458282B"
+   },
+   {
+       _id: 2,
+       nombre: "Laura",
+       apellido: "Gómez",
+       dni: "12432134U"
+   },
+   {
+       _id: 3,
+       nombre: "Sara",
+       apellido: "Pérez",
+       dni: "76537293V"
+   }
+];
+
+//Peticiones get
+// localhost:3000/ seran peticiones get que gestiono con un callback
+app.get('/', (req, res)=> {
+  res.status(200).json(clientes); //Codigo de respuesta de la operación - json mete en el body el json
+}); 
+
+
+app.listen(3000, () => {
+    console.log("App esta escuchando en http://localhost:3000")
+});
+```
+
+`.json` es como un stringfy lo parsea para convertirlo de Objetos a JSON (pone las comillas en las keys)
+
+
+
+<img src="postman-get-clientes.png">
+
