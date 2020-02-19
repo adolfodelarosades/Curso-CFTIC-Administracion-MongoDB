@@ -2,6 +2,7 @@
 
 
 Desde la terminal escribo 
+
 ```
 PS C:\Users\manana\Documents\apiexpress> npm init
 This utility will walk you through creating a package.json file.
@@ -37,20 +38,10 @@ About to write to C:\Users\manana\Documents\apiexpress\package.json:
   "license": "ISC"
 }
 
-
 Is this OK? (yes)
 PS C:\Users\manana\Documents\apiexpress>
-
 ```
 
-
-```
-
-`````
-
-
-
-````
 PS C:\Users\manana\Documents\apiexpress> npm  i nodemon --save
 
 PS C:\Users\manana\Documents\apiexpress> npm i express --save
@@ -108,6 +99,7 @@ En el Package añado:
     "test": "echo \"Error: no test specified\" && exit 1"
   },
 ```
+
 Son Scrips que lanzo mi aplicación
 
 Para ejecutar la aplicación `npm run start`
@@ -132,7 +124,7 @@ pero en windows hay lios que es un poco complicado detectar, por eso lo metemos 
 
 Si en Chrome llamo:
 
-```
+```sh
 http://localhost:3000/
 
 Cannot GET /
@@ -140,3 +132,41 @@ Cannot GET /
 Esto indica que mi servidor esta levantado.
 
 
+Petición GET con express:
+
+```js
+//Peticiones get
+// localhost:3000/ seran peticiones get que gestiono con un callback
+app.get('/', (req, res)=> {
+  res.status(200).json({"mensaje": "Bienvenido!"}); //Codigo de respuesta de la operación - json mete en el body el json
+}); 
+
+app.get('/getafe', (req, res)=> {
+    res.status(200).json({"mensaje": "Mensaje desde Getafe!"}); //Codigo de respuesta de la operación - json mete en el body el json
+});
+```
+
+Al cargar en 
+
+Si en Chrome llamo:
+
+```sh
+http://localhost:3000/
+// 20200219125203
+// http://localhost:3000/
+
+{
+  "mensaje": "Bienvenido!"
+}
+```
+Si en Chrome llamo:
+```sh
+http://localhost:3000/getafe
+// 20200219125354
+// http://localhost:3000/getafe
+
+{
+  "mensaje": "Mensaje desde Getafe!"
+}
+
+```
