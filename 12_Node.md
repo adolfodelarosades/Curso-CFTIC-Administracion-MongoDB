@@ -175,9 +175,9 @@ Para documentar librerías:
 
 [https://swagger.io/](https://swagger.io/)
 
-<img src="postman-get.png">
+<img src="images/postman-get.png">
 
-<img src="postman-get-2.png">
+<img src="images/postman-get-2.png">
 
 ```sh
 const express = require('express');
@@ -220,7 +220,7 @@ app.listen(3000, () => {
 
 
 
-<img src="images/postman-get-clientes.png">
+<img src="images/postman-clientes.png">
 
 Get con parámetros:
 
