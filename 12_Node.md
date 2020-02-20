@@ -178,8 +178,6 @@ Para documentar librerías:
 
 <img src="images/postman-get.png">
 
-<img src="images/postman-get-2.png">
-
 ```sh
 const express = require('express');
 const app = express(); //Toda la coleccione de métodos de la libreria express
