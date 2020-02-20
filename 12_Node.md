@@ -485,3 +485,116 @@ App esta escuchando en http://localhost:3000
 ```
 
 <img src="images/postman2-delete.png">
+
+
+## TODO EL CÓDIGO
+
+```sh
+const express = require('express');
+const app = express(); //Toda la coleccione de métodos de la libreria express
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({ extended: true}));
+
+
+let clientes = [
+   {
+       _id: 1,
+       nombre: "Juan",
+       apellido: "Pérez",
+       dni: "02458282B"
+   },
+   {
+       _id: 2,
+       nombre: "Laura",
+       apellido: "Gómez",
+       dni: "12432134U"
+   },
+   {
+       _id: 3,
+       nombre: "Sara",
+       apellido: "Pérez",
+       dni: "76537293V"
+   }
+];
+
+//Peticiones get
+// localhost:3000/ seran peticiones get que gestiono con un callback
+app.get('/', (req, res)=> {
+  res.status(200).json(clientes); //Codigo de respuesta de la operación - json mete en el body el json
+}); 
+
+// Paso de parámetros
+app.get('/:_id', (req, res)=> {
+    console.log(req.params._id);
+
+    let cliente = clientes.find(cliente => {
+        return cliente._id === Number(req.params._id);
+    });
+    res.status(200).json({cliente});
+})
+
+
+// POST
+//Body-Parser me sirve para que en las entradas me parse el JSON si no sale 
+// me pone undefined
+app.post('/', (req, res)=>{
+    console.log(req.body);    
+    let cliente = req.body;
+    cliente._id = clientes[clientes.length-1]._id + 1; 
+    clientes.push(cliente);
+
+    res.status(200).json({
+        mensaje: "El cliente se ha creado correctamente"
+    });
+    console.log(clientes);
+});
+
+
+//Actualizar registros
+app.put('/:_id', (req, res) => {
+   let posicion = clientes.findIndex(cliente => {
+       return cliente._id === Number(req.params._id);
+    });
+    if(posicion < 0) {
+        res.status(200).json({
+            mensaje: "El cliente no existe"
+        })
+    } else {
+        if(req.body.nombre !== undefined){
+            clientes[posicion].nombre = req.body.nombre;
+        }
+        if(req.body.apellidos !== undefined){
+            clientes[posicion].apellidos = req.body.apellidos;
+        }
+        if(req.body.dni !== undefined){
+            clientes[posicion].dni = req.body.dni;
+        }
+        res.status(200).json({
+            mensaje: "El cliente ha sido actualizado"
+        })
+    }
+    console.log(clientes);
+});
+
+app.delete('/:_id', (req, res) => {
+    let posicion = clientes.findIndex(cliente => {
+        return cliente._id === Number(req.params._id);
+    });
+    if(posicion < 0) {
+        res.status(200).json({ mensaje: "El cliente no existe"});
+    } else {
+        clientes.splice(posicion, 1); //Borra en el array
+        res.status(200).json({
+            mensaje: "El cliente ha sido eliminado correctamente"
+        })
+    }
+    console.log(clientes);
+})
+
+
+app.listen(3000, () => {
+    console.log("App esta escuchando en http://localhost:3000")
+});
+
+```
