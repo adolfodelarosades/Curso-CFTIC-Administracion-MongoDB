@@ -333,7 +333,8 @@ app.post('/', (req, res)=>{
 ```
 
 
-<img src="/images/postman-clientenew"
+<img src="/images/postman2-clientenew">
+<img src="/images/postman2-clientenew3">
 
 En la consola nos muestra esto:
 ```sh
@@ -370,3 +371,55 @@ App esta escuchando en http://localhost:3000
 ]
 
 ```
+
+
+## Método `put` (Actualizar Registros)
+
+```
+//Actualizar registros
+app.put('/:_id', (req, res) => {
+   let posicion = clientes.findIndex(cliente => {
+       return cliente._id === Number(req.params._id);
+    })
+    console.log(posicion);
+    res.status(200).json({});
+});
+
+```
+
+<img src="/images/postman2-put1">
+
+En la consola me sale
+```sh
+[nodemon] restarting due to changes...
+[nodemon] starting `node app.js`
+App esta escuchando en http://localhost:3000
+1
+
+```
+Si mando uno que no existe me pone `-1`
+```sh
+PUT http://localhost:3000/56
+...
+-1
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+```sh
+
+```
+
