@@ -333,8 +333,8 @@ app.post('/', (req, res)=>{
 ```
 
 
-<img src="/images/postman2-clientenew">
-<img src="/images/postman2-clientenew3">
+<img src="images/postman2-clientenew">
+<img src="images/postman2-clientenew3">
 
 En la consola nos muestra esto:
 ```sh
@@ -387,7 +387,7 @@ app.put('/:_id', (req, res) => {
 
 ```
 
-<img src="/images/postman2-put1">
+<img src="images/postman2-put1">
 
 En la consola me sale
 ```sh
