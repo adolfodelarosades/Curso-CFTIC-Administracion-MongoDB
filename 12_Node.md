@@ -882,7 +882,7 @@ app.use('/producto', producto)
 ```
 
 
-<img src="images/postman3-productos.png">
+<img src="images/postman3-producto.png">
 
 Podemos tener mas niveles de rutas:
 
@@ -901,7 +901,7 @@ app.get('/zapatos', (req, res) => {
 });
 ```
 
-<img src="images/postman3-productos-zapatos.png">
+<img src="images/postman3-producto-zapatos.png">
 
 #### Importar el Modelo en mi ruta:
 
