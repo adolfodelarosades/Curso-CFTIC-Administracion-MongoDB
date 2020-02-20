@@ -598,3 +598,53 @@ app.listen(3000, () => {
 });
 
 ```
+
+
+# apimongoose
+
+**Diagrama apuntes**
+
+Crear carpeta `apimongoose`
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
+
+```sh
+```
