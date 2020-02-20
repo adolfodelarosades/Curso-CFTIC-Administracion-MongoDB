@@ -315,3 +315,58 @@ App esta escuchando en http://localhost:3000
 
 Ahora ya me sale bien en consola.
 
+Vamos a meter el cliente que mandemos con post a nuestro array:
+
+```sh
+app.post('/', (req, res)=>{
+    console.log(req.body);    
+    let cliente = req.body;
+    cliente._id = clientes[clientes.length-1]._id + 1; 
+    clientes.push(cliente);
+
+    res.status(200).json({
+        mensaje: "El cliente se ha creado correctamente"
+    });
+    console.log(clientes);
+})
+
+```
+
+
+<img src="/images/postman-clientenew"
+
+En la consola nos muestra esto:
+```sh
+App esta escuchando en http://localhost:3000
+{ nombre: '"Fernando"', apellidos: '"Gutierrez"', dni: '"12345678H"' }
+[
+  { _id: 1, nombre: 'Juan', apellido: 'Pérez', dni: '02458282B' },
+  { _id: 2, nombre: 'Laura', apellido: 'Gómez', dni: '12432134U' },
+  { _id: 3, nombre: 'Sara', apellido: 'Pérez', dni: '76537293V' },
+  {
+    nombre: '"Fernando"',
+    apellidos: '"Gutierrez"',
+    dni: '"12345678H"',
+    _id: 4
+  }
+]
+{ nombre: '"Laura"', apellidos: '"Lopez"', dni: '"87654321U"' }
+[
+  { _id: 1, nombre: 'Juan', apellido: 'Pérez', dni: '02458282B' },
+  { _id: 2, nombre: 'Laura', apellido: 'Gómez', dni: '12432134U' },
+  { _id: 3, nombre: 'Sara', apellido: 'Pérez', dni: '76537293V' },
+  {
+    nombre: '"Fernando"',
+    apellidos: '"Gutierrez"',
+    dni: '"12345678H"',
+    _id: 4
+  },
+  {
+    nombre: '"Laura"',
+    apellidos: '"Lopez"',
+    dni: '"87654321U"',
+    _id: 5
+  }
+]
+
+```
