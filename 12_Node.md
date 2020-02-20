@@ -903,26 +903,83 @@ app.get('/zapatos', (req, res) => {
 
 <img src="images/postman3-productos-zapatos.png">
 
+#### Importar el Modelo en mi ruta:
+
+En archivo `producto.js` de `routes`
+```sh
+let Producto = require('../models/producto');
+```
+
+Metodo Post
+```sh
+//Genero objeto del tipo clase Producto y le paso lo que llega de la petición Post
+app.post('/', (req, res) => {
+   let producto = new Producto({
+       nombre: req.body.nombre,
+       descripcion: req.body.descripcion,
+       precio: req.body.precio,
+       sku: req.body.sku
+   });
+}); 
+```
+
+Necesito instalar Body parser
 
 ```sh
+PS C:\Users\manana\Documents\apimongoose> npm i body-parser --save
 
 ```
 
+incluirlo en `app.js`
+
+
+```
+let bodyParser = require('body-parser');
+....
+//Para parsear lo que nos llegue de las peticiones
+app.use(bodyParser.urlencoded({extended: true}));
+```
+
+En Routes tengo mi post
 
 ```sh
+//Genero objeto del tipo clase Producto y le paso lo que llega de la petición Post
+app.post('/', (req, res) => {
+   let producto = new Producto({
+       nombre: req.body.nombre,
+       descripcion: req.body.descripcion,
+       precio: req.body.precio,
+       sku: req.body.sku
+   });
+   //Con monggosse hago un save (insertar) (tiene todos los valores)
+   //Si no existe la coleccion la crea
+   //Recibe el documento insertado
+   //err es de Mongoose
+   producto.save((err, producto) => {
+      //Si existe un error mando mensaje y no sigo (return) 
+      if(err) {
+          return res.status(400).json({
+              mensaje: "Error ...",
+              error: err
+          })
+      }
+      //Respuesta correcta
+      res.status(200).json({
+          mensaje: 'El producto sku ' + producto.sku + ' ha sido insertado correctamente'                   
+      });
+   });
+}); 
 
 ```
 
+Si no tengo la BD y la colección me las crea. (Le añade una s a la colección `productos`.
 
-```sh
+<img src="images/postman-insert-producto.png">
+<img src="images/compass-insert-producto.png">
 
-```
+Para generar el error mantengo el mismo SKU:
 
-
-```sh
-
-```
-
+<img src="images/postman3-insert-producto-error.png">
 
 ```sh
 
