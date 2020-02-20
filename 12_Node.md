@@ -1002,6 +1002,28 @@ app.get('/', (req, res) => {
 
 <img src="images/postman3-get.png">
 
+Get con parámetro
+
+```sh
+//GET 
+app.get('/:termino', (req, res) => {
+    Producto.find({nombre: {$regex: req.params.termino}}, (err, productos) => {
+        if(err) {
+            return res.status(400).json({
+                error: err
+            });
+        }
+        res.status(200).json({
+            productos: productos
+        });
+    });
+});
+```
+
+<img src="images/postman3-get-param.png">
+
+
+
 ## CODIGO FINAL
 
 
@@ -1100,6 +1122,21 @@ app.get('/', (req, res) => {
         });
     });
 });
+
+//GET 
+app.get('/:termino', (req, res) => {
+    Producto.find({nombre: {$regex: req.params.termino}}, (err, productos) => {
+        if(err) {
+            return res.status(400).json({
+                error: err
+            });
+        }
+        res.status(200).json({
+            productos: productos
+        });
+    });
+});
+
 
 //Genero objeto del tipo clase Producto y le paso lo que llega de la petición Post
 app.post('/', (req, res) => {
