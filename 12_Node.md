@@ -702,8 +702,8 @@ Añado el script para el arranque:
 
 
 
-Crear el archivo `app.js`
-
+Crear el archivo `app.js` que tendra el siguiente código:
+ 
 Crear el servidor:
 ```sh
 //Levantar el servidor
@@ -732,13 +732,78 @@ Servidor escuchando en http://localhost:3000
 
 ```
 
-```sh
-```
+Instalo Mongoose:
 
 ```sh
+PS C:\Users\manana\Documents\apimongoose> npm i mongoose --save
+npm WARN apimongoose@1.0.0 No description
+npm WARN apimongoose@1.0.0 No repository field.
+npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@2.1.2 (node_modules\fsevents):
+npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@2.1.2: wanted {"os":"darwin","arch":"any"} (current: {"os":"win32","arch":"x64"})
+
++ mongoose@5.9.1
+added 26 packages from 17 contributors and audited 305 packages in 3.318s
+
+2 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
 ```
 
+En el Package.json se añade la dependencia de mongoose:
+
 ```sh
+{
+  "name": "apimongoose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.9.1",
+    "nodemon": "^2.0.2"
+  }
+}
+
+```
+
+Llamar a Mongoose:
+(Tengo tener levantado un `mongod`)
+
+```sh
+//Llamar mongoose
+let mongoose = requiere('mongoose');
+....
+let opciones = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+};
+
+//Establecer conexión (URIConexion, opciones)
+mongoose.connect('mongodb://localhost:27017', opciones)
+     .then( () => {
+         console.log("Conexión Base de Datos OK");
+     })
+     .catch( (err) => {
+        console.log("Error conexión Base de Datos: ", err );
+     })
+//Permite encadenarle una promesa
+```
+
+En la consola me sale:
+
+```sh
+[nodemon] restarting due to changes...
+[nodemon] starting `node app.js`
+Servidor escuchando en http://localhost:3000
+Conexión Base de Datos OK
+
 ```
 
 ```sh
