@@ -823,6 +823,12 @@ Uso del Chalk:
 ```
 El error de BD no conexión tarda en Salir 10s.
 
+## Creear el Modelado
+
+Crear carpeta `models`.
+
+Crear archivo `productos.js`
+
 ```sh
 ```
 
