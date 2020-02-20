@@ -786,7 +786,7 @@ let opciones = {
 };
 
 //Establecer conexión (URIConexion, opciones)
-mongoose.connect('mongodb://localhost:27017', opciones)
+mongoose.connect('mongodb://localhost:27017/compras', opciones)
      .then( () => {
          console.log("Conexión Base de Datos OK");
      })
@@ -806,11 +806,22 @@ Conexión Base de Datos OK
 
 ```
 
+Instalar Chalk
 ```sh
+PS C:\Users\manana\Documents\apimongoose> npm i chalk --save
 ```
 
+Uso del Chalk:
+
 ```sh
+.then( () => {
+         console.log(chalk.bgBlue("Conexión Base de Datos OK"));
+     })
+     .catch( (err) => {
+        console.log(chalk.bgRed("Error conexión Base de Datos: "), err );
+     })
 ```
+El error de BD no conexión tarda en Salir 10s.
 
 ```sh
 ```
