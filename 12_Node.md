@@ -304,7 +304,7 @@ app.use(bodyParser.urlencoded({ extended: true}));
 
 Una vez que ya lo tiende y si vuelvo a cargar el URL:
 
-<img src="images/postman2-post.png">
+<img src="images/postman-post.png">
 
 ```
 [nodemon] restarting due to changes...
