@@ -981,9 +981,26 @@ Para generar el error mantengo el mismo SKU:
 
 <img src="images/postman3-insert-producto-error.png">
 
-```sh
 
+### Método Get
+
+```sh
+//GET 
+app.get('/', (req, res) => {
+    Producto.find({}, (err, productos) => {
+        if(err) {
+            return res.status(400).json({
+                error: err
+            });
+        }
+        res.status(200).json({
+            productos: productos
+        });
+    });
+});
 ```
+
+<img src="images/postman3-get.png">
 
 ## CODIGO FINAL
 
@@ -1071,6 +1088,19 @@ app.get('/zapatos', (req, res) => {
 });
 */
 
+app.get('/', (req, res) => {
+    Producto.find({}, (err, productos) => {
+        if(err) {
+            return res.status(400).json({
+                error: err
+            });
+        }
+        res.status(200).json({
+            productos: productos
+        });
+    });
+});
+
 //Genero objeto del tipo clase Producto y le paso lo que llega de la petición Post
 app.post('/', (req, res) => {
    let producto = new Producto({
@@ -1102,6 +1132,7 @@ module.exports = app;
 
 ```
 
+## Me
 
 ```sh
 
