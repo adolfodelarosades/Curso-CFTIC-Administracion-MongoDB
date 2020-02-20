@@ -304,7 +304,7 @@ app.use(bodyParser.urlencoded({ extended: true}));
 
 Una vez que ya lo tiende y si vuelvo a cargar el URL:
 
-<img src="images/postman-post.png">
+<img src="images/postman2-post.png">
 
 ```
 [nodemon] restarting due to changes...
@@ -333,8 +333,8 @@ app.post('/', (req, res)=>{
 ```
 
 
-<img src="images/postman2-clientenew">
-<img src="images/postman2-clientenew3">
+<img src="images/postman2-clientenew.png">
+<img src="images/postman2-clientenew3.png">
 
 En la consola nos muestra esto:
 ```sh
@@ -387,7 +387,7 @@ app.put('/:_id', (req, res) => {
 
 ```
 
-<img src="images/postman2-put1">
+<img src="images/postman2-put1.png">
 
 En la consola me sale
 ```sh
@@ -404,19 +404,53 @@ PUT http://localhost:3000/56
 -1
 ```
 
+Manejando los diferentes casos en el Put
+
 
 ```sh
-
+//Actualizar registros
+app.put('/:_id', (req, res) => {
+   let posicion = clientes.findIndex(cliente => {
+       return cliente._id === Number(req.params._id);
+    });
+    if(posicion < 0) {
+        res.status(200).json({
+            mensaje: "El cliente no existe"
+        })
+    } else {
+        if(req.body.nombre !== undefined){
+            clientes[posicion].nombre = req.body.nombre;
+        }
+        if(req.body.apellidos !== undefined){
+            clientes[posicion].apellidos = req.body.apellidos;
+        }
+        if(req.body.dni !== undefined){
+            clientes[posicion].dni = req.body.dni;
+        }
+        res.status(200).json({
+            mensaje: "El cliente ha sido actualizado"
+        })
+    }
+    console.log(clientes);
+});
 ```
 
+<img src="images/postman2-put2.png">
+
+En la consola tenemos:
 
 ```sh
-
-```
-
-
-```sh
-
+[
+  { _id: 1, nombre: 'Juan', apellido: 'Pérez', dni: '02458282B' },
+  { _id: 2, nombre: 'Laura', apellido: 'Gómez', dni: '12432134U' },
+  {
+    _id: 3,
+    nombre: '"Laura María"',
+    apellido: 'Pérez',
+    dni: '"87654321U"',
+    apellidos: '"Lopez"'
+  }
+]
 ```
 
 ```sh
