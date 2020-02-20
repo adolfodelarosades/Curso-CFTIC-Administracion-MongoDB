@@ -829,11 +829,142 @@ Crear carpeta `models`.
 
 Crear archivo `productos.js`
 
-```sh
-```
+Establecer lo que va a tener mi documento en Mongo y ademas que sea un objeto que permita hacer operaciones.
+
 
 ```sh
+let mongoose = require('mongoose');
+
+//Defino comno va a ser mi entidad
+//Uso tipos de Mongoose (casi BSON)
+let ProductoSchema = new mongoose.Schema({ //Se supone que es una clase
+    nombre: String,
+    descripción: String,
+    precio: Number,
+    sku: { type: String, unique: true}
+}); 
+
+//Lo exporto comno un objeto que puedo consumir y usar métodos que tiene Mongoose
+module.exports = mongoose.model('Producto', ProductoSchema);
+
+
 ```
 
+## Crear las Rutas
+
+Crear la carpeta `routes` y dentro crearlo en el archivo para productos `productos.js` Uno para cada modelo.
+Meter el siguiente código
+
+El enrutamiento aquí 
+
 ```sh
+let express = require('express');
+let app = express();
+
+app.get('/', (req, res) => {
+    res.status(200).json({
+        mensaje: "Get desde producto"
+    })
+});
+
+module.exports = app;
+
 ```
+
+En `app.js` meto:
+
+```sh
+....
+let producto = require('./routes/producto');
+
+....
+app.use('/producto', producto)
+```
+
+
+<img src="images/postman3-productos.png">
+
+Podemos tener mas niveles de rutas:
+
+
+```sh
+app.get('/', (req, res) => {
+    res.status(200).json({
+        mensaje: "Get desde producto"
+    })
+});
+
+app.get('/zapatos', (req, res) => {
+    res.status(200).json({
+        mensaje: "Get desde producto-zapatos"
+    })
+});
+```
+
+<img src="images/postman3-productos-zapatos.png">
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+```
+
