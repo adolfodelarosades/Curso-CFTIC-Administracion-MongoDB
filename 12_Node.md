@@ -604,25 +604,132 @@ app.listen(3000, () => {
 
 **Diagrama apuntes**
 
+Para varias entidades necesito varias rutas, en un mismo archivo sería un inferno usando los export e import 
+para implementar el API en varios archivos, Mongoose usa esto para hacer el modelado.
+
+
+
 Crear carpeta `apimongoose`
 
+Creo el proyecto con ` npm init`
+
 ```sh
+PS C:\Users\manana\Documents\apimongoose> npm init
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+
+See `npm help json` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install <pkg>` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+package name: (apimongoose)
+version: (1.0.0)
+description:
+entry point: (index.js) app.js
+test command:
+git repository:
+keywords:
+author:
+license: (ISC)
+About to write to C:\Users\manana\Documents\apimongoose\package.json:
+
+{
+  "name": "apimongoose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
+
+
+Is this OK? (yes) y
+PS C:\Users\manana\Documents\apimongoose> 
 ```
 
+Tenemos el package.json
+
 ```sh
+{
+  "name": "apimongoose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
 ```
 
+Instalamos Express y Nodemon
+
+Mi package.json añade las dependencias:
 ```sh
+{
+  "name": "apimongoose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.2"
+  }
+}
+
+```
+
+Añado el script para el arranque:
+
+```sh
+"scripts": {
+    "start": "nodemon app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
 ```
 
 
+
+Crear el archivo `app.js`
+
+Crear el servidor:
 ```sh
+//Levantar el servidor
+let express = require('express');
+let app = express();
+app.listen(3000, () => {
+    console.log("Servidor escuchando en http://localhost:3000");
+});
 ```
 
-```sh
-```
+Probar servidor en la Terminal:
+
 
 ```sh
+PS C:\Users\manana\Documents\apimongoose> npm run start
+
+> apimongoose@1.0.0 start C:\Users\manana\Documents\apimongoose
+> nodemon app
+
+[nodemon] 2.0.2
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching dir(s): *.*
+[nodemon] watching extensions: js,mjs,json  
+[nodemon] starting `node app.js`
+Servidor escuchando en http://localhost:3000
+
 ```
 
 ```sh
