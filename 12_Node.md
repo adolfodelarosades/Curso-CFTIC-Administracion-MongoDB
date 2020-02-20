@@ -985,18 +985,120 @@ Para generar el error mantengo el mismo SKU:
 
 ```
 
+## CODIGO FINAL
 
+
+`app.js`
 ```sh
+//Levantar el servidor
+let express = require('express');
+//Llamar mongoose
+let mongoose = require('mongoose');
+
+let bodyParser = require('body-parser');
+
+let chalk = require('chalk');
+
+let app = express();
+
+let producto = require('./routes/producto');
+
+let opciones = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true  // Evitar el Warning  DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead.
+};
+
+//Para parsear lo que nos llegue de las peticiones
+app.use(bodyParser.urlencoded({extended: true}));
+
+//Establecer conexión (URIConexion, opciones)
+mongoose.connect('mongodb://localhost:27017/compras', opciones)
+     .then( () => {
+         console.log(chalk.bgBlue("Conexión Base de Datos OK"));
+     })
+     .catch( (err) => {
+        console.log(chalk.bgRed("Error conexión Base de Datos: "), err );
+     })
+//Permite encadenarle una promesa
+
+app.use('/producto', producto);
+
+
+
+app.listen(3000, () => {
+    console.log("Servidor escuchando en http://localhost:3000");
+});
 
 ```
 
-
+`producto.js` `models`
 ```sh
+let mongoose = require('mongoose');
+
+//Defino comno va a ser mi entidad
+//Uso tipos de Mongoose (casi BSON)
+let ProductoSchema = new mongoose.Schema({ //Se supone que es una clase
+    nombre: String,
+    descripción: String,
+    precio: Number,
+    sku: { type: String, unique: true}
+}); 
+
+//Lo exporto comno un objeto que puedo consumir y usar métodos que tiene Mongoose
+module.exports = mongoose.model('Producto', ProductoSchema);//Puede ser que el nombre no se especifique (Producto)
+
 
 ```
 
+`product.js` de `rutas`
 
 ```sh
+let express = require('express');
+let app = express();
+let Producto = require('../models/producto');
+/*
+app.get('/', (req, res) => {
+    res.status(200).json({
+        mensaje: "Get desde producto"
+    })
+});
+
+app.get('/zapatos', (req, res) => {
+    res.status(200).json({
+        mensaje: "Get desde producto-zapatos"
+    })
+});
+*/
+
+//Genero objeto del tipo clase Producto y le paso lo que llega de la petición Post
+app.post('/', (req, res) => {
+   let producto = new Producto({
+       nombre: req.body.nombre,
+       descripcion: req.body.descripcion,
+       precio: req.body.precio,
+       sku: req.body.sku
+   });
+   //Con monggosse hago un save (insertar) (tiene todos los valores)
+   //Si no existe la coleccion la crea
+   //Recibe el documento insertado
+   //err es de Mongoose
+   producto.save((err, producto) => {
+      //Si existe un error mando mensaje y no sigo (return) 
+      if(err) {
+          return res.status(400).json({
+              mensaje: "Error ...",
+              error: err
+          })
+      }
+      //Respuesta correcta
+      res.status(200).json({
+          mensaje: 'El producto sku ' + producto.sku + ' ha sido insertado correctamente'                   
+      });
+   });
+}); 
+
+module.exports = app;
 
 ```
 
