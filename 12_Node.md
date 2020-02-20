@@ -453,7 +453,37 @@ En la consola tenemos:
 ]
 ```
 
+## Método `delete`
+
+
 ```sh
+app.delete('/:_id', (req, res) => {
+    let posicion = clientes.findIndex(cliente => {
+        return cliente._id === Number(req.params._id);
+    });
+    if(posicion < 0) {
+        res.status(200).json({ mensaje: "El cliente no existe"});
+    } else {
+        clientes.splice(posicion, 1); //Borra en el array
+        res.status(200).json({
+            mensaje: "El cliente ha sido eliminado correctamente"
+        })
+    }
+    console.log(clientes);
+})
+```
+
+En la consola nos sale:
+
+```sh
+[nodemon] restarting due to changes...
+[nodemon] starting `node app.js`
+App esta escuchando en http://localhost:3000
+[
+  { _id: 2, nombre: 'Laura', apellido: 'Gómez', dni: '12432134U' },
+  { _id: 3, nombre: 'Sara', apellido: 'Pérez', dni: '76537293V' }
+]
 
 ```
 
+<img src="images/postman2-delete.png">
