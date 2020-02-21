@@ -1102,9 +1102,20 @@ app.delete('/:_id', (req, res) => {
 
 ### Crear Nueva Entidad Proveedor
 
+Se crea el Modelo y la Router, se añade en la APP
+
 ```sh
 
 ```
+
+Prueba del POST
+
+<img src="images/p5-post-proveedores.png">
+
+<img src="images/c5-post-proveedores.png">
+
+<img src="images/p5-post-error.png">
+
 
 
 ```sh
