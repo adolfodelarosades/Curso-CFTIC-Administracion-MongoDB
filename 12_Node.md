@@ -1024,6 +1024,93 @@ app.get('/:termino', (req, res) => {
 
 
 
+## PUT
+
+
+```sh
+//PUT
+app.put('/:_id', (req, res) => {
+
+    console.log("EN EL PUT")
+    let id = req.params._id;
+    let updateQuery = {};
+
+    if(req.body.nombre){
+        updateQuery.nombre = req.body.nombre;        
+    }
+    if(req.body.descripcion){
+        updateQuery.descripcion = req.body.descripcion;        
+    }
+    
+    if(req.body.precio){
+        updateQuery.precio = req.body.precio;        
+    }
+    if(req.body.sku){
+        updateQuery.sku = req.body.sku;        
+    }
+
+    Producto.findByIdAndUpdate(id, {$set: updateQuery}, (err, producto) => {
+        if(err){
+            return res.status(400).json({
+                mensaje: "Error....",
+                error: err
+            })
+        }
+        res.status(200).json({
+            mensaje: `El producto ${producto.sku} ha sido actualizado`
+        });
+    });
+    //En Mongoose el ID se pasa directamente el String si el ObjectId
+    /*
+    En el shell Mongo
+
+    */
+});
+
+```
+<img src="images/p5-get1.png">
+<img src="images/p5-put.png">
+<img src="images/p5-get2.png">
+
+
+## DELETE
+
+```sh
+//DELETE
+app.delete('/:_id', (req, res) => {
+   Producto.findByIdAndRemove(req.params._id, (err, producto) => {
+        if(err){
+            return res.status(400).json({
+                mensaje: "Error....",
+                error: err
+            })
+        }
+        res.status(200).json({
+            mensaje: `El producto ${producto.sku} ha sido eliminado`
+        });
+      
+   });
+});
+
+```
+<img src="images/p5-delete.png">
+<img src="images/p5-get3.png">
+
+```sh
+
+```
+
+
+```sh
+
+```
+
+
+```sh
+
+
+
+
 ## CODIGO FINAL
 
 
@@ -1169,29 +1256,6 @@ module.exports = app;
 
 ```
 
-## Me
-
-```sh
-
-```
-
-
-```sh
-
-```
-
-
-```sh
-
-```
-
-
-```sh
-
-```
-
-
-```sh
 
 ```
 
